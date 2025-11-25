@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7
+    container_name: payload-platform-mongodb
+    ports:
+      - '27017:27017'
+    volumes:
+      - payload-mongodb-data:/data/db
+    healthcheck:
+      test: ['CMD', 'mongosh', '--eval', "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
+volumes:
+  payload-mongodb-data:
+    name: payload-platform-mongodb-data

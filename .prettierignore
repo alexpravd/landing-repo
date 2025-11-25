@@ -1,0 +1,22 @@
+# Dependencies
+node_modules
+
+# Build outputs
+.next
+dist
+build
+out
+
+# Generated files
+payload-types.ts
+next-env.d.ts
+
+# Cache
+.turbo
+.cache
+
+# Old migration files
+backend
+package-old.json
+package-new.json
+tsconfig-new.json
