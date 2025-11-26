@@ -1,0 +1,5 @@
+# Type-check entire project (cannot be scoped to staged files)
+npm run type-check || exit 1
+
+# Run lint-staged for ESLint + Prettier on staged files
+npx lint-staged

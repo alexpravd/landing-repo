@@ -3,9 +3,30 @@ import config from '@payload-config'
 
 export type SupportedLocale = 'uk' | 'en' | 'es'
 
-interface GetSiteDataOptions {
-  locale?: SupportedLocale
-  draft?: boolean
+// Reserved for future use
+// interface GetSiteDataOptions {
+//   locale?: SupportedLocale
+//   draft?: boolean
+// }
+
+// Raw navigation doc from Payload CMS
+interface NavigationDoc {
+  id: string
+  label?: string
+  linkType?: string
+  page?: { slug?: string } | null
+  href?: string
+  openInNewTab?: boolean
+  children?: Array<{
+    label?: string
+    items?: Array<{
+      label?: string
+      linkType?: string
+      page?: { slug?: string } | null
+      href?: string
+      openInNewTab?: boolean
+    }>
+  }>
 }
 
 // Types matching the 3-level CMS structure
@@ -14,24 +35,32 @@ interface NavigationItem {
   label: string
   href?: string
   linkType?: 'none' | 'page' | 'custom'
-  page?: string | { id: string; slug: string }
+  page?: { slug?: string } | null
   openInNewTab?: boolean
   children?: Array<{
     id: string
-    label: string
+    label?: string
     items?: Array<{
       id: string
-      label: string
+      label?: string
       href?: string
       linkType?: 'page' | 'custom'
-      page?: string | { id: string; slug: string }
+      page?: { slug?: string } | null
       openInNewTab?: boolean
     }>
   }>
 }
 
 interface SocialLink {
-  platform: 'facebook' | 'twitter' | 'instagram' | 'linkedin' | 'youtube' | 'tiktok' | 'github' | 'discord'
+  platform:
+    | 'facebook'
+    | 'twitter'
+    | 'instagram'
+    | 'linkedin'
+    | 'youtube'
+    | 'tiktok'
+    | 'github'
+    | 'discord'
   url: string
   openInNewTab?: boolean
 }
@@ -73,10 +102,7 @@ interface FooterData {
 /**
  * Fetch the home page
  */
-export async function getHomePage(
-  locale: SupportedLocale = 'uk',
-  draft: boolean = false
-) {
+export async function getHomePage(locale: SupportedLocale = 'uk', draft: boolean = false) {
   const payload = await getPayload({ config })
 
   const result = await payload.find({
@@ -85,11 +111,13 @@ export async function getHomePage(
       pageType: {
         equals: 'home',
       },
-      ...(draft ? {} : {
-        status: {
-          equals: 'published',
-        },
-      }),
+      ...(draft
+        ? {}
+        : {
+            status: {
+              equals: 'published',
+            },
+          }),
     },
     locale,
     limit: 1,
@@ -115,11 +143,13 @@ export async function getPageBySlug(
       slug: {
         equals: slug,
       },
-      ...(draft ? {} : {
-        status: {
-          equals: 'published',
-        },
-      }),
+      ...(draft
+        ? {}
+        : {
+            status: {
+              equals: 'published',
+            },
+          }),
     },
     locale,
     limit: 1,
@@ -145,11 +175,13 @@ export async function getNewsBySlug(
       slug: {
         equals: slug,
       },
-      ...(draft ? {} : {
-        status: {
-          equals: 'published',
-        },
-      }),
+      ...(draft
+        ? {}
+        : {
+            status: {
+              equals: 'published',
+            },
+          }),
     },
     locale,
     limit: 1,
@@ -173,11 +205,13 @@ export async function getAllNews(
 
   const result = await payload.find({
     collection: 'news',
-    where: draft ? {} : {
-      status: {
-        equals: 'published',
-      },
-    },
+    where: draft
+      ? {}
+      : {
+          status: {
+            equals: 'published',
+          },
+        },
     locale,
     limit,
     page,
@@ -207,7 +241,7 @@ export async function getNewsForBlock(
   blockConfig: {
     contentSource: 'all' | 'byTag' | 'manual'
     selectedTag?: string | { id: string }
-    selectedNews?: any[]
+    selectedNews?: Array<string | { id: string }>
     limit?: number
   },
   locale: SupportedLocale = 'uk',
@@ -217,7 +251,7 @@ export async function getNewsForBlock(
 
   // Manual selection
   if (blockConfig.contentSource === 'manual' && blockConfig.selectedNews) {
-    const newsIds = blockConfig.selectedNews.map((item: any) =>
+    const newsIds = blockConfig.selectedNews.map((item) =>
       typeof item === 'string' ? item : item.id
     )
 
@@ -229,11 +263,13 @@ export async function getNewsForBlock(
         id: {
           in: newsIds,
         },
-        ...(draft ? {} : {
-          status: {
-            equals: 'published',
-          },
-        }),
+        ...(draft
+          ? {}
+          : {
+              status: {
+                equals: 'published',
+              },
+            }),
       },
       locale,
       depth: 2,
@@ -261,11 +297,13 @@ export async function getNewsForBlock(
         tags: {
           in: [tagId],
         },
-        ...(draft ? {} : {
-          status: {
-            equals: 'published',
-          },
-        }),
+        ...(draft
+          ? {}
+          : {
+              status: {
+                equals: 'published',
+              },
+            }),
       },
       locale,
       limit: blockConfig.limit || 10,
@@ -280,11 +318,13 @@ export async function getNewsForBlock(
   // All news (default)
   const result = await payload.find({
     collection: 'news',
-    where: draft ? {} : {
-      status: {
-        equals: 'published',
-      },
-    },
+    where: draft
+      ? {}
+      : {
+          status: {
+            equals: 'published',
+          },
+        },
     locale,
     limit: blockConfig.limit || 10,
     sort: '-publishedDate',
@@ -298,10 +338,7 @@ export async function getNewsForBlock(
 /**
  * Get all news tags
  */
-export async function getAllNewsTags(
-  locale: SupportedLocale = 'uk',
-  draft: boolean = false
-) {
+export async function getAllNewsTags(locale: SupportedLocale = 'uk', draft: boolean = false) {
   const payload = await getPayload({ config })
 
   const result = await payload.find({
@@ -315,10 +352,7 @@ export async function getAllNewsTags(
   return result.docs
 }
 
-export async function getSiteData(
-  locale: SupportedLocale = 'uk',
-  draft: boolean = false
-) {
+export async function getSiteData(locale: SupportedLocale = 'uk', draft: boolean = false) {
   const payload = await getPayload({ config })
 
   // Fetch site settings global with locale and draft status
@@ -365,7 +399,12 @@ export async function getSiteData(
     : undefined
 
   // Helper function to resolve href from page relationship or custom URL
-  const resolveHref = (linkType: string, page: any, customHref: string | undefined, locale: string): string | undefined => {
+  const resolveHref = (
+    linkType: string,
+    page: { slug?: string } | null | undefined,
+    customHref: string | undefined,
+    locale: string
+  ): string | undefined => {
     if (linkType === 'page' && page) {
       // If page is an object with slug, use it
       if (typeof page === 'object' && page.slug) {
@@ -381,24 +420,24 @@ export async function getSiteData(
   // Transform navigation items - 3-level structure with page references
   const navigationItems: NavigationItem[] | undefined =
     navigationResult.docs.length > 0
-      ? navigationResult.docs
-          .filter((doc: any) => doc.label)
-          .map((doc: any) => ({
+      ? (navigationResult.docs as NavigationDoc[])
+          .filter((doc) => doc.label)
+          .map((doc) => ({
             id: doc.id,
-            label: doc.label,
-            linkType: doc.linkType || undefined,
+            label: doc.label as string,
+            linkType: (doc.linkType as 'none' | 'page' | 'custom') || undefined,
             page: doc.page,
-            href: resolveHref(doc.linkType, doc.page, doc.href, locale),
+            href: resolveHref(doc.linkType || '', doc.page, doc.href, locale),
             openInNewTab: doc.openInNewTab,
-            children: doc.children?.map((child: any, childIndex: number) => ({
+            children: doc.children?.map((child, childIndex) => ({
               id: `${doc.id}-child-${childIndex}`,
               label: child.label,
-              items: child.items?.map((item: any, itemIndex: number) => ({
+              items: child.items?.map((item, itemIndex) => ({
                 id: `${doc.id}-child-${childIndex}-item-${itemIndex}`,
                 label: item.label,
-                linkType: item.linkType || undefined,
+                linkType: (item.linkType as 'page' | 'custom') || undefined,
                 page: item.page,
-                href: resolveHref(item.linkType, item.page, item.href, locale),
+                href: resolveHref(item.linkType || '', item.page, item.href, locale),
                 openInNewTab: item.openInNewTab,
               })),
             })),
@@ -407,7 +446,11 @@ export async function getSiteData(
 
   // Transform footer data - return undefined if no data
   const footer: FooterData | undefined =
-    footerData && (footerData.copyrightText || footerData.description || footerData.links || footerData.contactColumns)
+    footerData &&
+    (footerData.copyrightText ||
+      footerData.description ||
+      footerData.links ||
+      footerData.contactColumns)
       ? {
           copyrightText: footerData.copyrightText || undefined,
           description: footerData.description || undefined,

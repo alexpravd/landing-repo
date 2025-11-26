@@ -71,10 +71,12 @@ npm run seed:fresh       # Cleanup + seed in one step
 - **ESLint**: Next.js core-web-vitals rules; unused vars prefixed with `_` are ignored
 - **Prettier**: No semicolons, single quotes, 100-char lines, Tailwind class sorting
 - **Payload**: MongoDB, Slate editor, 3 locales (uk default, en, es), 5MB upload limit
+- **Pre-commit**: Husky + lint-staged runs type-check, ESLint, and Prettier; commits blocked on failure
 
 ## Environment Variables
 
 Required in `.env`:
+
 - `DATABASE_URI` - MongoDB connection string
 - `PAYLOAD_SECRET` - Min 32 characters
 - `NEXT_PUBLIC_SERVER_URL` - Full URL (e.g., http://localhost:3000)

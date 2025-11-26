@@ -30,12 +30,14 @@ npm run dev:docker
 ```
 
 First run automatically:
+
 - Starts MongoDB in Docker
 - Creates admin user (admin@example.com / admin123)
 - Seeds bilingual demo content
 - Launches Next.js dev server
 
 Access points:
+
 - Frontend: http://localhost:3000
 - Admin Panel: http://localhost:3000/admin
 - REST API: http://localhost:3000/api
@@ -43,17 +45,27 @@ Access points:
 
 ## Scripts
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev:docker` | Start MongoDB + auto-seed + dev server |
-| `npm run dev` | Dev server only (requires external MongoDB) |
-| `npm run build` | Production build |
-| `npm run docker:down` | Stop MongoDB (keeps data) |
-| `npm run docker:clean` | Stop MongoDB + delete all data |
-| `npm run seed:fresh` | Reset and re-seed database |
-| `npm run generate:types` | Regenerate TypeScript types |
-| `npm run lint` | Run ESLint |
-| `npm run type-check` | TypeScript checking |
+| Command                  | Description                                 |
+| ------------------------ | ------------------------------------------- |
+| `npm run dev:docker`     | Start MongoDB + auto-seed + dev server      |
+| `npm run dev`            | Dev server only (requires external MongoDB) |
+| `npm run build`          | Production build                            |
+| `npm run docker:down`    | Stop MongoDB (keeps data)                   |
+| `npm run docker:clean`   | Stop MongoDB + delete all data              |
+| `npm run seed:fresh`     | Reset and re-seed database                  |
+| `npm run generate:types` | Regenerate TypeScript types                 |
+| `npm run lint`           | Run ESLint                                  |
+| `npm run type-check`     | TypeScript checking                         |
+
+## Pre-commit Hooks
+
+This project uses Husky + lint-staged for automatic code quality checks before commits:
+
+- **TypeScript** - Full project type-check
+- **ESLint** - Auto-fix on staged files (blocks on errors/warnings)
+- **Prettier** - Auto-format staged files
+
+Commits are blocked if any check fails. Hooks are installed automatically via `npm install`.
 
 ## Environment Variables
 

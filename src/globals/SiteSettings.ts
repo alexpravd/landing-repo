@@ -11,17 +11,17 @@ export const SiteSettings: GlobalConfig = {
         interval: 2000, // Auto-save every 2 seconds
       },
     },
-    maxPerDoc: 50, // Keep up to 50 versions per document
+    max: 50, // Keep up to 50 versions per document
   },
   admin: {
     livePreview: {
-      url: ({ data, locale }) => {
+      url: ({ locale }) => {
         // Generate preview URL based on locale
         const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
         return `${baseUrl}/${locale || 'en'}?preview=true`
       },
     },
-    preview: (doc, { locale }) => {
+    preview: (_doc, { locale }) => {
       const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
       return `${baseUrl}/${locale || 'en'}?preview=true`
     },

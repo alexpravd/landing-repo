@@ -97,13 +97,6 @@ export default buildConfig({
     disable: false,
   },
 
-  // Rate limiting
-  rateLimit: {
-    trustProxy: true,
-    max: isProduction ? 500 : 2000,
-    window: 900000, // 15 minutes
-  },
-
   // Email configuration (optional)
   // email: {
   //   transportOptions: {
