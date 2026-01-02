@@ -4,18 +4,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Payload CMS platform built with Next.js 15, React 19, and Payload CMS 3.62. Features bilingual content support (Ukrainian/English/Spanish), block-based page architecture, and MongoDB database.
+Payload CMS platform built with Next.js 15, React 19, and Payload CMS 3.62. Features bilingual content support (Ukrainian/English/Spanish), block-based page architecture, and PostgreSQL database (Neon recommended for Vercel deployment).
 
 ## Common Commands
 
 ```bash
-# Docker Development (recommended)
-npm run dev:docker       # Start MongoDB + auto-seed + dev server (one command)
-npm run docker:down      # Stop MongoDB (preserves data)
-npm run docker:clean     # Stop MongoDB and delete all data
-npm run docker:logs      # View MongoDB logs
-
-# Development (requires external MongoDB)
+# Development (requires PostgreSQL - use Neon free tier)
 npm run dev              # Start dev server (port 3000)
 npm run build            # Production build
 npm run start            # Start production server
@@ -70,13 +64,21 @@ npm run seed:fresh       # Cleanup + seed in one step
 - **TypeScript**: Strict mode, path aliases (`@/*` → `./src/*`, `@/payload-types` → `./payload-types.ts`)
 - **ESLint**: Next.js core-web-vitals rules; unused vars prefixed with `_` are ignored
 - **Prettier**: No semicolons, single quotes, 100-char lines, Tailwind class sorting
-- **Payload**: MongoDB, Slate editor, 3 locales (uk default, en, es), 5MB upload limit
+- **Payload**: PostgreSQL (Neon), Slate editor, 3 locales (uk default, en, es), 5MB upload limit
 - **Pre-commit**: Husky + lint-staged runs type-check, ESLint, and Prettier; commits blocked on failure
 
 ## Environment Variables
 
 Required in `.env`:
 
-- `DATABASE_URI` - MongoDB connection string
+- `DATABASE_URI` - PostgreSQL connection string (e.g., `postgresql://user:pass@host/db?sslmode=require`)
 - `PAYLOAD_SECRET` - Min 32 characters
 - `NEXT_PUBLIC_SERVER_URL` - Full URL (e.g., http://localhost:3000)
+
+## Deployment
+
+Optimized for Vercel + Neon (PostgreSQL) free tier deployment:
+1. Create Neon account at https://neon.tech
+2. Connect GitHub repo to Vercel
+3. Add environment variables in Vercel dashboard
+4. Deploy

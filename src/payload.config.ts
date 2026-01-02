@@ -1,10 +1,10 @@
 import { buildConfig } from 'payload'
-import { mongooseAdapter } from '@payloadcms/db-mongodb'
+import { postgresAdapter } from '@payloadcms/db-postgres'
 import { slateEditor } from '@payloadcms/richtext-slate'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
-import { env, getCorsOrigins, isProduction } from './lib/env'
+import { env, getCorsOrigins } from './lib/env'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { MediaFolders } from './collections/MediaFolders'
@@ -46,12 +46,10 @@ export default buildConfig({
     outputFile: path.resolve(dirname, '../payload-types.ts'),
   },
 
-  // Database adapter
-  db: mongooseAdapter({
-    url: env.DATABASE_URI,
-    connectOptions: {
-      // Mongoose options
-      autoIndex: !isProduction,
+  // Database adapter (PostgreSQL for Vercel/Neon deployment)
+  db: postgresAdapter({
+    pool: {
+      connectionString: env.DATABASE_URI,
     },
   }),
 

@@ -42,11 +42,11 @@ function validateEnvironment(): EnvironmentConfig {
     )
   }
 
-  // Validate DATABASE_URI format
+  // Validate DATABASE_URI format (PostgreSQL)
   const dbUri = process.env.DATABASE_URI as string
-  if (!dbUri.startsWith('mongodb://') && !dbUri.startsWith('mongodb+srv://')) {
+  if (!dbUri.startsWith('postgres://') && !dbUri.startsWith('postgresql://')) {
     throw new EnvironmentError(
-      'DATABASE_URI must be a valid MongoDB connection string (mongodb:// or mongodb+srv://)'
+      'DATABASE_URI must be a valid PostgreSQL connection string (postgres:// or postgresql://)'
     )
   }
 
