@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     // Enable latest features
-    "lib": [
-      "ES2023",
-      "DOM",
-      "DOM.Iterable"
-    ],
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "bundler",
@@ -47,42 +43,16 @@
     // Path mapping
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ],
-      "@/components/*": [
-        "./src/components/*"
-      ],
-      "@/app/*": [
-        "./src/app/*"
-      ],
-      "@/lib/*": [
-        "./src/lib/*"
-      ],
-      "@/collections/*": [
-        "./src/collections/*"
-      ],
-      "@/payload-types": [
-        "./payload-types.ts"
-      ],
-      "@payload-config": [
-        "./src/payload.config.ts"
-      ]
+      "@/*": ["./src/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/app/*": ["./src/app/*"],
+      "@/lib/*": ["./src/lib/*"],
+      "@/collections/*": ["./src/collections/*"],
+      "@/payload-types": ["./payload-types.ts"],
+      "@payload-config": ["./src/payload.config.ts"]
     },
     "allowJs": true
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "backend",
-    ".next",
-    "dist",
-    "build",
-    "scripts"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules", "backend", ".next", "dist", "build", "scripts"]
 }

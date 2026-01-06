@@ -1,11 +1,6 @@
 'use client'
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from './ui/accordion'
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion'
 import { HelpCircle, Sparkles } from 'lucide-react'
 
 const faqItems = [
@@ -26,7 +21,7 @@ TechCorp offers a comprehensive range of technology services including:
 **Support & Training**: 24/7 customer support and comprehensive training programs to ensure your team's success.
 
 Our solutions are designed to scale with your business and adapt to changing market conditions.
-    `
+    `,
   },
   {
     id: 'item-2',
@@ -47,7 +42,7 @@ Getting started with TechCorp is simple and straightforward:
 **6. Ongoing Support**: Access to our 24/7 support team and regular updates to keep your systems running smoothly.
 
 The entire process typically takes 4-8 weeks depending on the complexity of your requirements.
-    `
+    `,
   },
   {
     id: 'item-3',
@@ -68,7 +63,7 @@ TechCorp serves a diverse range of industries including:
 **Government**: Public sector and municipal organizations with secure, compliant solutions.
 
 Our solutions are adaptable and can be customized for virtually any industry vertical.
-    `
+    `,
   },
   {
     id: 'item-4',
@@ -87,7 +82,7 @@ We offer flexible pricing models to suit different business needs:
 **Hybrid Models**: Combinations of the above to match your unique requirements and budget.
 
 Contact our sales team for a personalized quote based on your specific needs and scale.
-    `
+    `,
   },
   {
     id: 'item-5',
@@ -108,7 +103,7 @@ Security and compliance are at the core of everything we do:
 **Backup & Recovery**: Automated backups and disaster recovery plans to ensure business continuity.
 
 We maintain the highest security standards to protect your sensitive information and meet regulatory requirements.
-    `
+    `,
   },
   {
     id: 'item-6',
@@ -127,41 +122,41 @@ We provide comprehensive support to ensure your success:
 **Community Forums**: Active community forums where users can share knowledge and best practices.
 
 **Regular Updates**: Quarterly product updates and monthly security patches at no additional cost.
-    `
-  }
-];
+    `,
+  },
+]
 
 export function CollapsibleTextBlock() {
   return (
     <section className="bg-gradient-to-br from-gray-50 to-indigo-50/30 py-20">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 bg-teal-50 px-4 py-2 rounded-full mb-4">
+        <div className="mb-12 text-center">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-teal-50 px-4 py-2">
             <HelpCircle className="h-4 w-4 text-teal-700" />
             <span className="text-sm text-teal-700">Help Center</span>
           </div>
-          <h2 className="text-4xl mb-4">Frequently Asked Questions</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+          <h2 className="mb-4 text-4xl">Frequently Asked Questions</h2>
+          <p className="mx-auto max-w-2xl text-gray-600">
             Find answers to common questions about our services, pricing, and support
           </p>
         </div>
 
-        <div className="max-w-4xl mx-auto">
+        <div className="mx-auto max-w-4xl">
           <Accordion type="single" collapsible className="space-y-4">
             {faqItems.map((item) => (
-              <AccordionItem 
-                key={item.id} 
-                value={item.id} 
-                className="bg-white rounded-xl px-6 border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300 data-[state=open]:shadow-lg data-[state=open]:border-indigo-200"
+              <AccordionItem
+                key={item.id}
+                value={item.id}
+                className="rounded-xl border border-gray-200 bg-white px-6 shadow-sm transition-all duration-300 hover:shadow-lg data-[state=open]:border-indigo-200 data-[state=open]:shadow-lg"
               >
-                <AccordionTrigger className="hover:no-underline text-left py-5">
+                <AccordionTrigger className="py-5 text-left hover:no-underline">
                   <span className="flex items-start gap-3">
-                    <Sparkles className="h-5 w-5 text-indigo-600 flex-shrink-0 mt-0.5" />
+                    <Sparkles className="mt-0.5 h-5 w-5 flex-shrink-0 text-indigo-600" />
                     <span>{item.question}</span>
                   </span>
                 </AccordionTrigger>
                 <AccordionContent className="pb-5">
-                  <div className="prose prose-sm max-w-none text-gray-600 pl-8 whitespace-pre-line">
+                  <div className="prose prose-sm max-w-none whitespace-pre-line pl-8 text-gray-600">
                     {item.answer}
                   </div>
                 </AccordionContent>
@@ -169,16 +164,16 @@ export function CollapsibleTextBlock() {
             ))}
           </Accordion>
 
-          <div className="mt-12 text-center p-8 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl text-white">
-            <h3 className="text-white text-2xl mb-3">Still have questions?</h3>
-            <p className="text-indigo-100 mb-6">
+          <div className="mt-12 rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 p-8 text-center text-white">
+            <h3 className="mb-3 text-2xl text-white">Still have questions?</h3>
+            <p className="mb-6 text-indigo-100">
               Our team is here to help. Contact us for personalized assistance.
             </p>
-            <div className="flex gap-4 justify-center flex-wrap">
-              <button className="px-6 py-3 bg-white text-indigo-600 rounded-lg hover:bg-indigo-50 transition-colors">
+            <div className="flex flex-wrap justify-center gap-4">
+              <button className="rounded-lg bg-white px-6 py-3 text-indigo-600 transition-colors hover:bg-indigo-50">
                 Contact Sales
               </button>
-              <button className="px-6 py-3 bg-white/10 text-white rounded-lg hover:bg-white/20 transition-colors border border-white/20">
+              <button className="rounded-lg border border-white/20 bg-white/10 px-6 py-3 text-white transition-colors hover:bg-white/20">
                 View Documentation
               </button>
             </div>
@@ -186,5 +181,5 @@ export function CollapsibleTextBlock() {
         </div>
       </div>
     </section>
-  );
+  )
 }

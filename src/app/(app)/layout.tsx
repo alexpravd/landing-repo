@@ -42,11 +42,7 @@ export const metadata: Metadata = {
  * Wraps the main application with providers and shared layouts
  * This is a server component that wraps client components
  */
-export default function AppLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="uk" suppressHydrationWarning>
       <body className={`${inter.variable} font-sans antialiased`}>

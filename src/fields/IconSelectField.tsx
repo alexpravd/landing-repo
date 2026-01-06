@@ -20,7 +20,7 @@ export const IconSelectField: React.FC = () => {
     <div className="field-type">
       <div className="relative">
         <div
-          className="flex items-center gap-3 p-3 border border-gray-300 rounded-md cursor-pointer hover:border-blue-500 transition-colors bg-white"
+          className="flex cursor-pointer items-center gap-3 rounded-md border border-gray-300 bg-white p-3 transition-colors hover:border-blue-500"
           onClick={() => setIsOpen(!isOpen)}
         >
           {SelectedIcon && (
@@ -29,29 +29,24 @@ export const IconSelectField: React.FC = () => {
               <span className="text-sm font-medium">{value}</span>
             </div>
           )}
-          {!SelectedIcon && (
-            <span className="text-sm text-gray-500">Select an icon...</span>
-          )}
+          {!SelectedIcon && <span className="text-sm text-gray-500">Select an icon...</span>}
         </div>
 
         {isOpen && (
           <>
-            <div
-              className="fixed inset-0 z-40"
-              onClick={() => setIsOpen(false)}
-            />
-            <div className="absolute z-50 mt-2 w-full bg-white border border-gray-300 rounded-md shadow-xl max-h-96 overflow-hidden">
-              <div className="p-3 border-b border-gray-200 sticky top-0 bg-white">
+            <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
+            <div className="absolute z-50 mt-2 max-h-96 w-full overflow-hidden rounded-md border border-gray-300 bg-white shadow-xl">
+              <div className="sticky top-0 border-b border-gray-200 bg-white p-3">
                 <input
                   type="text"
                   placeholder="Search icons..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
-              <div className="grid grid-cols-5 gap-2 p-3 overflow-y-auto max-h-80">
+              <div className="grid max-h-80 grid-cols-5 gap-2 overflow-y-auto p-3">
                 {filteredIcons.map((iconName) => {
                   const IconComponent = iconMap[iconName as IconName]
                   const isSelected = value === iconName
@@ -64,15 +59,13 @@ export const IconSelectField: React.FC = () => {
                         setValue(iconName)
                         setIsOpen(false)
                       }}
-                      className={`
-                        flex flex-col items-center justify-center p-3 rounded-md transition-all
-                        hover:bg-blue-50 hover:border-blue-300 border-2
-                        ${isSelected ? 'bg-blue-100 border-blue-500' : 'bg-white border-transparent'}
-                      `}
+                      className={`flex flex-col items-center justify-center rounded-md border-2 p-3 transition-all hover:border-blue-300 hover:bg-blue-50 ${isSelected ? 'border-blue-500 bg-blue-100' : 'border-transparent bg-white'} `}
                       title={iconName}
                     >
-                      <IconComponent className={`h-6 w-6 ${isSelected ? 'text-blue-600' : 'text-gray-700'}`} />
-                      <span className="text-[10px] mt-1 truncate w-full text-center leading-tight">
+                      <IconComponent
+                        className={`h-6 w-6 ${isSelected ? 'text-blue-600' : 'text-gray-700'}`}
+                      />
+                      <span className="mt-1 w-full truncate text-center text-[10px] leading-tight">
                         {iconName}
                       </span>
                     </button>
@@ -82,7 +75,7 @@ export const IconSelectField: React.FC = () => {
 
               {filteredIcons.length === 0 && (
                 <div className="p-8 text-center text-gray-500">
-                  <Icons.Search className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                  <Icons.Search className="mx-auto mb-2 h-8 w-8 opacity-50" />
                   <p className="text-sm">No icons found</p>
                 </div>
               )}

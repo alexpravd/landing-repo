@@ -11,5 +11,11 @@ export async function HeaderWrapper({ locale }: HeaderWrapperProps) {
 
   if (!siteSettings || !navigationItems) return null
 
-  return <Header locale={locale} siteSettings={siteSettings as SiteSettings} navigationItems={navigationItems as NavigationItem[]} />
+  return (
+    <Header
+      locale={locale}
+      siteSettings={siteSettings as SiteSettings}
+      navigationItems={navigationItems as NavigationItem[]}
+    />
+  )
 }

@@ -18,24 +18,26 @@ export function Footer({ footerData, siteSettings }: FooterProps) {
         {/* Footer Description */}
         {footerData.description && (
           <div className="mb-8">
-            <p className="text-sm text-muted-foreground max-w-2xl">{footerData.description}</p>
+            <p className="max-w-2xl text-sm text-muted-foreground">{footerData.description}</p>
           </div>
         )}
 
         {/* Footer Columns */}
         {footerData.columns && footerData.columns.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+          <div className="mb-8 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
             {footerData.columns.map((column, index) => (
               <div key={index}>
-                <h3 className="font-semibold text-sm mb-3">{column.title}</h3>
+                <h3 className="mb-3 text-sm font-semibold">{column.title}</h3>
                 {column.links && column.links.length > 0 && (
                   <ul className="space-y-2">
                     {column.links.map((link, linkIndex) => (
                       <li key={linkIndex}>
                         <Link
                           href={link.href}
-                          className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                          {...(link.openInNewTab ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                          className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                          {...(link.openInNewTab
+                            ? { target: '_blank', rel: 'noopener noreferrer' }
+                            : {})}
                         >
                           {link.label}
                         </Link>
@@ -50,12 +52,12 @@ export function Footer({ footerData, siteSettings }: FooterProps) {
 
         {/* Footer Links */}
         {footerData.links && footerData.links.length > 0 && (
-          <div className="flex flex-wrap gap-4 mb-8">
+          <div className="mb-8 flex flex-wrap gap-4">
             {footerData.links.map((link, index) => (
               <Link
                 key={index}
                 href={link.href}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
                 {...(link.openInNewTab ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
               >
                 {link.label}
@@ -66,13 +68,13 @@ export function Footer({ footerData, siteSettings }: FooterProps) {
 
         {/* Social Links */}
         {siteSettings.socialLinks && (
-          <div className="flex gap-4 mb-8">
+          <div className="mb-8 flex gap-4">
             {siteSettings.socialLinks.facebook && (
               <a
                 href={siteSettings.socialLinks.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-foreground transition-colors"
+                className="text-muted-foreground transition-colors hover:text-foreground"
                 aria-label="Facebook"
               >
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -85,7 +87,7 @@ export function Footer({ footerData, siteSettings }: FooterProps) {
                 href={siteSettings.socialLinks.twitter}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-foreground transition-colors"
+                className="text-muted-foreground transition-colors hover:text-foreground"
                 aria-label="Twitter"
               >
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -98,7 +100,7 @@ export function Footer({ footerData, siteSettings }: FooterProps) {
                 href={siteSettings.socialLinks.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-foreground transition-colors"
+                className="text-muted-foreground transition-colors hover:text-foreground"
                 aria-label="LinkedIn"
               >
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -111,7 +113,7 @@ export function Footer({ footerData, siteSettings }: FooterProps) {
                 href={siteSettings.socialLinks.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-foreground transition-colors"
+                className="text-muted-foreground transition-colors hover:text-foreground"
                 aria-label="Instagram"
               >
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
@@ -124,8 +126,9 @@ export function Footer({ footerData, siteSettings }: FooterProps) {
 
         {/* Copyright */}
         <div className="border-t pt-8">
-          <p className="text-sm text-muted-foreground text-center">
-            {footerData.copyrightText || `© ${currentYear} ${siteSettings.siteTitle}. All rights reserved.`}
+          <p className="text-center text-sm text-muted-foreground">
+            {footerData.copyrightText ||
+              `© ${currentYear} ${siteSettings.siteTitle}. All rights reserved.`}
           </p>
         </div>
       </div>

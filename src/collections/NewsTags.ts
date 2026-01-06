@@ -36,7 +36,8 @@ export const NewsTags: CollectionConfig = {
       required: true,
       unique: true,
       admin: {
-        description: 'URL-friendly identifier (auto-generated from name with Cyrillic transliteration)',
+        description:
+          'URL-friendly identifier (auto-generated from name with Cyrillic transliteration)',
         position: 'sidebar',
       },
       hooks: {

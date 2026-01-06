@@ -9,10 +9,9 @@ import '@uiw/react-md-editor/markdown-editor.css'
 import '@uiw/react-markdown-preview/markdown.css'
 
 // Dynamically import the markdown editor and commands to avoid SSR issues
-const MDEditor = dynamic(
-  () => import('@uiw/react-md-editor').then((mod) => mod.default),
-  { ssr: false }
-)
+const MDEditor = dynamic(() => import('@uiw/react-md-editor').then((mod) => mod.default), {
+  ssr: false,
+})
 
 // Import all commands dynamically (commented out since unused)
 // const commands = dynamic(
@@ -46,7 +45,7 @@ export const MarkdownEditorField: React.FC = () => {
       // Preserve line breaks
       turndownService.current.addRule('lineBreak', {
         filter: 'br',
-        replacement: () => '  \n'
+        replacement: () => '  \n',
       })
 
       // Handle images better
@@ -58,7 +57,7 @@ export const MarkdownEditorField: React.FC = () => {
           const src = element.src || ''
           const title = element.title ? ` "${element.title}"` : ''
           return src ? `![${alt}](${src}${title})` : ''
-        }
+        },
       })
     }
   }, [])
@@ -105,9 +104,7 @@ export const MarkdownEditorField: React.FC = () => {
 
             // Insert markdown at cursor position
             const newValue =
-              currentValue.substring(0, start) +
-              markdown +
-              currentValue.substring(end)
+              currentValue.substring(0, start) + markdown + currentValue.substring(end)
 
             setValue(newValue)
 
@@ -160,13 +157,17 @@ export const MarkdownEditorField: React.FC = () => {
             <div>
               <h4>✨ Smart Markdown Editor</h4>
               <p>
-                Use the toolbar buttons to format your text. Changes appear in the preview on the right.
+                Use the toolbar buttons to format your text. Changes appear in the preview on the
+                right.
                 <br />
-                <strong>✨ Magic Paste:</strong> Copy content from ANY website and paste here - it will automatically convert to markdown!
+                <strong>✨ Magic Paste:</strong> Copy content from ANY website and paste here - it
+                will automatically convert to markdown!
                 <br />
-                <strong>Copy/Paste:</strong> You can also copy/paste markdown between editors - all formatting preserved!
+                <strong>Copy/Paste:</strong> You can also copy/paste markdown between editors - all
+                formatting preserved!
                 <br />
-                Common shortcuts: <strong>Ctrl+B</strong> (bold), <strong>Ctrl+I</strong> (italic), <strong>Ctrl+K</strong> (link)
+                Common shortcuts: <strong>Ctrl+B</strong> (bold), <strong>Ctrl+I</strong> (italic),{' '}
+                <strong>Ctrl+K</strong> (link)
               </p>
             </div>
             <button
@@ -203,7 +204,8 @@ export const MarkdownEditorField: React.FC = () => {
           // Bold, Italic, Strikethrough, HR, Headings (H1-H6),
           // Links, Quotes, Code, Images, Lists, Tables, etc.
           textareaProps={{
-            placeholder: 'Start typing or use the toolbar buttons above to format your content...\n\n💡 TIP: You can paste markdown from anywhere and it will preserve all formatting!\n\nQuick examples:\n\n# Large Heading\n## Medium Heading\n### Small Heading\n\n**Bold text** or __Bold text__\n*Italic text* or _Italic text_\n~~Strikethrough~~\n\n- Bullet point 1\n- Bullet point 2\n  - Nested bullet\n\n1. Numbered item 1\n2. Numbered item 2\n\n> This is a quote or blockquote\n\n`Inline code snippet`\n\n```javascript\n// Code block\nconst example = "hello";\n```\n\n[Link text](https://example.com)\n\n![Image description](image-url.jpg)\n\n| Column 1 | Column 2 | Column 3 |\n|----------|----------|----------|\n| Data 1   | Data 2   | Data 3   |\n| Data 4   | Data 5   | Data 6   |\n\n---\n\nHorizontal line above',
+            placeholder:
+              'Start typing or use the toolbar buttons above to format your content...\n\n💡 TIP: You can paste markdown from anywhere and it will preserve all formatting!\n\nQuick examples:\n\n# Large Heading\n## Medium Heading\n### Small Heading\n\n**Bold text** or __Bold text__\n*Italic text* or _Italic text_\n~~Strikethrough~~\n\n- Bullet point 1\n- Bullet point 2\n  - Nested bullet\n\n1. Numbered item 1\n2. Numbered item 2\n\n> This is a quote or blockquote\n\n`Inline code snippet`\n\n```javascript\n// Code block\nconst example = "hello";\n```\n\n[Link text](https://example.com)\n\n![Image description](image-url.jpg)\n\n| Column 1 | Column 2 | Column 3 |\n|----------|----------|----------|\n| Data 1   | Data 2   | Data 3   |\n| Data 4   | Data 5   | Data 6   |\n\n---\n\nHorizontal line above',
             spellCheck: true,
             autoComplete: 'off',
             autoCorrect: 'off',
@@ -219,27 +221,64 @@ export const MarkdownEditorField: React.FC = () => {
           <div className="reference-grid">
             <div className="reference-item">
               <strong>Headers</strong>
-              <code># H1<br />## H2<br />### H3</code>
+              <code>
+                # H1
+                <br />
+                ## H2
+                <br />
+                ### H3
+              </code>
             </div>
             <div className="reference-item">
               <strong>Emphasis</strong>
-              <code>**bold**<br />*italic*<br />~~strikethrough~~</code>
+              <code>
+                **bold**
+                <br />
+                *italic*
+                <br />
+                ~~strikethrough~~
+              </code>
             </div>
             <div className="reference-item">
               <strong>Lists</strong>
-              <code>- Item 1<br />- Item 2<br />  - Nested<br /><br />1. Item 1<br />2. Item 2</code>
+              <code>
+                - Item 1<br />- Item 2<br /> - Nested
+                <br />
+                <br />
+                1. Item 1<br />
+                2. Item 2
+              </code>
             </div>
             <div className="reference-item">
               <strong>Links & Images</strong>
-              <code>[text](url)<br />![alt](image.jpg)</code>
+              <code>
+                [text](url)
+                <br />
+                ![alt](image.jpg)
+              </code>
             </div>
             <div className="reference-item">
               <strong>Code</strong>
-              <code>`inline code`<br /><br />```<br />code block<br />```</code>
+              <code>
+                `inline code`
+                <br />
+                <br />
+                ```
+                <br />
+                code block
+                <br />
+                ```
+              </code>
             </div>
             <div className="reference-item">
               <strong>Quotes & Tables</strong>
-              <code>&gt; Quote<br /><br />| Col | Col |<br />|-----|-----|<br />| A   | B   |</code>
+              <code>
+                &gt; Quote
+                <br />
+                <br />| Col | Col |<br />
+                |-----|-----|
+                <br />| A | B |
+              </code>
             </div>
           </div>
         </details>
@@ -259,7 +298,9 @@ export const MarkdownEditorField: React.FC = () => {
           background: linear-gradient(135deg, #10b981 0%, #059669 100%);
           color: white;
           border-radius: 8px;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 10px 30px rgba(16, 185, 129, 0.2);
+          box-shadow:
+            0 4px 12px rgba(0, 0, 0, 0.15),
+            0 10px 30px rgba(16, 185, 129, 0.2);
           font-size: 14px;
           font-weight: 600;
           animation: slideInRight 0.3s ease;
@@ -362,7 +403,9 @@ export const MarkdownEditorField: React.FC = () => {
         }
 
         .markdown-editor-field .w-md-editor {
-          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+          box-shadow:
+            0 4px 6px -1px rgba(0, 0, 0, 0.1),
+            0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
           border: 1px solid #d1d5db !important;
           border-radius: 0 0 8px 8px !important;
         }
@@ -404,7 +447,7 @@ export const MarkdownEditorField: React.FC = () => {
           transform: translateY(-1px);
         }
 
-        .markdown-editor-field .w-md-editor-toolbar button[data-active="true"] {
+        .markdown-editor-field .w-md-editor-toolbar button[data-active='true'] {
           background-color: #4f46e5 !important;
           color: white !important;
         }
@@ -425,7 +468,8 @@ export const MarkdownEditorField: React.FC = () => {
         }
 
         .markdown-editor-field .w-md-editor-text {
-          font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', 'Fira Mono', 'Roboto Mono', monospace !important;
+          font-family:
+            'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', 'Fira Mono', 'Roboto Mono', monospace !important;
           font-size: 14px !important;
           line-height: 1.7 !important;
           padding: 16px !important;
@@ -444,7 +488,9 @@ export const MarkdownEditorField: React.FC = () => {
         }
 
         .markdown-editor-field .wmde-markdown {
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif !important;
+          font-family:
+            -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+            'Cantarell', sans-serif !important;
           font-size: 15px !important;
           line-height: 1.7 !important;
           color: #1f2937 !important;
@@ -584,7 +630,9 @@ export const MarkdownEditorField: React.FC = () => {
           margin: 20px 0 !important;
           border-radius: 8px !important;
           overflow: hidden !important;
-          box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
+          box-shadow:
+            0 1px 3px 0 rgba(0, 0, 0, 0.1),
+            0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
         }
 
         .markdown-editor-field .wmde-markdown table th,
@@ -631,7 +679,9 @@ export const MarkdownEditorField: React.FC = () => {
           height: auto !important;
           border-radius: 8px !important;
           margin: 20px 0 !important;
-          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+          box-shadow:
+            0 4px 6px -1px rgba(0, 0, 0, 0.1),
+            0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
         }
 
         /* Horizontal Rule */
@@ -642,7 +692,7 @@ export const MarkdownEditorField: React.FC = () => {
         }
 
         /* Task Lists */
-        .markdown-editor-field .wmde-markdown input[type="checkbox"] {
+        .markdown-editor-field .wmde-markdown input[type='checkbox'] {
           margin-right: 8px !important;
           cursor: pointer !important;
         }

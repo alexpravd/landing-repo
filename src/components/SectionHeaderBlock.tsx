@@ -31,7 +31,9 @@ export function SectionHeaderBlock({
 }: SectionHeaderBlockProps) {
   const HeadingTag = headingLevel
   const IconComponent = badge?.icon ? getIcon(badge.icon) : null
-  const gradientClasses = badge?.gradient ? getGradientClasses(badge.gradient) : 'from-indigo-500 to-purple-500'
+  const gradientClasses = badge?.gradient
+    ? getGradientClasses(badge.gradient)
+    : 'from-indigo-500 to-purple-500'
 
   if (type === 'big') {
     return (
@@ -39,29 +41,29 @@ export function SectionHeaderBlock({
         initial={enableAnimation ? { y: 20, opacity: 0 } : undefined}
         animate={enableAnimation ? { y: 0, opacity: 1 } : undefined}
         transition={enableAnimation ? { delay: 0.2, duration: 0.5 } : undefined}
-        className="text-center mb-8"
+        className="mb-8 text-center"
       >
         {badge && (
-          <div className={`inline-flex items-center gap-2 bg-gradient-to-r ${gradientClasses} px-6 py-2 rounded-full mb-6 shadow-lg`}>
+          <div
+            className={`inline-flex items-center gap-2 bg-gradient-to-r ${gradientClasses} mb-6 rounded-full px-6 py-2 shadow-lg`}
+          >
             {IconComponent && <IconComponent className="h-4 w-4 text-white" />}
             <span className="text-white">{badge.text}</span>
           </div>
         )}
 
-        <HeadingTag className="text-5xl md:text-6xl lg:text-7xl mb-6 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+        <HeadingTag className="mb-6 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-5xl text-transparent md:text-6xl lg:text-7xl">
           {title}
         </HeadingTag>
 
         {subtitle && (
-          <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed mb-4">
+          <p className="mx-auto mb-4 max-w-3xl text-xl leading-relaxed text-gray-600 md:text-2xl">
             {subtitle}
           </p>
         )}
 
         {description && (
-          <p className="text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed">
-            {description}
-          </p>
+          <p className="mx-auto max-w-2xl text-lg leading-relaxed text-gray-500">{description}</p>
         )}
       </motion.div>
     )
@@ -73,40 +75,30 @@ export function SectionHeaderBlock({
       initial={enableAnimation ? { y: 20, opacity: 0 } : undefined}
       animate={enableAnimation ? { y: 0, opacity: 1 } : undefined}
       transition={enableAnimation ? { duration: 0.5 } : undefined}
-      className="text-center mb-12"
+      className="mb-12 text-center"
     >
       {badge && (
-        <div className="inline-flex items-center gap-2 bg-indigo-50 px-4 py-2 rounded-full mb-4">
+        <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-indigo-50 px-4 py-2">
           {IconComponent && badge.gradient ? (
-            <div className={`h-4 w-4 bg-gradient-to-r ${gradientClasses} rounded-full flex items-center justify-center`}>
+            <div
+              className={`h-4 w-4 bg-gradient-to-r ${gradientClasses} flex items-center justify-center rounded-full`}
+            >
               <IconComponent className="h-3 w-3 text-white" />
             </div>
           ) : IconComponent ? (
             <IconComponent className="h-4 w-4 text-indigo-700" />
           ) : (
-            <div className="w-2 h-2 bg-indigo-600 rounded-full animate-pulse" />
+            <div className="h-2 w-2 animate-pulse rounded-full bg-indigo-600" />
           )}
-          <span className="text-sm text-indigo-700">
-            {badge.text}
-          </span>
+          <span className="text-sm text-indigo-700">{badge.text}</span>
         </div>
       )}
 
-      <HeadingTag className="text-4xl mb-4 font-bold text-gray-900">
-        {title}
-      </HeadingTag>
+      <HeadingTag className="mb-4 text-4xl font-bold text-gray-900">{title}</HeadingTag>
 
-      {subtitle && (
-        <p className="text-xl text-gray-700 max-w-2xl mx-auto mb-2">
-          {subtitle}
-        </p>
-      )}
+      {subtitle && <p className="mx-auto mb-2 max-w-2xl text-xl text-gray-700">{subtitle}</p>}
 
-      {description && (
-        <p className="text-gray-600 max-w-2xl mx-auto">
-          {description}
-        </p>
-      )}
+      {description && <p className="mx-auto max-w-2xl text-gray-600">{description}</p>}
     </motion.div>
   )
 }

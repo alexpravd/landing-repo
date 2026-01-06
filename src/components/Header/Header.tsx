@@ -24,7 +24,11 @@ export function Header({ locale, siteSettings, navigationItems }: HeaderProps) {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center">
         {/* Logo and Title */}
-        <Link href={homeUrl} className="mr-6 flex items-center space-x-2" aria-label={`${siteSettings.siteTitle} - Home`}>
+        <Link
+          href={homeUrl}
+          className="mr-6 flex items-center space-x-2"
+          aria-label={`${siteSettings.siteTitle} - Home`}
+        >
           {siteSettings.siteLogo?.url && (
             <Image
               src={siteSettings.siteLogo.url}
@@ -38,12 +42,12 @@ export function Header({ locale, siteSettings, navigationItems }: HeaderProps) {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-6 text-sm font-medium flex-1">
+        <nav className="hidden flex-1 items-center space-x-6 text-sm font-medium md:flex">
           {navigationItems.map((item) => (
-            <div key={item.id} className="relative group">
+            <div key={item.id} className="group relative">
               <Link
                 href={item.href}
-                className="transition-colors hover:text-foreground/80 text-foreground/60"
+                className="text-foreground/60 transition-colors hover:text-foreground/80"
                 {...(item.openInNewTab ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
               >
                 {item.label}
@@ -51,14 +55,16 @@ export function Header({ locale, siteSettings, navigationItems }: HeaderProps) {
 
               {/* Dropdown for children */}
               {item.children && item.children.length > 0 && (
-                <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-background border hidden group-hover:block">
+                <div className="absolute left-0 mt-2 hidden w-48 rounded-md border bg-background shadow-lg group-hover:block">
                   <div className="py-1">
                     {item.children.map((child) => (
                       <Link
                         key={child.id}
                         href={child.href}
                         className="block px-4 py-2 text-sm text-foreground/60 hover:bg-accent hover:text-foreground/80"
-                        {...(child.openInNewTab ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                        {...(child.openInNewTab
+                          ? { target: '_blank', rel: 'noopener noreferrer' }
+                          : {})}
                       >
                         {child.label}
                       </Link>
@@ -73,41 +79,46 @@ export function Header({ locale, siteSettings, navigationItems }: HeaderProps) {
         {/* Mobile Menu Toggle */}
         <button
           onClick={toggleMobileNav}
-          className="inline-flex items-center justify-center rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:text-accent-foreground h-9 py-2 mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
+          className="mr-2 inline-flex h-9 items-center justify-center rounded-md px-0 py-2 text-base font-medium transition-colors hover:bg-transparent hover:text-accent-foreground focus-visible:bg-transparent focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-ring focus-visible:ring-offset-0 disabled:pointer-events-none disabled:opacity-50 md:hidden"
           aria-label="Toggle Menu"
           aria-expanded={isMobileNavOpen}
         >
-          <svg
-            className="h-6 w-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
+          <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             {isMobileNavOpen ? (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
             ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
             )}
           </svg>
         </button>
 
         {/* Language Switcher */}
-        <div className="hidden md:flex items-center space-x-2 ml-auto">
+        <div className="ml-auto hidden items-center space-x-2 md:flex">
           <Link
             href={`/en${typeof window !== 'undefined' ? window.location.pathname.substring(3) : ''}`}
-            className={`px-2 py-1 text-sm rounded ${localeString === 'en' ? 'bg-accent' : ''}`}
+            className={`rounded px-2 py-1 text-sm ${localeString === 'en' ? 'bg-accent' : ''}`}
           >
             EN
           </Link>
           <Link
             href={`/uk${typeof window !== 'undefined' ? window.location.pathname.substring(3) : ''}`}
-            className={`px-2 py-1 text-sm rounded ${localeString === 'uk' ? 'bg-accent' : ''}`}
+            className={`rounded px-2 py-1 text-sm ${localeString === 'uk' ? 'bg-accent' : ''}`}
           >
             UK
           </Link>
           <Link
             href={`/es${typeof window !== 'undefined' ? window.location.pathname.substring(3) : ''}`}
-            className={`px-2 py-1 text-sm rounded ${localeString === 'es' ? 'bg-accent' : ''}`}
+            className={`rounded px-2 py-1 text-sm ${localeString === 'es' ? 'bg-accent' : ''}`}
           >
             ES
           </Link>
@@ -116,13 +127,13 @@ export function Header({ locale, siteSettings, navigationItems }: HeaderProps) {
 
       {/* Mobile Navigation */}
       {isMobileNavOpen && (
-        <div className="md:hidden border-t">
-          <nav className="container py-4 space-y-2">
+        <div className="border-t md:hidden">
+          <nav className="container space-y-2 py-4">
             {navigationItems.map((item) => (
               <div key={item.id}>
                 <Link
                   href={item.href}
-                  className="block px-4 py-2 text-sm hover:bg-accent rounded-md"
+                  className="block rounded-md px-4 py-2 text-sm hover:bg-accent"
                   {...(item.openInNewTab ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                   onClick={() => !item.children?.length && toggleMobileNav()}
                 >
@@ -134,8 +145,10 @@ export function Header({ locale, siteSettings, navigationItems }: HeaderProps) {
                       <Link
                         key={child.id}
                         href={child.href}
-                        className="block px-4 py-2 text-xs hover:bg-accent rounded-md"
-                        {...(child.openInNewTab ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                        className="block rounded-md px-4 py-2 text-xs hover:bg-accent"
+                        {...(child.openInNewTab
+                          ? { target: '_blank', rel: 'noopener noreferrer' }
+                          : {})}
                         onClick={toggleMobileNav}
                       >
                         {child.label}
@@ -150,19 +163,19 @@ export function Header({ locale, siteSettings, navigationItems }: HeaderProps) {
             <div className="flex items-center space-x-2 px-4 py-2">
               <Link
                 href={`/en${typeof window !== 'undefined' ? window.location.pathname.substring(3) : ''}`}
-                className={`px-3 py-1 text-sm rounded ${localeString === 'en' ? 'bg-accent' : ''}`}
+                className={`rounded px-3 py-1 text-sm ${localeString === 'en' ? 'bg-accent' : ''}`}
               >
                 EN
               </Link>
               <Link
                 href={`/uk${typeof window !== 'undefined' ? window.location.pathname.substring(3) : ''}`}
-                className={`px-3 py-1 text-sm rounded ${localeString === 'uk' ? 'bg-accent' : ''}`}
+                className={`rounded px-3 py-1 text-sm ${localeString === 'uk' ? 'bg-accent' : ''}`}
               >
                 UK
               </Link>
               <Link
                 href={`/es${typeof window !== 'undefined' ? window.location.pathname.substring(3) : ''}`}
-                className={`px-3 py-1 text-sm rounded ${localeString === 'es' ? 'bg-accent' : ''}`}
+                className={`rounded px-3 py-1 text-sm ${localeString === 'es' ? 'bg-accent' : ''}`}
               >
                 ES
               </Link>

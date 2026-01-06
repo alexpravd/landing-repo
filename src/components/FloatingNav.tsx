@@ -82,17 +82,17 @@ export function FloatingNav({
     <motion.div
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      className={`sticky top-4 z-40 mx-4 md:mx-8 mt-4 ${className}`}
+      className={`sticky top-4 z-40 mx-4 mt-4 md:mx-8 ${className}`}
     >
       <div className="container mx-auto">
-        <div className="bg-white/90 backdrop-blur-2xl rounded-3xl shadow-xl border border-white/50 px-6 py-4">
+        <div className="rounded-3xl border border-white/50 bg-white/90 px-6 py-4 shadow-xl backdrop-blur-2xl">
           <div className="flex items-center justify-between">
             {/* Left side - Back button */}
             {showBackButton && (
               <Button
                 onClick={handleBack}
                 variant="ghost"
-                className="gap-2 hover:bg-indigo-50 rounded-2xl"
+                className="gap-2 rounded-2xl hover:bg-indigo-50"
               >
                 <ArrowLeft className="h-4 w-4" />
                 <span className="hidden sm:inline">{backButtonText}</span>
@@ -100,10 +100,10 @@ export function FloatingNav({
             )}
 
             {/* Right side - Site info and badges */}
-            <div className="flex items-center gap-3 ml-auto">
+            <div className="ml-auto flex items-center gap-3">
               {/* Site name */}
               {siteName && (
-                <div className="hidden md:flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-full">
+                <div className="hidden items-center gap-2 rounded-full bg-gradient-to-r from-indigo-50 to-purple-50 px-4 py-2 md:flex">
                   {siteIcon && siteIcon}
                   <span className="text-sm text-indigo-900">{siteName}</span>
                 </div>
@@ -113,7 +113,7 @@ export function FloatingNav({
               {badgeText && (
                 <Badge
                   variant={badgeVariant}
-                  className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white border-0 shadow-lg"
+                  className="border-0 bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg"
                 >
                   {badgeText}
                 </Badge>

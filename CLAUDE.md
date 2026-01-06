@@ -78,6 +78,7 @@ Required in `.env`:
 ## Deployment
 
 Optimized for Vercel + Neon (PostgreSQL) free tier deployment:
+
 1. Create Neon account at https://neon.tech
 2. Connect GitHub repo to Vercel
 3. Add environment variables in Vercel dashboard

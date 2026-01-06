@@ -81,5 +81,7 @@ export const gradientOptions = Object.values(gradientPresets).map((preset) => ({
 }))
 
 export const getGradientClasses = (gradient: GradientPreset | string) => {
-  return gradientPresets[gradient as GradientPreset]?.classes || gradientPresets['indigo-purple'].classes
+  return (
+    gradientPresets[gradient as GradientPreset]?.classes || gradientPresets['indigo-purple'].classes
+  )
 }

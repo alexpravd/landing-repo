@@ -99,3 +99,6 @@ docker-compose.override.yml
 # package-lock.json
 # yarn.lock
 # pnpm-lock.yaml
+
+# Auto Claude data directory
+.auto-claude/

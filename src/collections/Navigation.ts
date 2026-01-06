@@ -69,7 +69,8 @@ export const Navigation: CollectionConfig = {
       required: false,
       admin: {
         description: 'Select a page to link to',
-        condition: (data) => data.linkType === 'page' && (!data.children || data.children.length === 0),
+        condition: (data) =>
+          data.linkType === 'page' && (!data.children || data.children.length === 0),
       },
     },
     {
@@ -79,7 +80,8 @@ export const Navigation: CollectionConfig = {
       localized: true,
       admin: {
         description: 'Custom URL (e.g., /about, https://example.com)',
-        condition: (data) => data.linkType === 'custom' && (!data.children || data.children.length === 0),
+        condition: (data) =>
+          data.linkType === 'custom' && (!data.children || data.children.length === 0),
       },
     },
     {

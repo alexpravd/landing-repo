@@ -55,7 +55,7 @@ function validateEnvironment(): EnvironmentConfig {
   if (secret.length < 32) {
     warnings.push(
       'PAYLOAD_SECRET should be at least 32 characters long for security. ' +
-        'Generate a secure secret with: node -e "console.log(require(\'crypto\').randomBytes(32).toString(\'hex\'))"'
+        "Generate a secure secret with: node -e \"console.log(require('crypto').randomBytes(32).toString('hex'))\""
     )
   }
 
