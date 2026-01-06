@@ -49,6 +49,14 @@ export default async function LocaleLayout(props: LocaleLayoutProps) {
 
   return (
     <>
+      {/* Skip to content link for accessibility */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[200] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+      >
+        Skip to main content
+      </a>
+
       {isPreview && (
         <div className="sticky top-0 z-[100] bg-yellow-500 px-4 py-2 text-center text-sm font-medium text-black">
           Preview Mode - Locale: {localeString} (type: {typeof locale})
@@ -63,7 +71,9 @@ export default async function LocaleLayout(props: LocaleLayoutProps) {
         currentLocale={localeString}
         availableLocales={availableLocales}
       />
-      <main className="flex-1">{children}</main>
+      <main id="main-content" className="flex-1">
+        {children}
+      </main>
       <Footer siteSettings={siteSettings} footerData={footer} />
     </>
   )

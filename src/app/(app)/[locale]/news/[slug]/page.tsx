@@ -10,6 +10,7 @@ import { LivePreviewNews } from '@/components/LivePreviewNews'
 import type { IconName } from '@/lib/icons'
 import type { GradientPreset } from '@/lib/gradients'
 import { generateSEOMetadata, type SEOData } from '@/lib/seo'
+import { getTagColorClasses } from '@/lib/tag-colors'
 
 /**
  * Rich text node interface for Lexical/Slate content
@@ -109,21 +110,12 @@ function NewsArticleRenderer({ article }: { article: News }) {
               if (!tagData) return null
 
               const color = tagData.color || 'indigo'
-              const colorClasses = {
-                indigo: 'bg-indigo-100 text-indigo-700 border-indigo-200',
-                blue: 'bg-blue-100 text-blue-700 border-blue-200',
-                purple: 'bg-purple-100 text-purple-700 border-purple-200',
-                green: 'bg-green-100 text-green-700 border-green-200',
-                amber: 'bg-amber-100 text-amber-700 border-amber-200',
-                red: 'bg-red-100 text-red-700 border-red-200',
-                pink: 'bg-pink-100 text-pink-700 border-pink-200',
-                teal: 'bg-teal-100 text-teal-700 border-teal-200',
-              }
+              const colorClasses = getTagColorClasses(color)
 
               return (
                 <span
                   key={tagData.id}
-                  className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium ${colorClasses[color as keyof typeof colorClasses]}`}
+                  className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium ${colorClasses.combined}`}
                 >
                   <Tag className="h-3 w-3" />
                   {tagData.name}
@@ -134,17 +126,13 @@ function NewsArticleRenderer({ article }: { article: News }) {
         )}
 
         {/* Title */}
-        <h1 className="mb-4 text-4xl font-bold text-gray-900 dark:text-gray-100 md:text-5xl">
-          {title}
-        </h1>
+        <h1 className="mb-4 text-4xl font-bold text-foreground md:text-5xl">{title}</h1>
 
         {/* Excerpt */}
-        {excerpt && (
-          <p className="mb-6 text-xl leading-relaxed text-gray-600 dark:text-gray-400">{excerpt}</p>
-        )}
+        {excerpt && <p className="mb-6 text-xl leading-relaxed text-muted-foreground">{excerpt}</p>}
 
         {/* Metadata */}
-        <div className="flex flex-wrap items-center gap-6 border-b border-t border-gray-200 py-4 text-sm text-gray-600 dark:border-gray-700 dark:text-gray-400">
+        <div className="flex flex-wrap items-center gap-6 border-b border-t border-border py-4 text-sm text-muted-foreground">
           {/* Published Date */}
           {publishedDate && (
             <div className="flex items-center gap-2">
@@ -177,9 +165,17 @@ function NewsArticleRenderer({ article }: { article: News }) {
       {featuredImage && typeof featuredImage === 'object' && 'url' in featuredImage && (
         <div className="mx-auto mb-12 max-w-5xl">
           <figure className="overflow-hidden rounded-xl shadow-lg">
-            {featuredImage.caption && (
-              <figcaption className="bg-gray-50 px-6 py-3 text-center text-sm text-gray-600 dark:bg-gray-800 dark:text-gray-400">
-                {featuredImage.caption}
+            <Image
+              src={(featuredImage as Media).url || ''}
+              alt={(featuredImage as Media).alt || title || 'Featured image'}
+              width={1200}
+              height={675}
+              className="aspect-video w-full object-cover"
+              priority
+            />
+            {(featuredImage as Media).caption && (
+              <figcaption className="bg-muted px-6 py-3 text-center text-sm text-muted-foreground">
+                {(featuredImage as Media).caption}
               </figcaption>
             )}
           </figure>

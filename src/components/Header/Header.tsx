@@ -3,6 +3,7 @@
 import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { usePathname } from 'next/navigation'
 import { useHeader } from '@/contexts/HeaderContext'
 import type { NavigationItem, SiteSettings } from './types'
 
@@ -14,9 +15,13 @@ interface HeaderProps {
 
 export function Header({ locale, siteSettings, navigationItems }: HeaderProps) {
   const { isMobileNavOpen, toggleMobileNav } = useHeader()
+  const pathname = usePathname()
 
   // Ensure locale is always a string
   const localeString = typeof locale === 'string' ? locale : String(locale || 'uk')
+
+  // Extract path without locale prefix for language switching
+  const pathWithoutLocale = pathname.replace(/^\/(uk|en|es)/, '') || '/'
 
   const homeUrl = `/${localeString}`
 
@@ -105,20 +110,20 @@ export function Header({ locale, siteSettings, navigationItems }: HeaderProps) {
         {/* Language Switcher */}
         <div className="ml-auto hidden items-center space-x-2 md:flex">
           <Link
-            href={`/en${typeof window !== 'undefined' ? window.location.pathname.substring(3) : ''}`}
-            className={`rounded px-2 py-1 text-sm ${localeString === 'en' ? 'bg-accent' : ''}`}
+            href={`/en${pathWithoutLocale}`}
+            className={`rounded px-2 py-1 text-sm transition-colors hover:bg-accent ${localeString === 'en' ? 'bg-accent font-medium' : ''}`}
           >
             EN
           </Link>
           <Link
-            href={`/uk${typeof window !== 'undefined' ? window.location.pathname.substring(3) : ''}`}
-            className={`rounded px-2 py-1 text-sm ${localeString === 'uk' ? 'bg-accent' : ''}`}
+            href={`/uk${pathWithoutLocale}`}
+            className={`rounded px-2 py-1 text-sm transition-colors hover:bg-accent ${localeString === 'uk' ? 'bg-accent font-medium' : ''}`}
           >
             UK
           </Link>
           <Link
-            href={`/es${typeof window !== 'undefined' ? window.location.pathname.substring(3) : ''}`}
-            className={`rounded px-2 py-1 text-sm ${localeString === 'es' ? 'bg-accent' : ''}`}
+            href={`/es${pathWithoutLocale}`}
+            className={`rounded px-2 py-1 text-sm transition-colors hover:bg-accent ${localeString === 'es' ? 'bg-accent font-medium' : ''}`}
           >
             ES
           </Link>
@@ -162,20 +167,20 @@ export function Header({ locale, siteSettings, navigationItems }: HeaderProps) {
             {/* Mobile Language Switcher */}
             <div className="flex items-center space-x-2 px-4 py-2">
               <Link
-                href={`/en${typeof window !== 'undefined' ? window.location.pathname.substring(3) : ''}`}
-                className={`rounded px-3 py-1 text-sm ${localeString === 'en' ? 'bg-accent' : ''}`}
+                href={`/en${pathWithoutLocale}`}
+                className={`rounded px-3 py-1 text-sm transition-colors hover:bg-accent ${localeString === 'en' ? 'bg-accent font-medium' : ''}`}
               >
                 EN
               </Link>
               <Link
-                href={`/uk${typeof window !== 'undefined' ? window.location.pathname.substring(3) : ''}`}
-                className={`rounded px-3 py-1 text-sm ${localeString === 'uk' ? 'bg-accent' : ''}`}
+                href={`/uk${pathWithoutLocale}`}
+                className={`rounded px-3 py-1 text-sm transition-colors hover:bg-accent ${localeString === 'uk' ? 'bg-accent font-medium' : ''}`}
               >
                 UK
               </Link>
               <Link
-                href={`/es${typeof window !== 'undefined' ? window.location.pathname.substring(3) : ''}`}
-                className={`rounded px-3 py-1 text-sm ${localeString === 'es' ? 'bg-accent' : ''}`}
+                href={`/es${pathWithoutLocale}`}
+                className={`rounded px-3 py-1 text-sm transition-colors hover:bg-accent ${localeString === 'es' ? 'bg-accent font-medium' : ''}`}
               >
                 ES
               </Link>
