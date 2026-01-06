@@ -1,6 +1,6 @@
 import { getSiteData, type SupportedLocale } from '@/lib/payload-data'
 import { Footer } from './Footer'
-import type { FooterData, SiteSettings } from '@/components/Header/types'
+import type { FooterData, SiteSettings } from '@/lib/types'
 
 interface FooterWrapperProps {
   locale: string

@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { getPageBySlug, getSiteData, type SupportedLocale } from '@/lib/payload-data'
 import type { Media, Page, PageBlock } from '@/payload-types'
 import { FloatingNav } from '@/components/FloatingNav'
+import { Breadcrumbs, type BreadcrumbItem } from '@/components/Breadcrumbs'
 import { Building2 } from 'lucide-react'
 import { SectionHeaderBlock } from '@/components/SectionHeaderBlock'
 import { MarkdownRichTextBlock } from '@/components/MarkdownRichTextBlock'
@@ -85,6 +86,20 @@ export default async function DynamicPage(props: PageProps) {
     )
   }
 
+  // Build breadcrumb items from slug segments
+  const breadcrumbItems: BreadcrumbItem[] = slug.map((segment, index) => {
+    const href = `/${localeString}/${slug.slice(0, index + 1).join('/')}`
+    const isLast = index === slug.length - 1
+    // Use page title for the last segment, otherwise capitalize the slug segment
+    const label = isLast
+      ? (page.title as unknown as string) || segment
+      : segment
+          .split('-')
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(' ')
+    return { label, href: isLast ? undefined : href }
+  })
+
   // Render based on page type
   return (
     <div className="min-h-screen bg-background">
@@ -96,7 +111,12 @@ export default async function DynamicPage(props: PageProps) {
           page.pageType ? page.pageType.charAt(0).toUpperCase() + page.pageType.slice(1) : undefined
         }
       />
-      <PageRenderer page={page} locale={localeString} draft={isPreview} />
+      <PageRenderer
+        page={page}
+        locale={localeString}
+        draft={isPreview}
+        breadcrumbItems={breadcrumbItems}
+      />
     </div>
   )
 }
@@ -109,10 +129,12 @@ async function PageRenderer({
   page,
   locale,
   draft,
+  breadcrumbItems,
 }: {
   page: Page
   locale: string
   draft: boolean
+  breadcrumbItems: BreadcrumbItem[]
 }) {
   const { content, blocks, pageType } = page
 
@@ -122,6 +144,9 @@ async function PageRenderer({
     if (blocks && blocks.length > 0) {
       return (
         <div className="min-h-screen">
+          <div className="container mx-auto px-4 pt-6">
+            <Breadcrumbs items={breadcrumbItems} locale={locale} />
+          </div>
           <div className="space-y-8">
             {await Promise.all(
               blocks.map(async (block, index) => (
@@ -136,6 +161,9 @@ async function PageRenderer({
     // Default: show all news in list mode with search, filters, and pagination
     return (
       <div className="min-h-screen">
+        <div className="container mx-auto px-4 pt-6">
+          <Breadcrumbs items={breadcrumbItems} locale={locale} />
+        </div>
         <NewsBlockServer
           block={{
             displayMode: 'list',
@@ -154,6 +182,9 @@ async function PageRenderer({
 
   return (
     <div className="container mx-auto px-4 py-12">
+      {/* Breadcrumbs */}
+      <Breadcrumbs items={breadcrumbItems} locale={locale} />
+
       {/* Main Content */}
       <main>
         {/* Render rich text content if available (for text pages) */}

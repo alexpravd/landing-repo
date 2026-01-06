@@ -2,7 +2,7 @@
 
 import React from 'react'
 import Link from 'next/link'
-import type { FooterData, SiteSettings } from '@/components/Header/types'
+import type { FooterData, SiteSettings } from '@/lib/types'
 
 interface FooterProps {
   footerData: FooterData
