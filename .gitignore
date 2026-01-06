@@ -46,7 +46,6 @@ tsconfig.tsbuildinfo
 
 # Payload CMS
 /media
-payload-types.ts
 
 # IDE & Editors
 .vscode/*
