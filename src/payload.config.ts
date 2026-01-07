@@ -55,6 +55,7 @@ export default buildConfig({
       idleTimeoutMillis: 30000, // Close idle connections after 30s
       connectionTimeoutMillis: 10000, // Connection timeout 10s
     },
+    push: true, // Force schema sync on startup (creates missing version tables)
   }),
 
   // Server URL
