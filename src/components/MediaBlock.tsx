@@ -2,21 +2,31 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import { ImageIcon } from 'lucide-react'
 
 interface MediaImage {
   url?: string | null
   alt?: string | null
+  filename?: string | null
 }
 
 interface MediaItem {
-  image: string | MediaImage
+  image: string | number | MediaImage | null
   caption?: string | null
+  id?: string | null
 }
 
 interface ValidMediaItem {
   image: { url: string; alt?: string | null }
   caption?: string | null
 }
+
+interface PendingMediaItem {
+  isPending: true
+  caption?: string | null
+}
+
+type ProcessedMediaItem = ValidMediaItem | PendingMediaItem
 
 interface MediaBlockProps {
   title?: string | null
@@ -26,8 +36,56 @@ interface MediaBlockProps {
   enableLightbox?: boolean
 }
 
-function isValidMediaItem(item: MediaItem): item is ValidMediaItem {
-  return typeof item.image === 'object' && typeof item.image?.url === 'string'
+function processMediaItem(item: MediaItem): ProcessedMediaItem | null {
+  if (!item) return null
+
+  const image = item.image
+
+  // If image is null/undefined but item exists - show placeholder
+  if (image === null || image === undefined) {
+    return {
+      isPending: true,
+      caption: item.caption,
+    }
+  }
+
+  // If image is a populated object with URL
+  if (typeof image === 'object' && image !== null && image.url) {
+    return {
+      image: { url: image.url, alt: image.alt },
+      caption: item.caption,
+    }
+  }
+
+  // If image is a string ID (not yet populated) - show placeholder
+  if (typeof image === 'string' && image) {
+    return {
+      isPending: true,
+      caption: item.caption,
+    }
+  }
+
+  // If image is a number ID (Payload sometimes uses numbers)
+  if (typeof image === 'number') {
+    return {
+      isPending: true,
+      caption: item.caption,
+    }
+  }
+
+  // Fallback - item exists but we can't process the image
+  return {
+    isPending: true,
+    caption: item.caption,
+  }
+}
+
+function isValidMedia(item: ProcessedMediaItem): item is ValidMediaItem {
+  return 'image' in item && !('isPending' in item)
+}
+
+function isPendingMedia(item: ProcessedMediaItem): item is PendingMediaItem {
+  return 'isPending' in item && item.isPending === true
 }
 
 export function MediaBlock({
@@ -42,14 +100,39 @@ export function MediaBlock({
   const [carouselIndex, setCarouselIndex] = useState(0)
 
   if (!media || media.length === 0) {
-    return null
+    return (
+      <div className="my-8">
+        {title && <h3 className="mb-6 text-2xl font-semibold">{title}</h3>}
+        <div className="flex aspect-video items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 dark:border-gray-700 dark:bg-gray-900">
+          <div className="text-center">
+            <ImageIcon className="mx-auto h-12 w-12 text-gray-400" />
+            <p className="mt-2 text-sm text-gray-500">No media items added yet</p>
+          </div>
+        </div>
+      </div>
+    )
   }
 
-  const validMedia = media.filter(isValidMediaItem)
+  const processedMedia = media
+    .map(processMediaItem)
+    .filter((item): item is ProcessedMediaItem => item !== null)
 
-  if (validMedia.length === 0) {
-    return null
+  if (processedMedia.length === 0) {
+    return (
+      <div className="my-8">
+        {title && <h3 className="mb-6 text-2xl font-semibold">{title}</h3>}
+        <div className="flex aspect-video items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 dark:border-gray-700 dark:bg-gray-900">
+          <div className="text-center">
+            <ImageIcon className="mx-auto h-12 w-12 text-gray-400" />
+            <p className="mt-2 text-sm text-gray-500">Media loading...</p>
+          </div>
+        </div>
+      </div>
+    )
   }
+
+  // For lightbox, only use valid media
+  const validMedia = processedMedia.filter(isValidMedia)
 
   const openLightbox = (index: number) => {
     if (enableLightbox) {
@@ -71,11 +154,11 @@ export function MediaBlock({
   }
 
   const goToCarouselPrevious = () => {
-    setCarouselIndex((prev) => (prev === 0 ? validMedia.length - 1 : prev - 1))
+    setCarouselIndex((prev) => (prev === 0 ? processedMedia.length - 1 : prev - 1))
   }
 
   const goToCarouselNext = () => {
-    setCarouselIndex((prev) => (prev === validMedia.length - 1 ? 0 : prev + 1))
+    setCarouselIndex((prev) => (prev === processedMedia.length - 1 ? 0 : prev + 1))
   }
 
   const columnClasses = {
@@ -90,14 +173,37 @@ export function MediaBlock({
     '4': 'columns-2 md:columns-3 lg:columns-4',
   }
 
-  const renderGridItem = (item: ValidMediaItem, index: number) => {
+  const renderGridItem = (item: ProcessedMediaItem, index: number) => {
+    if (isPendingMedia(item)) {
+      return (
+        <div
+          key={index}
+          className="group relative aspect-square overflow-hidden rounded-lg bg-muted shadow-sm"
+        >
+          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900">
+            <div className="text-center">
+              <ImageIcon className="mx-auto h-12 w-12 text-gray-400" />
+              <p className="mt-2 text-xs text-gray-500">Image loading...</p>
+            </div>
+          </div>
+          {item.caption && (
+            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-3">
+              <p className="text-sm text-white">{item.caption}</p>
+            </div>
+          )}
+        </div>
+      )
+    }
+
+    const validIndex = validMedia.findIndex((m) => m === item)
+
     return (
       <div
         key={index}
         className={`group relative aspect-square overflow-hidden rounded-lg bg-muted shadow-sm transition-shadow hover:shadow-md ${
           enableLightbox ? 'cursor-pointer' : ''
         }`}
-        onClick={() => openLightbox(index)}
+        onClick={() => validIndex >= 0 && openLightbox(validIndex)}
       >
         <Image
           src={item.image.url}
@@ -115,14 +221,37 @@ export function MediaBlock({
     )
   }
 
-  const renderMasonryItem = (item: ValidMediaItem, index: number) => {
+  const renderMasonryItem = (item: ProcessedMediaItem, index: number) => {
+    if (isPendingMedia(item)) {
+      return (
+        <div
+          key={index}
+          className="group mb-4 break-inside-avoid overflow-hidden rounded-lg bg-muted shadow-sm"
+        >
+          <div className="flex aspect-[4/3] w-full items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900">
+            <div className="text-center">
+              <ImageIcon className="mx-auto h-12 w-12 text-gray-400" />
+              <p className="mt-2 text-xs text-gray-500">Image loading...</p>
+            </div>
+          </div>
+          {item.caption && (
+            <div className="p-3">
+              <p className="text-sm text-muted-foreground">{item.caption}</p>
+            </div>
+          )}
+        </div>
+      )
+    }
+
+    const validIndex = validMedia.findIndex((m) => m === item)
+
     return (
       <div
         key={index}
         className={`group mb-4 break-inside-avoid overflow-hidden rounded-lg bg-muted shadow-sm transition-shadow hover:shadow-md ${
           enableLightbox ? 'cursor-pointer' : ''
         }`}
-        onClick={() => openLightbox(index)}
+        onClick={() => validIndex >= 0 && openLightbox(validIndex)}
       >
         <div className="relative">
           <Image
@@ -144,27 +273,41 @@ export function MediaBlock({
   }
 
   const renderCarousel = () => {
-    const currentItem = validMedia[carouselIndex]
+    const currentItem = processedMedia[carouselIndex]
     if (!currentItem) return null
+
+    const isPending = isPendingMedia(currentItem)
 
     return (
       <div className="relative">
         <div className="relative aspect-video overflow-hidden rounded-lg bg-muted">
-          <Image
-            src={currentItem.image.url}
-            alt={currentItem.image.alt || currentItem.caption || ''}
-            fill
-            className={`object-cover ${enableLightbox ? 'cursor-pointer' : ''}`}
-            sizes="100vw"
-            onClick={() => openLightbox(carouselIndex)}
-          />
+          {isPending ? (
+            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900">
+              <div className="text-center">
+                <ImageIcon className="mx-auto h-16 w-16 text-gray-400" />
+                <p className="mt-2 text-sm text-gray-500">Image loading...</p>
+              </div>
+            </div>
+          ) : (
+            <Image
+              src={currentItem.image.url}
+              alt={currentItem.image.alt || currentItem.caption || ''}
+              fill
+              className={`object-cover ${enableLightbox ? 'cursor-pointer' : ''}`}
+              sizes="100vw"
+              onClick={() => {
+                const validIndex = validMedia.findIndex((m) => m === currentItem)
+                if (validIndex >= 0) openLightbox(validIndex)
+              }}
+            />
+          )}
         </div>
 
         {currentItem.caption && (
           <p className="mt-2 text-center text-sm text-muted-foreground">{currentItem.caption}</p>
         )}
 
-        {validMedia.length > 1 && (
+        {processedMedia.length > 1 && (
           <>
             <button
               onClick={goToCarouselPrevious}
@@ -204,7 +347,7 @@ export function MediaBlock({
             </button>
 
             <div className="mt-4 flex justify-center gap-2">
-              {validMedia.map((_, index) => (
+              {processedMedia.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setCarouselIndex(index)}
@@ -323,13 +466,13 @@ export function MediaBlock({
 
       {displayMode === 'grid' && (
         <div className={`grid gap-4 ${columnClasses[columns]}`}>
-          {validMedia.map((item, index) => renderGridItem(item, index))}
+          {processedMedia.map((item, index) => renderGridItem(item, index))}
         </div>
       )}
 
       {displayMode === 'masonry' && (
         <div className={`gap-4 ${masonryColumnClasses[columns]}`}>
-          {validMedia.map((item, index) => renderMasonryItem(item, index))}
+          {processedMedia.map((item, index) => renderMasonryItem(item, index))}
         </div>
       )}
 

@@ -7,6 +7,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
+import { SlateRichText } from '@/components/SlateRichText'
 
 interface LinkItem {
   linkText: string
@@ -55,13 +56,7 @@ function renderContentItem(item: ContentItem, index: number) {
 
     case 'richText':
       if (!item.richText) return null
-      // Rich text rendering - simplified for now
-      return (
-        <div key={key} className="prose prose-sm max-w-none text-muted-foreground">
-          {/* TODO: Implement proper rich text rendering when RichTextBlock is updated */}
-          <p>Rich text content</p>
-        </div>
-      )
+      return <SlateRichText key={key} content={item.richText} className="text-muted-foreground" />
 
     case 'image': {
       if (!item.image) return null

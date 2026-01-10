@@ -7,13 +7,13 @@ import { fileURLToPath } from 'url'
 import { env, getCorsOrigins } from './lib/env'
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
-import { MediaFolders } from './collections/MediaFolders'
 import { Navigation } from './collections/Navigation'
 import { Pages } from './collections/Pages'
 import { News } from './collections/News'
 import { NewsTags } from './collections/NewsTags'
 import { SiteSettings } from './globals/SiteSettings'
 import { Footer } from './globals/Footer'
+import { MediaFoldersGlobal } from './globals/MediaFolders'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -30,10 +30,10 @@ export default buildConfig({
   },
 
   // Collections (data models)
-  collections: [Users, Media, MediaFolders, Navigation, Pages, News, NewsTags],
+  collections: [Users, Media, Navigation, Pages, News, NewsTags],
 
   // Globals
-  globals: [SiteSettings, Footer],
+  globals: [SiteSettings, Footer, MediaFoldersGlobal],
 
   // Rich text editor
   editor: slateEditor({}),

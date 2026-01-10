@@ -139,7 +139,7 @@ export function LivePreviewPage({ initialData }: LivePreviewPageProps) {
           ))}
         </div>
       )}
-      <PageContent key={`${pageData.id}-${pageData.updatedAt}`} page={pageData} />
+      <PageContent key={pageData.id} page={pageData} />
     </>
   )
 }

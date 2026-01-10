@@ -36,7 +36,7 @@ export function NewsCarouselMode({ newsItems, locale = 'uk' }: NewsCarouselModeP
   }
 
   return (
-    <section className="container mx-auto px-4 py-20">
+    <section className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen py-20">
       {/* Carousel */}
       <Carousel
         opts={{
@@ -45,11 +45,19 @@ export function NewsCarouselMode({ newsItems, locale = 'uk' }: NewsCarouselModeP
         }}
         className="w-full"
       >
+        {/* Left fade gradient */}
+        <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-20 bg-gradient-to-r from-white to-transparent" />
+        {/* Right fade gradient */}
+        <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-20 bg-gradient-to-l from-white to-transparent" />
+
         <CarouselContent>
           {newsItems.map((item) => (
-            <CarouselItem key={item.id} className="md:basis-1/2 lg:basis-1/3">
-              <Card className="group overflow-hidden border-border transition-all duration-300 hover:shadow-2xl">
-                <CardContent className="p-0">
+            <CarouselItem
+              key={item.id}
+              className="basis-full sm:basis-1/2 lg:basis-1/3 xl:basis-1/4 2xl:basis-1/5"
+            >
+              <Card className="group h-full overflow-hidden border-border transition-all duration-300 hover:shadow-2xl">
+                <CardContent className="flex h-full flex-col p-0">
                   {/* Featured Image */}
                   {item.featuredImage && typeof item.featuredImage === 'object' && (
                     <div className="relative aspect-video overflow-hidden bg-muted">
@@ -77,7 +85,7 @@ export function NewsCarouselMode({ newsItems, locale = 'uk' }: NewsCarouselModeP
                   )}
 
                   {/* Content */}
-                  <div className="p-6">
+                  <div className="flex flex-1 flex-col p-6">
                     {/* Date */}
                     {item.publishedDate && (
                       <div className="mb-3 flex items-center gap-2 text-muted-foreground">
@@ -98,7 +106,7 @@ export function NewsCarouselMode({ newsItems, locale = 'uk' }: NewsCarouselModeP
                     </h3>
 
                     {/* Read More Link */}
-                    <Link href={`/${locale}/news/${item.slug}`}>
+                    <Link href={`/${locale}/news/${item.slug}`} className="mt-auto">
                       <Button
                         variant="ghost"
                         className="-ml-4 gap-2 text-indigo-600 transition-all group-hover:gap-3"
@@ -113,8 +121,8 @@ export function NewsCarouselMode({ newsItems, locale = 'uk' }: NewsCarouselModeP
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious className="left-0 -translate-x-12" />
-        <CarouselNext className="right-0 translate-x-12" />
+        <CarouselPrevious className="left-6 z-20" />
+        <CarouselNext className="right-6 z-20" />
       </Carousel>
     </section>
   )

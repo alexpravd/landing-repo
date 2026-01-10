@@ -18,7 +18,7 @@ import { MarkdownRichTextBlock } from '@/components/MarkdownRichTextBlock'
 import { LivePreviewPage } from '@/components/LivePreviewPage'
 import { NewsBlockServer } from '@/components/NewsBlockServer'
 import { PersonPlaceBlock } from '@/components/PersonPlaceBlock'
-import { TabBlock } from '@/components/TabBlock'
+import { TabBlockServer } from '@/components/TabBlockServer'
 import { MediaBlock } from '@/components/MediaBlock'
 import { AccordionBlock } from '@/components/AccordionBlock'
 import type { IconName } from '@/lib/icons'
@@ -416,7 +416,13 @@ async function BlockRenderer({
       )
 
     case 'tabBlock':
-      return <TabBlock tabs={block.tabs as TabBlockType['tabs']} />
+      return (
+        <TabBlockServer
+          tabs={block.tabs as TabBlockType['tabs']}
+          locale={locale as SupportedLocale}
+          draft={draft}
+        />
+      )
 
     case 'mediaBlock':
       return (

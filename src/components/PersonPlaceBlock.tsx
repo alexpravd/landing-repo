@@ -43,7 +43,7 @@ export function PersonPlaceBlock({ displayMode, itemsPerRow = '3', items }: Pers
           return (
             <div
               key={item.id || index}
-              className="flex flex-col gap-6 rounded-2xl bg-white p-6 shadow-lg md:flex-row"
+              className="flex flex-col gap-6 overflow-hidden rounded-2xl bg-white p-6 shadow-lg md:flex-row"
             >
               {/* Photo */}
               <div className="relative h-64 w-full shrink-0 overflow-hidden rounded-xl md:h-auto md:w-64">
@@ -62,10 +62,12 @@ export function PersonPlaceBlock({ displayMode, itemsPerRow = '3', items }: Pers
               <div className="flex flex-1 flex-col">
                 <h3 className="mb-1 text-2xl font-bold text-foreground">{item.name}</h3>
                 {item.subtitle && (
-                  <p className="mb-4 text-lg text-muted-foreground">{item.subtitle}</p>
+                  <p className="mb-4 break-words text-lg text-muted-foreground">{item.subtitle}</p>
                 )}
                 {item.description && (
-                  <p className="mb-4 leading-relaxed text-foreground/80">{item.description}</p>
+                  <div className="mb-4 whitespace-pre-line break-words leading-relaxed text-foreground/80">
+                    {item.description}
+                  </div>
                 )}
 
                 {/* Custom Fields */}
@@ -130,13 +132,20 @@ export function PersonPlaceBlock({ displayMode, itemsPerRow = '3', items }: Pers
             </div>
 
             {/* Content */}
-            <div className="p-4">
+            <div className="flex flex-1 flex-col p-4">
               <h3 className="mb-1 text-lg font-bold text-foreground">{item.name}</h3>
-              {item.subtitle && <p className="text-sm text-muted-foreground">{item.subtitle}</p>}
+              {item.subtitle && (
+                <p className="mb-2 text-sm text-muted-foreground">{item.subtitle}</p>
+              )}
+              {item.description && (
+                <p className="mb-3 line-clamp-3 break-words text-sm leading-relaxed text-foreground/80">
+                  {item.description}
+                </p>
+              )}
 
               {/* Read More Link */}
               {item.readMoreLink?.enabled && item.readMoreLink.url && (
-                <div className="mt-3">
+                <div className="mt-auto pt-2">
                   <a
                     href={item.readMoreLink.url}
                     target={item.readMoreLink.openInNewTab ? '_blank' : '_self'}

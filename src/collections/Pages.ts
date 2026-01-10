@@ -268,15 +268,6 @@ export const Pages: CollectionConfig = {
           description: 'Page content and layout blocks',
           fields: [
             {
-              name: 'content',
-              type: 'richText',
-              localized: true,
-              admin: {
-                description: 'Main page content (for text-based pages)',
-                condition: (data) => data.pageType === 'text',
-              },
-            },
-            {
               name: 'blocks',
               type: 'blocks',
               localized: true,
@@ -817,8 +808,8 @@ export const Pages: CollectionConfig = {
                           type: 'textarea',
                           localized: true,
                           admin: {
-                            condition: (_data, _siblingData, { blockData }) =>
-                              blockData?.displayMode === 'fullRow',
+                            description:
+                              'Detailed description (shown in both grid and full row modes)',
                           },
                         },
                         {
@@ -888,14 +879,18 @@ export const Pages: CollectionConfig = {
                             { label: 'Records', value: 'records' },
                           ],
                         },
-                        // Rich Text content
+                        // Rich Text content (using Smart Markdown Editor)
                         {
                           name: 'richTextContent',
-                          type: 'richText',
+                          type: 'textarea',
                           localized: true,
                           admin: {
+                            description: 'Use the Smart Markdown Editor to format your content',
                             condition: (_data, siblingData) =>
                               siblingData?.contentType === 'richText',
+                            components: {
+                              Field: '@/fields/MarkdownEditorField#MarkdownEditorField',
+                            },
                           },
                         },
                         // News content
@@ -987,14 +982,18 @@ export const Pages: CollectionConfig = {
                                 { label: 'Image Card', value: 'imageCard' },
                               ],
                             },
-                            // Rich text record
+                            // Rich text record (using Smart Markdown Editor)
                             {
                               name: 'recordRichText',
-                              type: 'richText',
+                              type: 'textarea',
                               localized: true,
                               admin: {
+                                description: 'Use the Smart Markdown Editor to format your content',
                                 condition: (_data, siblingData) =>
                                   siblingData?.recordType === 'richText',
+                                components: {
+                                  Field: '@/fields/MarkdownEditorField#MarkdownEditorField',
+                                },
                               },
                             },
                             // Image record

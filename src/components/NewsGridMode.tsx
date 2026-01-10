@@ -18,8 +18,8 @@ export function NewsGridMode({ newsItems, locale = 'uk' }: NewsGridModeProps) {
 
   if (!mainItem) {
     return (
-      <section className="bg-gradient-to-br from-muted to-indigo-50/30 py-20">
-        <div className="container mx-auto px-4">
+      <section className="relative py-20 before:absolute before:inset-0 before:-left-[50vw] before:-right-[50vw] before:ml-[calc(50%-50vw)] before:mr-[calc(50%-50vw)] before:w-screen before:bg-gradient-to-br before:from-muted before:to-indigo-50/30">
+        <div className="container relative mx-auto px-4">
           <p className="text-center text-muted-foreground">No news articles available</p>
         </div>
       </section>
@@ -27,8 +27,8 @@ export function NewsGridMode({ newsItems, locale = 'uk' }: NewsGridModeProps) {
   }
 
   return (
-    <section className="bg-gradient-to-br from-muted to-indigo-50/30 py-20">
-      <div className="container mx-auto px-4">
+    <section className="relative py-20 before:absolute before:inset-0 before:left-1/2 before:w-screen before:-translate-x-1/2 before:bg-gradient-to-br before:from-muted before:to-indigo-50/30">
+      <div className="container relative mx-auto px-4">
         {/* Grid Layout */}
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
           {/* Left Side - Main Featured Card */}

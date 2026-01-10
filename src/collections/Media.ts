@@ -2,11 +2,15 @@ import type { CollectionConfig } from 'payload'
 
 /**
  * Media Collection
- * Handles file uploads and media management
- * Following Payload CMS 3.0 best practices
+ * Unified file and folder management with nested folder support
+ * Files and folders live together in one collection
  */
 export const Media: CollectionConfig = {
   slug: 'media',
+  labels: {
+    singular: 'Media',
+    plural: 'Media',
+  },
   upload: {
     staticDir: 'media',
     mimeTypes: ['image/*', 'application/pdf'],
@@ -35,16 +39,19 @@ export const Media: CollectionConfig = {
     crop: true,
   },
   admin: {
-    group: 'Media',
-    defaultColumns: ['filename', 'alt', 'updatedAt'],
+    group: 'Content',
+    defaultColumns: ['filename', 'folder', 'alt', 'mimeType', 'updatedAt'],
     useAsTitle: 'filename',
+    listSearchableFields: ['filename', 'alt', 'caption'],
+    description: 'Upload and organize your media files',
+    components: {
+      // Custom folder browser component for the list view
+      beforeList: ['@/components/admin/MediaFolderBrowser#MediaFolderBrowser'],
+    },
   },
   access: {
-    // Public read access
     read: () => true,
-    // Authenticated users can create
     create: ({ req: { user } }) => !!user,
-    // Users can update their own uploads, admins can update all
     update: ({ req: { user } }) => {
       if (!user) return false
       if (user.role === 'admin') return true
@@ -54,7 +61,6 @@ export const Media: CollectionConfig = {
         },
       }
     },
-    // Only admins can delete
     delete: ({ req: { user } }) => {
       return user?.role === 'admin'
     },
@@ -62,11 +68,14 @@ export const Media: CollectionConfig = {
   fields: [
     {
       name: 'folder',
-      type: 'relationship',
-      relationTo: 'media-folders',
+      type: 'text',
+      // Note: defaultValue is handled in the custom field component
       admin: {
-        description: 'Organize this file into a folder',
         position: 'sidebar',
+        description: 'Folder path (e.g., /photos/2024)',
+        components: {
+          Field: '@/fields/FolderSelectField#FolderSelectField',
+        },
       },
     },
     {
@@ -74,7 +83,7 @@ export const Media: CollectionConfig = {
       type: 'text',
       required: true,
       admin: {
-        description: 'Alternative text for accessibility (required for images)',
+        description: 'Alternative text for accessibility',
         placeholder: 'Describe the image',
       },
     },
@@ -82,7 +91,7 @@ export const Media: CollectionConfig = {
       name: 'caption',
       type: 'text',
       admin: {
-        description: 'Optional caption to display with the image',
+        description: 'Optional caption',
       },
     },
     {
@@ -92,12 +101,11 @@ export const Media: CollectionConfig = {
       admin: {
         readOnly: true,
         position: 'sidebar',
-        description: 'User who uploaded this file',
+        description: 'Uploaded by',
       },
       hooks: {
         beforeChange: [
           ({ req, operation, value }) => {
-            // Automatically set uploadedBy on creation
             if (operation === 'create' && req.user) {
               return req.user.id
             }
@@ -110,9 +118,16 @@ export const Media: CollectionConfig = {
   hooks: {
     beforeChange: [
       ({ data, req, operation }) => {
-        // Set uploadedBy field on creation
         if (operation === 'create' && req.user) {
           data.uploadedBy = req.user.id
+        }
+        // Ensure folder path starts with /
+        if (data.folder && !data.folder.startsWith('/')) {
+          data.folder = '/' + data.folder
+        }
+        // Default to root folder
+        if (!data.folder) {
+          data.folder = '/'
         }
         return data
       },

@@ -11,7 +11,7 @@ import { SectionHeaderBlock } from '@/components/SectionHeaderBlock'
 import { LivePreviewPage } from '@/components/LivePreviewPage'
 import { NewsBlockServer } from '@/components/NewsBlockServer'
 import { PersonPlaceBlock } from '@/components/PersonPlaceBlock'
-import { TabBlock } from '@/components/TabBlock'
+import { TabBlockServer } from '@/components/TabBlockServer'
 import { MediaBlock } from '@/components/MediaBlock'
 import { AccordionBlock } from '@/components/AccordionBlock'
 import { getHomePage, getSiteData, type SupportedLocale } from '@/lib/payload-data'
@@ -103,8 +103,8 @@ export default async function HomePage(props: PageProps) {
       )
     }
 
-    // Render blocks
-    const renderBlock = (block: PageBlock, index: number): React.ReactNode => {
+    // Render blocks (async for server components like TabBlockServer)
+    const renderBlock = async (block: PageBlock, index: number): Promise<React.ReactNode> => {
       switch (block.blockType) {
         case 'sectionHeader':
           return (
@@ -223,7 +223,14 @@ export default async function HomePage(props: PageProps) {
             />
           )
         case 'tabBlock':
-          return <TabBlock key={index} tabs={block.tabs as TabBlockType['tabs']} />
+          return (
+            <TabBlockServer
+              key={index}
+              tabs={block.tabs as TabBlockType['tabs']}
+              locale={localeString as SupportedLocale}
+              draft={isPreview}
+            />
+          )
         case 'mediaBlock':
           return (
             <MediaBlock
@@ -250,9 +257,10 @@ export default async function HomePage(props: PageProps) {
       }
     }
 
-    // Pre-render blocks to avoid type inference issues
-    const renderedBlocks: React.ReactNode[] =
+    // Pre-render blocks with Promise.all for async server components
+    const renderedBlocks: React.ReactNode[] = await Promise.all(
       homePage.blocks?.map((block, index) => renderBlock(block, index)) ?? []
+    )
 
     // Regular rendering for non-preview mode
     return (

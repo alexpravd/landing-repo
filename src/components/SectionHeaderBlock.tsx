@@ -41,11 +41,11 @@ export function SectionHeaderBlock({
         initial={enableAnimation ? { y: 20, opacity: 0 } : undefined}
         animate={enableAnimation ? { y: 0, opacity: 1 } : undefined}
         transition={enableAnimation ? { delay: 0.2, duration: 0.5 } : undefined}
-        className="mb-8 text-center"
+        className="mb-8 flex flex-col items-center text-center"
       >
         {badge && (
           <div
-            className={`inline-flex items-center gap-2 bg-gradient-to-r ${gradientClasses} mb-6 rounded-full px-6 py-2 shadow-lg`}
+            className={`inline-flex items-center justify-center gap-2 bg-gradient-to-r ${gradientClasses} mx-auto mb-6 rounded-full px-6 py-2 shadow-lg`}
           >
             {IconComponent && <IconComponent className="h-4 w-4 text-white" />}
             <span className="text-white">{badge.text}</span>

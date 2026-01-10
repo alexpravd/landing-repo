@@ -4,11 +4,12 @@ import { SectionHeaderBlock } from './SectionHeaderBlock'
 import { MarkdownRichTextBlock } from './MarkdownRichTextBlock'
 import { PersonPlaceBlock } from './PersonPlaceBlock'
 import { AccordionBlock } from './AccordionBlock'
-import { TabBlock } from './TabBlock'
+import { TabBlockServer } from './TabBlockServer'
 import { MediaBlock } from './MediaBlock'
 import type { IconName } from '@/lib/icons'
 import type { GradientPreset } from '@/lib/gradients'
 import type { Media } from '@/payload-types'
+import type { SupportedLocale } from '@/lib/payload-data'
 
 // Type definitions for blocks
 interface SectionHeaderBlockData {
@@ -169,9 +170,16 @@ type BlockData =
 interface RenderBlocksProps {
   blocks: BlockData[]
   className?: string
+  locale?: SupportedLocale
+  draft?: boolean
 }
 
-export function RenderBlocks({ blocks, className = '' }: RenderBlocksProps) {
+export async function RenderBlocks({
+  blocks,
+  className = '',
+  locale = 'uk',
+  draft = false,
+}: RenderBlocksProps) {
   if (!blocks || blocks.length === 0) {
     return null
   }
@@ -267,7 +275,7 @@ export function RenderBlocks({ blocks, className = '' }: RenderBlocksProps) {
             )
 
           case 'tabBlock':
-            return <TabBlock key={key} tabs={block.tabs} />
+            return <TabBlockServer key={key} tabs={block.tabs} locale={locale} draft={draft} />
 
           case 'mediaBlock':
             return (
