@@ -7,7 +7,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
-import { SlateRichText } from '@/components/SlateRichText'
+import { SlateRichText } from './SlateRichText'
 
 interface LinkItem {
   linkText: string

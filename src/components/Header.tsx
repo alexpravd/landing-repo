@@ -363,18 +363,9 @@ export function Header({
                     {Array.isArray(navigationData)
                       ? // CMS format: 3-level navigation with icons and staggered animation
                         navigationData.map((item, index) => {
-                          // Icon mapping for Ukrainian labels
-                          const getNavIcon = (label: string) => {
-                            const iconMap: Record<string, typeof Home> = {
-                              Головна: Home,
-                              Новини: Newspaper,
-                              'Про нас': Users,
-                              Ресурси: BookOpen,
-                              Спільнота: MessageCircle,
-                            }
-                            return iconMap[label] || ChevronRight
-                          }
-                          const NavIcon = getNavIcon(item.label)
+                          // Icon selection based on index position for consistent display
+                          const iconsList = [Home, Newspaper, Users, BookOpen, MessageCircle]
+                          const NavIcon = iconsList[index] || ChevronRight
 
                           return (
                             <div
@@ -428,17 +419,9 @@ export function Header({
                         })
                       : // Hardcoded format with staggered animation
                         Object.entries(navigationData).map(([mainItem, subItems], index) => {
-                          // Icon mapping for English labels
-                          const getNavIcon = (label: string) => {
-                            const iconMap: Record<string, typeof Home> = {
-                              About: Users,
-                              Services: BookOpen,
-                              Products: Sparkles,
-                              Resources: BookOpen,
-                            }
-                            return iconMap[label] || ChevronRight
-                          }
-                          const NavIcon = getNavIcon(mainItem)
+                          // Icon selection based on index position for consistent display
+                          const iconsList = [Users, BookOpen, Sparkles, BookOpen]
+                          const NavIcon = iconsList[index] || ChevronRight
 
                           return (
                             <div
@@ -566,11 +549,14 @@ export function Header({
                           </NavigationMenuContent>
                         </>
                       ) : (
-                        <Link href={item.href || '#'} passHref legacyBehavior>
-                          <NavigationMenuLink className="px-3 py-2 text-sm hover:text-indigo-600">
+                        <NavigationMenuLink asChild>
+                          <Link
+                            href={item.href || '#'}
+                            className="px-3 py-2 text-sm hover:text-indigo-600"
+                          >
                             {item.label}
-                          </NavigationMenuLink>
-                        </Link>
+                          </Link>
+                        </NavigationMenuLink>
                       )}
                     </NavigationMenuItem>
                   ))

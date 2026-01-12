@@ -674,14 +674,18 @@ export const Pages: CollectionConfig = {
                                   siblingData?.contentType === 'text',
                               },
                             },
-                            // Rich text content
+                            // Rich text content (Markdown Rich Text)
                             {
                               name: 'richText',
-                              type: 'richText',
+                              type: 'textarea',
                               localized: true,
                               admin: {
+                                description: 'Use the Smart Markdown Editor to format your content',
                                 condition: (_data, siblingData) =>
                                   siblingData?.contentType === 'richText',
+                                components: {
+                                  Field: '@/fields/MarkdownEditorField#MarkdownEditorField',
+                                },
                               },
                             },
                             // Image content
