@@ -43,7 +43,8 @@ export function NewsGridMode({ newsItems, locale = 'uk' }: NewsGridModeProps) {
                       alt={mainItem.featuredImage.alt || mainItem.title || ''}
                       fill
                       className="object-cover transition-transform duration-700 group-hover:scale-110"
-                      unoptimized
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      priority
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
                     <div className="absolute bottom-0 left-0 right-0 p-6 text-white">

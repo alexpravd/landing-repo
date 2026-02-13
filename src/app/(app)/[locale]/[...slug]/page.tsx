@@ -1,6 +1,12 @@
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
-import { getPageBySlug, getSiteData, type SupportedLocale } from '@/lib/payload-data'
+import { draftMode } from 'next/headers'
+import {
+  getPageBySlug,
+  getSiteData,
+  getAllPublishedPageSlugs,
+  type SupportedLocale,
+} from '@/lib/payload-data'
 import type {
   Media,
   Page,
@@ -73,17 +79,16 @@ interface PageProps {
     locale: string
     slug: string[]
   }>
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
 /**
  * Dynamic Page Renderer
  * Renders pages based on slug from the Pages collection
  * Supports multiple page types: home, news, leadership, departments, documents, text
+ * Uses Next.js draftMode() API for preview functionality
  */
 export default async function DynamicPage(props: PageProps) {
   const params = await props.params
-  const searchParams = await props.searchParams
   const { locale, slug } = params
 
   // Ensure locale is always a string
@@ -92,8 +97,9 @@ export default async function DynamicPage(props: PageProps) {
   // Join slug array into a single string (for nested routes like /about/team)
   const pageSlug = slug.join('/')
 
-  // Check if preview mode is enabled
-  const isPreview = searchParams.preview === 'true'
+  // Check if draft mode is enabled via Next.js draftMode API
+  const draft = await draftMode()
+  const isPreview = draft.isEnabled
 
   // Fetch page data by slug
   const page = await getPageBySlug(pageSlug, localeString as SupportedLocale, isPreview)
@@ -575,7 +581,7 @@ async function BlockRenderer({
                 width={800}
                 height={600}
                 className="w-full rounded-lg"
-                unoptimized
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 800px"
               />
               {block.caption && (
                 <figcaption className="mt-2 text-center text-sm text-muted-foreground">
@@ -679,13 +685,33 @@ async function BlockRenderer({
 
 /**
  * Generate static params for static site generation
- * This helps Next.js pre-render pages at build time
+ * Pre-builds all published pages at build time for both locales
  */
 export async function generateStaticParams() {
-  // In production, you might want to fetch all published pages
-  // and generate static params for them
-  // For now, we'll return an empty array to enable dynamic rendering
-  return []
+  const locales = ['uk', 'en'] as const
+
+  try {
+    const slugs = await getAllPublishedPageSlugs()
+
+    // Generate params for each slug and locale combination
+    const params: Array<{ locale: string; slug: string[] }> = []
+
+    for (const locale of locales) {
+      for (const slug of slugs) {
+        // Split slug into array for catch-all route
+        params.push({
+          locale,
+          slug: slug.split('/'),
+        })
+      }
+    }
+
+    return params
+  } catch (error) {
+    console.error('Error generating static params for pages:', error)
+    // Return empty array on error to allow dynamic rendering
+    return []
+  }
 }
 
 /**

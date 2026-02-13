@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { draftMode } from 'next/headers'
 import { CarouselBlock } from '@/components/CarouselBlock'
 import { SplitContentBlock } from '@/components/SplitContentBlock'
 import { EventCardsBlock } from '@/components/EventCardsBlock'
@@ -51,9 +52,11 @@ import type {
   AccordionBlock as AccordionBlockType,
 } from '@/payload-types'
 
+// Enable ISR with 60-second revalidation
+export const revalidate = 60
+
 interface PageProps {
   params: Promise<{ locale: string }>
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
 /**
@@ -94,6 +97,7 @@ export async function generateMetadata(props: PageProps) {
  * Home Page - Localized Version
  * Server Component by default - renders on the server for better performance
  * Following Next.js 15 App Router best practices with localization
+ * Uses Next.js draftMode() API for preview functionality
  *
  * Can render either:
  * 1. Content from Pages collection (if a home page exists)
@@ -103,14 +107,14 @@ export async function generateMetadata(props: PageProps) {
  */
 export default async function HomePage(props: PageProps) {
   const params = await props.params
-  const searchParams = await props.searchParams
   const { locale } = params
 
   // Ensure locale is always a string
   const localeString = String(locale || 'uk')
 
-  // Check if preview mode is enabled
-  const isPreview = searchParams.preview === 'true'
+  // Check if draft mode is enabled via Next.js draftMode API
+  const draft = await draftMode()
+  const isPreview = draft.isEnabled
 
   // Try to fetch home page from Pages collection
   const homePage = await getHomePage(localeString as SupportedLocale, isPreview)
@@ -358,7 +362,7 @@ export default async function HomePage(props: PageProps) {
                     width={800}
                     height={600}
                     className="w-full rounded-lg"
-                    unoptimized
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 800px"
                   />
                   {block.caption && (
                     <figcaption className="mt-2 text-center text-sm text-muted-foreground">

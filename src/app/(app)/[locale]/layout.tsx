@@ -1,15 +1,12 @@
 import React from 'react'
+import { draftMode } from 'next/headers'
 import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
 import { getSiteData, type SupportedLocale } from '@/lib/payload-data'
 
-// Force dynamic rendering - this layout uses searchParams for preview mode
-export const dynamic = 'force-dynamic'
-
 interface LocaleLayoutProps {
   children: React.ReactNode
   params: Promise<{ locale: string }>
-  searchParams?: Promise<{ preview?: string }>
 }
 
 const availableLocales = [
@@ -21,19 +18,20 @@ const availableLocales = [
  * Localized Layout
  * Fetches data from Payload CMS and passes to Header and Footer components
  * Falls back to hardcoded defaults if CMS data is unavailable
+ * Uses Next.js draftMode() API for preview functionality
  * AccessibilityProvider is in parent layout
  */
 export default async function LocaleLayout(props: LocaleLayoutProps) {
-  const { children, searchParams } = props
+  const { children } = props
   const params = await props.params
   const { locale } = params
 
   // Ensure locale is always a string
   const localeString: string = typeof locale === 'string' ? locale : 'uk'
 
-  // Check if preview mode is enabled
-  const resolvedSearchParams = searchParams ? await searchParams : {}
-  const isPreview = resolvedSearchParams.preview === 'true'
+  // Check if draft mode is enabled via Next.js draftMode API
+  const draft = await draftMode()
+  const isPreview = draft.isEnabled
 
   // Try to fetch CMS data, fall back to undefined if not available
   let siteSettings, navigationItems, footer
@@ -58,7 +56,13 @@ export default async function LocaleLayout(props: LocaleLayoutProps) {
 
       {isPreview && (
         <div className="sticky top-0 z-[100] bg-yellow-500 px-4 py-2 text-center text-sm font-medium text-black">
-          Preview Mode - Locale: {localeString} (type: {typeof locale})
+          Draft Mode Enabled - Viewing unpublished content
+          <a
+            href={`/api/draft/disable?redirect=/${localeString}`}
+            className="ml-4 rounded bg-black/20 px-2 py-1 text-xs hover:bg-black/30"
+          >
+            Exit Draft Mode
+          </a>
         </div>
       )}
       <Header

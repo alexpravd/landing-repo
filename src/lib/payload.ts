@@ -1,24 +1,15 @@
-import { getPayload as getPayloadInstance } from 'payload'
-import type { CollectionSlug, JsonValue, Where } from 'payload'
+import { getPayload as getPayloadFromPackage } from 'payload'
+import type { CollectionSlug, JsonValue, Payload, Where } from 'payload'
 
-import configPromise from '@/payload.config'
+import config from '@payload-config'
 
 /**
  * Get Payload CMS instance
- * Cached instance to avoid multiple initializations
- * Following Payload CMS 3.0 best practices for Next.js integration
+ * Simple wrapper that delegates to Payload's built-in getPayload
+ * Payload handles its own caching internally
  */
-let cachedPayload: Awaited<ReturnType<typeof getPayloadInstance>> | null = null
-
-export async function getPayload() {
-  if (cachedPayload) {
-    return cachedPayload
-  }
-
-  const config = await configPromise
-  cachedPayload = await getPayloadInstance({ config })
-
-  return cachedPayload
+export async function getPayload(): Promise<Payload> {
+  return getPayloadFromPackage({ config })
 }
 
 /**

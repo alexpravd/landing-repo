@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
-import { getNewsBySlug, type SupportedLocale } from '@/lib/payload-data'
+import { draftMode } from 'next/headers'
+import { getNewsBySlug, getAllPublishedNewsSlugs, type SupportedLocale } from '@/lib/payload-data'
 import type { Media, News, NewsContentBlock, NewsTag, User as PayloadUser } from '@/payload-types'
 import { FloatingNav } from '@/components/FloatingNav'
 import { Breadcrumbs } from '@/components/Breadcrumbs'
@@ -27,31 +28,31 @@ interface RichTextNode {
   children?: RichTextNode[]
 }
 
-// Force dynamic rendering - this page uses searchParams for preview mode
-export const dynamic = 'force-dynamic'
+// Enable ISR with 60-second revalidation
+export const revalidate = 60
 
 interface PageProps {
   params: Promise<{
     locale: string
     slug: string
   }>
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
 /**
  * News Article Page
  * Displays individual news articles with blocks and metadata
+ * Uses Next.js draftMode() API for preview functionality
  */
 export default async function NewsArticlePage(props: PageProps) {
   const params = await props.params
-  const searchParams = await props.searchParams
   const { locale, slug } = params
 
   // Ensure locale is always a string
   const localeString = String(locale || 'uk')
 
-  // Check if preview mode is enabled
-  const isPreview = searchParams.preview === 'true'
+  // Check if draft mode is enabled via Next.js draftMode API
+  const draft = await draftMode()
+  const isPreview = draft.isEnabled
 
   // Fetch news article by slug
   const article = await getNewsBySlug(slug, localeString as SupportedLocale, isPreview)
@@ -267,7 +268,7 @@ function BlockRenderer({ block }: { block: NewsContentBlock }) {
                 width={800}
                 height={600}
                 className="w-full rounded-lg"
-                unoptimized
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 80vw, 800px"
               />
               {block.caption && (
                 <figcaption className="mt-2 text-center text-sm text-muted-foreground">
@@ -370,6 +371,36 @@ function renderNode(node: RichTextNode): string {
       return `<a href="${node.url || '#'}" ${node.newTab ? 'target="_blank" rel="noopener noreferrer"' : ''}>${children}</a>`
     default:
       return `<p>${children}</p>`
+  }
+}
+
+/**
+ * Generate static params for static site generation
+ * Pre-builds all published news articles at build time for both locales
+ */
+export async function generateStaticParams() {
+  const locales = ['uk', 'en'] as const
+
+  try {
+    const slugs = await getAllPublishedNewsSlugs()
+
+    // Generate params for each slug and locale combination
+    const params: Array<{ locale: string; slug: string }> = []
+
+    for (const locale of locales) {
+      for (const slug of slugs) {
+        params.push({
+          locale,
+          slug,
+        })
+      }
+    }
+
+    return params
+  } catch (error) {
+    console.error('Error generating static params for news:', error)
+    // Return empty array on error to allow dynamic rendering
+    return []
   }
 }
 

@@ -27,7 +27,7 @@ export function ImageWithFallback(props: React.ImgHTMLAttributes<HTMLImageElemen
           width={88}
           height={88}
           data-original-url={typeof src === 'string' ? src : undefined}
-          unoptimized
+          unoptimized // Keep unoptimized for data URIs only
         />
       </div>
     </div>
@@ -40,7 +40,7 @@ export function ImageWithFallback(props: React.ImgHTMLAttributes<HTMLImageElemen
       className={className}
       style={style}
       onError={handleError}
-      unoptimized
+      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
     />
   )
 }

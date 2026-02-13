@@ -34,8 +34,17 @@ const nextConfig = {
 
   // Experimental features
   experimental: {
-    // Optimized package imports
-    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
+    // Optimized package imports - tree-shake these large libraries
+    optimizePackageImports: [
+      'lucide-react',
+      '@radix-ui/react-icons',
+      '@radix-ui/react-accordion',
+      '@radix-ui/react-dialog',
+      '@radix-ui/react-dropdown-menu',
+      '@radix-ui/react-navigation-menu',
+      '@radix-ui/react-tabs',
+      'motion',
+    ],
   },
 
   // TypeScript - strict mode, fail build on errors
@@ -62,9 +71,10 @@ const nextConfig = {
     return config
   },
 
-  // Headers for security
+  // Headers for security and caching
   async headers() {
     return [
+      // Security headers for all routes
       {
         source: '/:path*',
         headers: [
@@ -91,6 +101,36 @@ const nextConfig = {
           {
             key: 'Referrer-Policy',
             value: 'origin-when-cross-origin',
+          },
+        ],
+      },
+      // Long cache for media files (uploaded content)
+      {
+        source: '/media/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      // Long cache for Next.js static assets (already hashed)
+      {
+        source: '/_next/static/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      // Cache for optimized images
+      {
+        source: '/_next/image/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=86400, stale-while-revalidate=604800',
           },
         ],
       },

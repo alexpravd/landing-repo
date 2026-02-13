@@ -461,7 +461,7 @@ function BlockRenderer({ block }: { block: PageBlock }) {
                   width={800}
                   height={600}
                   className="w-full rounded-lg"
-                  unoptimized
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 800px"
                 />
                 {block.caption && (
                   <figcaption className="mt-2 text-center text-sm text-muted-foreground">

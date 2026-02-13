@@ -1,5 +1,5 @@
-import { getPayload } from 'payload'
-import config from '@payload-config'
+import { cache } from 'react'
+import { getPayload } from '@/lib/payload'
 import type {
   Page as PayloadPage,
   News as PayloadNews,
@@ -111,102 +111,109 @@ interface FooterData {
 
 /**
  * Fetch the home page
+ * Wrapped with React cache() to deduplicate requests within the same render
  */
-export async function getHomePage(
-  locale: SupportedLocale = 'uk',
-  draft: boolean = false
-): Promise<PayloadPage | null> {
-  const payload = await getPayload({ config })
+export const getHomePage = cache(
+  async (locale: SupportedLocale = 'uk', draft: boolean = false): Promise<PayloadPage | null> => {
+    const payload = await getPayload()
 
-  const result = await payload.find({
-    collection: 'pages',
-    where: {
-      pageType: {
-        equals: 'home',
+    const result = await payload.find({
+      collection: 'pages',
+      where: {
+        pageType: {
+          equals: 'home',
+        },
+        ...(draft
+          ? {}
+          : {
+              status: {
+                equals: 'published',
+              },
+            }),
       },
-      ...(draft
-        ? {}
-        : {
-            status: {
-              equals: 'published',
-            },
-          }),
-    },
-    locale,
-    limit: 1,
-    draft,
-  })
+      locale,
+      limit: 1,
+      draft,
+    })
 
-  return (result.docs[0] as PayloadPage) || null
-}
+    return (result.docs[0] as PayloadPage) || null
+  }
+)
 
 /**
  * Fetch a page by slug
+ * Wrapped with React cache() to deduplicate requests within the same render
  */
-export async function getPageBySlug(
-  slug: string,
-  locale: SupportedLocale = 'uk',
-  draft: boolean = false
-): Promise<PayloadPage | null> {
-  const payload = await getPayload({ config })
+export const getPageBySlug = cache(
+  async (
+    slug: string,
+    locale: SupportedLocale = 'uk',
+    draft: boolean = false
+  ): Promise<PayloadPage | null> => {
+    const payload = await getPayload()
 
-  const result = await payload.find({
-    collection: 'pages',
-    where: {
-      slug: {
-        equals: slug,
+    const result = await payload.find({
+      collection: 'pages',
+      where: {
+        slug: {
+          equals: slug,
+        },
+        ...(draft
+          ? {}
+          : {
+              status: {
+                equals: 'published',
+              },
+            }),
       },
-      ...(draft
-        ? {}
-        : {
-            status: {
-              equals: 'published',
-            },
-          }),
-    },
-    locale,
-    limit: 1,
-    draft,
-  })
+      locale,
+      limit: 1,
+      draft,
+    })
 
-  return (result.docs[0] as PayloadPage) || null
-}
+    return (result.docs[0] as PayloadPage) || null
+  }
+)
 
 /**
  * Fetch a news article by slug
+ * Wrapped with React cache() to deduplicate requests within the same render
  */
-export async function getNewsBySlug(
-  slug: string,
-  locale: SupportedLocale = 'uk',
-  draft: boolean = false
-): Promise<PayloadNews | null> {
-  const payload = await getPayload({ config })
+export const getNewsBySlug = cache(
+  async (
+    slug: string,
+    locale: SupportedLocale = 'uk',
+    draft: boolean = false
+  ): Promise<PayloadNews | null> => {
+    const payload = await getPayload()
 
-  const result = await payload.find({
-    collection: 'news',
-    where: {
-      slug: {
-        equals: slug,
+    const result = await payload.find({
+      collection: 'news',
+      where: {
+        slug: {
+          equals: slug,
+        },
+        ...(draft
+          ? {}
+          : {
+              status: {
+                equals: 'published',
+              },
+            }),
       },
-      ...(draft
-        ? {}
-        : {
-            status: {
-              equals: 'published',
-            },
-          }),
-    },
-    locale,
-    limit: 1,
-    draft,
-    depth: 2, // Include related data (tags, author, images)
-  })
+      locale,
+      limit: 1,
+      draft,
+      depth: 1, // Reduced from 2 - include direct relations only
+    })
 
-  return (result.docs[0] as PayloadNews) || null
-}
+    return (result.docs[0] as PayloadNews) || null
+  }
+)
 
 /**
  * Fetch all news articles (for listing pages)
+ * Optimized with reduced depth and select for required fields only
  */
 export async function getAllNews(
   locale: SupportedLocale = 'uk',
@@ -225,7 +232,7 @@ export async function getAllNews(
   prevPage: number | null | undefined
   nextPage: number | null | undefined
 }> {
-  const payload = await getPayload({ config })
+  const payload = await getPayload()
 
   const result = await payload.find({
     collection: 'news',
@@ -241,7 +248,7 @@ export async function getAllNews(
     page,
     sort: '-publishedDate', // Most recent first
     draft,
-    depth: 2, // Include related data
+    depth: 1, // Reduced from 2 - direct relations only
   })
 
   return {
@@ -260,6 +267,7 @@ export async function getAllNews(
 
 /**
  * Fetch news for a news block based on configuration
+ * Optimized with reduced depth for listing displays
  */
 export async function getNewsForBlock(
   blockConfig: {
@@ -271,7 +279,7 @@ export async function getNewsForBlock(
   locale: SupportedLocale = 'uk',
   draft: boolean = false
 ): Promise<PayloadNews[]> {
-  const payload = await getPayload({ config })
+  const payload = await getPayload()
 
   // Manual selection
   if (blockConfig.contentSource === 'manual' && blockConfig.selectedNews) {
@@ -296,7 +304,7 @@ export async function getNewsForBlock(
             }),
       },
       locale,
-      depth: 2,
+      depth: 1, // Reduced from 2
       draft,
     })
 
@@ -332,7 +340,7 @@ export async function getNewsForBlock(
       locale,
       limit: blockConfig.limit || 10,
       sort: '-publishedDate',
-      depth: 2,
+      depth: 1, // Reduced from 2
       draft,
     })
 
@@ -352,7 +360,7 @@ export async function getNewsForBlock(
     locale,
     limit: blockConfig.limit || 10,
     sort: '-publishedDate',
-    depth: 2,
+    depth: 1, // Reduced from 2
     draft,
   })
 
@@ -366,7 +374,7 @@ export async function getAllNewsTags(
   locale: SupportedLocale = 'uk',
   draft: boolean = false
 ): Promise<PayloadNewsTag[]> {
-  const payload = await getPayload({ config })
+  const payload = await getPayload()
 
   const result = await payload.find({
     collection: 'news-tags',
@@ -379,8 +387,12 @@ export async function getAllNewsTags(
   return result.docs as PayloadNewsTag[]
 }
 
-export async function getSiteData(locale: SupportedLocale = 'uk', draft: boolean = false) {
-  const payload = await getPayload({ config })
+/**
+ * Fetch site-wide data (settings, navigation, footer)
+ * Wrapped with React cache() to deduplicate requests within the same render
+ */
+export const getSiteData = cache(async (locale: SupportedLocale = 'uk', draft: boolean = false) => {
+  const payload = await getPayload()
 
   // Fetch site settings global with locale and draft status
   const settings = await payload.findGlobal({
@@ -397,7 +409,7 @@ export async function getSiteData(locale: SupportedLocale = 'uk', draft: boolean
     limit: 100,
     sort: 'order',
     draft,
-    depth: 2, // Include related pages
+    depth: 1, // Reduced from 2 - include direct page relations only
   })
 
   // Fetch footer data with locale and draft status
@@ -491,4 +503,54 @@ export async function getSiteData(locale: SupportedLocale = 'uk', draft: boolean
     navigationItems,
     footer,
   }
+})
+
+/**
+ * Get all published page slugs for generateStaticParams
+ * Returns an array of slugs for static generation
+ */
+export async function getAllPublishedPageSlugs(): Promise<string[]> {
+  const payload = await getPayload()
+
+  const result = await payload.find({
+    collection: 'pages',
+    where: {
+      status: {
+        equals: 'published',
+      },
+      // Exclude home pages as they don't use slug routes
+      pageType: {
+        not_equals: 'home',
+      },
+    },
+    limit: 1000, // Reasonable limit for static generation
+    depth: 0, // No relations needed, just slugs
+  })
+
+  return result.docs
+    .map((doc) => doc.slug)
+    .filter((slug): slug is string => typeof slug === 'string' && slug.length > 0)
+}
+
+/**
+ * Get all published news slugs for generateStaticParams
+ * Returns an array of slugs for static generation
+ */
+export async function getAllPublishedNewsSlugs(): Promise<string[]> {
+  const payload = await getPayload()
+
+  const result = await payload.find({
+    collection: 'news',
+    where: {
+      status: {
+        equals: 'published',
+      },
+    },
+    limit: 1000, // Reasonable limit for static generation
+    depth: 0, // No relations needed, just slugs
+  })
+
+  return result.docs
+    .map((doc) => doc.slug)
+    .filter((slug): slug is string => typeof slug === 'string' && slug.length > 0)
 }

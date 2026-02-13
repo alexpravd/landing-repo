@@ -211,7 +211,7 @@ export function MarkdownRichTextBlock({
                     width={800}
                     height={600}
                     className="my-8 w-full rounded-lg"
-                    unoptimized
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 80vw, 800px"
                   />
                 ),
               }}

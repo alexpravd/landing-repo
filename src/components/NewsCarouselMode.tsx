@@ -66,7 +66,7 @@ export function NewsCarouselMode({ newsItems, locale = 'uk' }: NewsCarouselModeP
                         alt={item.featuredImage.alt || item.title || ''}
                         fill
                         className="object-cover transition-transform duration-500 group-hover:scale-110"
-                        unoptimized
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
                       />
                       {/* Tag Badge */}
                       {item.tags && Array.isArray(item.tags) && item.tags.length > 0 && (
