@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { motion } from 'motion/react'
-import Image from 'next/image'
 import type { Media } from '@/payload-types'
 
 /**
@@ -95,14 +94,8 @@ function LogoImage({
           : 'opacity-80 hover:opacity-100'
       }`}
     >
-      <Image
-        src={imageUrl}
-        alt={altText}
-        width={0}
-        height={0}
-        sizes="(max-width: 640px) 100px, (max-width: 1024px) 120px, 150px"
-        className="h-10 w-auto sm:h-14"
-      />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={imageUrl} alt={altText} className="h-10 w-auto object-contain sm:h-14" />
     </div>
   )
 
@@ -299,14 +292,8 @@ function MarqueeLayout({
                   : 'opacity-80 hover:opacity-100'
               }`}
             >
-              <Image
-                src={imageUrl}
-                alt={altText}
-                width={0}
-                height={0}
-                sizes="160px"
-                className="h-10 w-auto sm:h-14"
-              />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={imageUrl} alt={altText} className="h-10 w-auto object-contain sm:h-14" />
             </div>
           )
 
