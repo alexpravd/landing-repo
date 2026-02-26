@@ -9,11 +9,6 @@ interface LocaleLayoutProps {
   params: Promise<{ locale: string }>
 }
 
-const availableLocales = [
-  { code: 'uk', label: 'Ukrainian' },
-  { code: 'en', label: 'English' },
-]
-
 /**
  * Localized Layout
  * Fetches data from Payload CMS and passes to Header and Footer components
@@ -72,7 +67,6 @@ export default async function LocaleLayout(props: LocaleLayoutProps) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         navigationItems={navigationItems as any}
         currentLocale={localeString}
-        availableLocales={availableLocales}
       />
       <main id="main-content" className="flex-1">
         {children}

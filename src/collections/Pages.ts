@@ -13,6 +13,15 @@ function extractLocaleString(locale: PayloadLocale): string {
   return 'uk'
 }
 
+/** Reusable anchor-id field added to every block so editors can target it via #hash links. */
+const anchorIdField: TextField = {
+  name: 'anchorId',
+  type: 'text',
+  admin: {
+    description: 'Optional anchor ID for in-page linking (e.g. "services"  →  #services)',
+  },
+}
+
 /**
  * Pages Collection
  * Flexible page management system with multiple page types
@@ -282,6 +291,7 @@ export const Pages: CollectionConfig = {
                     plural: 'Hero Blocks',
                   },
                   fields: [
+                    anchorIdField,
                     {
                       name: 'headline',
                       type: 'text',
@@ -392,6 +402,7 @@ export const Pages: CollectionConfig = {
                     plural: 'Features Blocks',
                   },
                   fields: [
+                    anchorIdField,
                     {
                       name: 'title',
                       type: 'text',
@@ -534,6 +545,7 @@ export const Pages: CollectionConfig = {
                     plural: 'Testimonials Blocks',
                   },
                   fields: [
+                    anchorIdField,
                     {
                       name: 'title',
                       type: 'text',
@@ -705,6 +717,7 @@ export const Pages: CollectionConfig = {
                     plural: 'Stats Blocks',
                   },
                   fields: [
+                    anchorIdField,
                     {
                       name: 'title',
                       type: 'text',
@@ -823,6 +836,7 @@ export const Pages: CollectionConfig = {
                     plural: 'Timeline Blocks',
                   },
                   fields: [
+                    anchorIdField,
                     {
                       name: 'title',
                       type: 'text',
@@ -957,6 +971,7 @@ export const Pages: CollectionConfig = {
                     plural: 'Pricing Blocks',
                   },
                   fields: [
+                    anchorIdField,
                     {
                       name: 'title',
                       type: 'text',
@@ -1175,6 +1190,7 @@ export const Pages: CollectionConfig = {
                     plural: 'Team Blocks',
                   },
                   fields: [
+                    anchorIdField,
                     {
                       name: 'title',
                       type: 'text',
@@ -1356,6 +1372,7 @@ export const Pages: CollectionConfig = {
                     plural: 'FAQ Blocks',
                   },
                   fields: [
+                    anchorIdField,
                     {
                       name: 'title',
                       type: 'text',
@@ -1422,6 +1439,7 @@ export const Pages: CollectionConfig = {
                     plural: 'Logo Cloud Blocks',
                   },
                   fields: [
+                    anchorIdField,
                     {
                       name: 'title',
                       type: 'text',
@@ -1545,6 +1563,7 @@ export const Pages: CollectionConfig = {
                     plural: 'Video Blocks',
                   },
                   fields: [
+                    anchorIdField,
                     {
                       name: 'source',
                       type: 'select',
@@ -1660,6 +1679,7 @@ export const Pages: CollectionConfig = {
                     plural: 'Case Study Blocks',
                   },
                   fields: [
+                    anchorIdField,
                     {
                       name: 'title',
                       type: 'text',
@@ -1884,6 +1904,7 @@ export const Pages: CollectionConfig = {
                     plural: 'Comparison Blocks',
                   },
                   fields: [
+                    anchorIdField,
                     {
                       name: 'title',
                       type: 'text',
@@ -2198,6 +2219,7 @@ export const Pages: CollectionConfig = {
                     plural: 'Section Headers',
                   },
                   fields: [
+                    anchorIdField,
                     {
                       name: 'layout',
                       type: 'select',
@@ -2328,6 +2350,7 @@ export const Pages: CollectionConfig = {
                     plural: 'Markdown Rich Text Blocks',
                   },
                   fields: [
+                    anchorIdField,
                     {
                       name: 'markdown',
                       type: 'textarea',
@@ -2364,6 +2387,7 @@ export const Pages: CollectionConfig = {
                     plural: 'Image Blocks',
                   },
                   fields: [
+                    anchorIdField,
                     {
                       name: 'image',
                       type: 'upload',
@@ -2383,6 +2407,7 @@ export const Pages: CollectionConfig = {
                     plural: 'Call to Actions',
                   },
                   fields: [
+                    anchorIdField,
                     // Content fields
                     {
                       name: 'heading',
@@ -2578,6 +2603,7 @@ export const Pages: CollectionConfig = {
                     plural: 'News Blocks',
                   },
                   fields: [
+                    anchorIdField,
                     {
                       name: 'displayMode',
                       type: 'select',
@@ -2687,6 +2713,7 @@ export const Pages: CollectionConfig = {
                     plural: 'Accordion Blocks',
                   },
                   fields: [
+                    anchorIdField,
                     {
                       name: 'title',
                       type: 'text',
@@ -2874,6 +2901,7 @@ export const Pages: CollectionConfig = {
                     plural: 'Person/Place Blocks',
                   },
                   fields: [
+                    anchorIdField,
                     {
                       name: 'displayMode',
                       type: 'select',
@@ -2971,6 +2999,7 @@ export const Pages: CollectionConfig = {
                     plural: 'Tab Blocks',
                   },
                   fields: [
+                    anchorIdField,
                     {
                       name: 'tabs',
                       type: 'array',
@@ -3183,6 +3212,7 @@ export const Pages: CollectionConfig = {
                     plural: 'Service Cards Blocks',
                   },
                   fields: [
+                    anchorIdField,
                     {
                       name: 'title',
                       type: 'text',
@@ -3225,16 +3255,54 @@ export const Pages: CollectionConfig = {
                           },
                         },
                         {
+                          name: 'ctaLinkType',
+                          type: 'radio',
+                          defaultValue: 'external',
+                          admin: {
+                            description: 'Choose link type',
+                            layout: 'horizontal',
+                          },
+                          options: [
+                            { label: 'Page', value: 'page' },
+                            { label: 'External URL', value: 'external' },
+                            { label: 'Anchor', value: 'anchor' },
+                          ],
+                        },
+                        {
+                          name: 'ctaPage',
+                          type: 'relationship',
+                          relationTo: 'pages',
+                          admin: {
+                            description: 'Select a page to link to',
+                            condition: (_data, siblingData) => siblingData?.ctaLinkType === 'page',
+                          },
+                        },
+                        {
                           name: 'ctaUrl',
                           type: 'text',
                           admin: {
-                            description: 'Button link URL',
+                            description: 'External URL (e.g., https://example.com)',
+                            condition: (_data, siblingData) =>
+                              siblingData?.ctaLinkType === 'external',
+                          },
+                        },
+                        {
+                          name: 'ctaAnchor',
+                          type: 'text',
+                          admin: {
+                            description: 'Anchor ID without # (e.g., "contact-section")',
+                            condition: (_data, siblingData) =>
+                              siblingData?.ctaLinkType === 'anchor',
                           },
                         },
                         {
                           name: 'ctaOpenInNewTab',
                           type: 'checkbox',
                           defaultValue: false,
+                          admin: {
+                            condition: (_data, siblingData) =>
+                              siblingData?.ctaLinkType !== 'anchor',
+                          },
                         },
                       ],
                     },
@@ -3267,6 +3335,7 @@ export const Pages: CollectionConfig = {
                     plural: 'About Blocks',
                   },
                   fields: [
+                    anchorIdField,
                     {
                       name: 'title',
                       type: 'text',
@@ -3348,6 +3417,7 @@ export const Pages: CollectionConfig = {
                     plural: 'Value Cards Blocks',
                   },
                   fields: [
+                    anchorIdField,
                     {
                       name: 'title',
                       type: 'text',
@@ -3405,6 +3475,7 @@ export const Pages: CollectionConfig = {
                     plural: 'Case Cards Blocks',
                   },
                   fields: [
+                    anchorIdField,
                     {
                       name: 'title',
                       type: 'text',
@@ -3518,6 +3589,7 @@ export const Pages: CollectionConfig = {
                     plural: 'Media Gallery Blocks',
                   },
                   fields: [
+                    anchorIdField,
                     {
                       name: 'title',
                       type: 'text',

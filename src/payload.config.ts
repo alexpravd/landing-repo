@@ -87,10 +87,6 @@ export default buildConfig({
         label: 'Ukrainian',
         code: 'uk',
       },
-      {
-        label: 'English',
-        code: 'en',
-      },
     ],
     defaultLocale: 'uk',
     fallback: true,

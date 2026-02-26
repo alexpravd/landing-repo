@@ -16,12 +16,12 @@ export const Footer: GlobalConfig = {
     livePreview: {
       url: ({ data: _data, locale }) => {
         const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
-        return `${baseUrl}/${locale || 'en'}?preview=true`
+        return `${baseUrl}/${locale || 'uk'}?preview=true`
       },
     },
     preview: (_doc, { locale }) => {
       const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
-      return `${baseUrl}/${locale || 'en'}?preview=true`
+      return `${baseUrl}/${locale || 'uk'}?preview=true`
     },
   },
   fields: [

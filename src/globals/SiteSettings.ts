@@ -18,12 +18,12 @@ export const SiteSettings: GlobalConfig = {
       url: ({ locale }) => {
         // Generate preview URL based on locale
         const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
-        return `${baseUrl}/${locale || 'en'}?preview=true`
+        return `${baseUrl}/${locale || 'uk'}?preview=true`
       },
     },
     preview: (_doc, { locale }) => {
       const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
-      return `${baseUrl}/${locale || 'en'}?preview=true`
+      return `${baseUrl}/${locale || 'uk'}?preview=true`
     },
   },
   fields: [

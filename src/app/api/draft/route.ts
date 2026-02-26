@@ -12,7 +12,7 @@ import { getPayload } from '@/lib/payload'
  * - secret: Must match DRAFT_SECRET environment variable
  * - slug: The path to redirect to after enabling draft mode
  * - collection: Optional - 'pages' or 'news' (defaults to 'pages')
- * - locale: Optional - 'uk' or 'en' (defaults to 'uk')
+ * - locale: Optional - defaults to 'uk'
  */
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
@@ -58,7 +58,7 @@ export async function GET(request: Request) {
             equals: 'home',
           },
         },
-        locale: locale as 'uk' | 'en',
+        locale: locale as 'uk',
         limit: 1,
         draft: true,
       })
@@ -75,7 +75,7 @@ export async function GET(request: Request) {
             equals: querySlug,
           },
         },
-        locale: locale as 'uk' | 'en',
+        locale: locale as 'uk',
         limit: 1,
         draft: true,
       })
@@ -92,7 +92,7 @@ export async function GET(request: Request) {
             equals: querySlug,
           },
         },
-        locale: locale as 'uk' | 'en',
+        locale: locale as 'uk',
         limit: 1,
         draft: true,
       })

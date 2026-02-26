@@ -9,7 +9,10 @@ interface ServiceCard {
   title: string
   bulletPoints?: { text: string; id?: string | null }[] | null
   ctaLabel?: string | null
+  ctaLinkType?: ('page' | 'external' | 'anchor') | null
+  ctaPage?: (string | { slug?: string | null }) | null
   ctaUrl?: string | null
+  ctaAnchor?: string | null
   ctaOpenInNewTab?: boolean | null
   id?: string | null
 }
@@ -24,6 +27,7 @@ export interface ServiceCardsBlockProps {
   cards?: ServiceCard[] | null
   tags?: Tag[] | null
   enableAnimation?: boolean | null
+  locale?: string
 }
 
 const containerVariants: Variants = {
@@ -51,11 +55,31 @@ const headerVariants: Variants = {
   },
 }
 
+function resolveCardHref(card: ServiceCard, locale?: string): string | undefined {
+  const linkType = card.ctaLinkType ?? 'external'
+  switch (linkType) {
+    case 'page': {
+      const page = card.ctaPage
+      if (typeof page === 'object' && page?.slug) {
+        return `/${locale || 'uk'}/${page.slug}`
+      }
+      return undefined
+    }
+    case 'external':
+      return card.ctaUrl || undefined
+    case 'anchor':
+      return card.ctaAnchor ? `#${card.ctaAnchor}` : undefined
+    default:
+      return card.ctaUrl || undefined
+  }
+}
+
 export function ServiceCardsBlock({
   title,
   cards,
   tags,
   enableAnimation = true,
+  locale,
 }: ServiceCardsBlockProps) {
   if (!cards || cards.length === 0) return null
 
@@ -162,19 +186,26 @@ export function ServiceCardsBlock({
                 )}
 
                 {/* CTA */}
-                {card.ctaLabel && card.ctaUrl && (
-                  <div className="relative mt-auto pt-1 sm:pt-2">
-                    <Link
-                      href={card.ctaUrl}
-                      target={card.ctaOpenInNewTab ? '_blank' : undefined}
-                      rel={card.ctaOpenInNewTab ? 'noopener noreferrer' : undefined}
-                      className="group/btn inline-flex items-center gap-2 rounded-full border border-teal-500/30 bg-teal-500/[0.06] px-4 py-1.5 text-sm font-medium text-teal-300 transition-all duration-300 hover:border-teal-400/50 hover:bg-teal-500/[0.12] hover:shadow-[0_0_24px_-4px_rgba(20,184,166,0.25)] active:scale-[0.97] sm:px-5 sm:py-2"
-                    >
-                      {card.ctaLabel}
-                      <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover/btn:translate-x-0.5" />
-                    </Link>
-                  </div>
-                )}
+                {card.ctaLabel &&
+                  (() => {
+                    const href = resolveCardHref(card, locale)
+                    if (!href) return null
+                    const isAnchor = card.ctaLinkType === 'anchor'
+                    const openInNewTab = !isAnchor && card.ctaOpenInNewTab
+                    return (
+                      <div className="relative mt-auto pt-1 sm:pt-2">
+                        <Link
+                          href={href}
+                          target={openInNewTab ? '_blank' : undefined}
+                          rel={openInNewTab ? 'noopener noreferrer' : undefined}
+                          className="group/btn inline-flex items-center gap-2 rounded-full border border-teal-500/30 bg-teal-500/[0.06] px-4 py-1.5 text-sm font-medium text-teal-300 transition-all duration-300 hover:border-teal-400/50 hover:bg-teal-500/[0.12] hover:shadow-[0_0_24px_-4px_rgba(20,184,166,0.25)] active:scale-[0.97] sm:px-5 sm:py-2"
+                        >
+                          {card.ctaLabel}
+                          <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover/btn:translate-x-0.5" />
+                        </Link>
+                      </div>
+                    )
+                  })()}
               </Card>
             )
           })}

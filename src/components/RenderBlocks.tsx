@@ -498,7 +498,10 @@ interface ServiceCardsBlockData {
     title: string
     bulletPoints?: { text: string; id?: string }[]
     ctaLabel?: string
+    ctaLinkType?: 'page' | 'external' | 'anchor'
+    ctaPage?: string | { slug?: string }
     ctaUrl?: string
+    ctaAnchor?: string
     ctaOpenInNewTab?: boolean
     id?: string
   }[]
@@ -618,333 +621,347 @@ export async function RenderBlocks({
     <div className={className}>
       {blocks.map((block, index) => {
         const key = block.id || `${block.blockType}-${index}`
+        const anchorId = 'anchorId' in block ? (block as { anchorId?: string }).anchorId : undefined
 
-        switch (block.blockType) {
-          case 'heroBlock':
-            return (
-              <HeroBlock
-                key={key}
-                headline={block.headline}
-                subheadline={block.subheadline}
-                primaryCTA={block.primaryCTA}
-                secondaryCTA={block.secondaryCTA}
-                enableAnimation={block.enableAnimation}
-                isFirstBlock={index === 0}
-              />
-            )
+        const rendered = (() => {
+          switch (block.blockType) {
+            case 'heroBlock':
+              return (
+                <HeroBlock
+                  key={key}
+                  headline={block.headline}
+                  subheadline={block.subheadline}
+                  primaryCTA={block.primaryCTA}
+                  secondaryCTA={block.secondaryCTA}
+                  enableAnimation={block.enableAnimation}
+                  isFirstBlock={index === 0}
+                />
+              )
 
-          case 'featuresBlock':
-            return (
-              <FeaturesBlock
-                key={key}
-                title={block.title}
-                subtitle={block.subtitle}
-                layout={block.layout}
-                cardStyle={block.cardStyle}
-                items={block.items}
-                showCTAs={block.showCTAs}
-                enableAnimation={block.enableAnimation}
-              />
-            )
+            case 'featuresBlock':
+              return (
+                <FeaturesBlock
+                  key={key}
+                  title={block.title}
+                  subtitle={block.subtitle}
+                  layout={block.layout}
+                  cardStyle={block.cardStyle}
+                  items={block.items}
+                  showCTAs={block.showCTAs}
+                  enableAnimation={block.enableAnimation}
+                />
+              )
 
-          case 'testimonialsBlock':
-            return (
-              <TestimonialsBlock
-                key={key}
-                title={block.title}
-                subtitle={block.subtitle}
-                displayMode={block.displayMode}
-                testimonials={block.testimonials}
-                showRatings={block.showRatings}
-                autoplay={block.autoplay}
-                autoplayInterval={block.autoplayInterval}
-                accentColor={block.accentColor}
-                enableAnimation={block.enableAnimation}
-              />
-            )
+            case 'testimonialsBlock':
+              return (
+                <TestimonialsBlock
+                  key={key}
+                  title={block.title}
+                  subtitle={block.subtitle}
+                  displayMode={block.displayMode}
+                  testimonials={block.testimonials}
+                  showRatings={block.showRatings}
+                  autoplay={block.autoplay}
+                  autoplayInterval={block.autoplayInterval}
+                  accentColor={block.accentColor}
+                  enableAnimation={block.enableAnimation}
+                />
+              )
 
-          case 'statsBlock':
-            return (
-              <StatsBlock
-                key={key}
-                title={block.title}
-                layout={block.layout}
-                stats={block.stats}
-                animateOnScroll={block.animateOnScroll}
-                accentColor={block.accentColor}
-                enableAnimation={block.enableAnimation}
-              />
-            )
+            case 'statsBlock':
+              return (
+                <StatsBlock
+                  key={key}
+                  title={block.title}
+                  layout={block.layout}
+                  stats={block.stats}
+                  animateOnScroll={block.animateOnScroll}
+                  accentColor={block.accentColor}
+                  enableAnimation={block.enableAnimation}
+                />
+              )
 
-          case 'timelineBlock':
-            return (
-              <TimelineBlock
-                key={key}
-                title={block.title}
-                subtitle={block.subtitle}
-                layout={block.layout}
-                items={block.items}
-                showConnectors={block.showConnectors}
-                accentColor={block.accentColor}
-                enableAnimation={block.enableAnimation}
-              />
-            )
+            case 'timelineBlock':
+              return (
+                <TimelineBlock
+                  key={key}
+                  title={block.title}
+                  subtitle={block.subtitle}
+                  layout={block.layout}
+                  items={block.items}
+                  showConnectors={block.showConnectors}
+                  accentColor={block.accentColor}
+                  enableAnimation={block.enableAnimation}
+                />
+              )
 
-          case 'pricingBlock':
-            return (
-              <PricingBlock
-                key={key}
-                title={block.title}
-                subtitle={block.subtitle}
-                layout={block.layout}
-                billingToggle={block.billingToggle}
-                plans={block.plans}
-                accentColor={block.accentColor}
-                enableAnimation={block.enableAnimation}
-              />
-            )
+            case 'pricingBlock':
+              return (
+                <PricingBlock
+                  key={key}
+                  title={block.title}
+                  subtitle={block.subtitle}
+                  layout={block.layout}
+                  billingToggle={block.billingToggle}
+                  plans={block.plans}
+                  accentColor={block.accentColor}
+                  enableAnimation={block.enableAnimation}
+                />
+              )
 
-          case 'teamBlock':
-            return (
-              <TeamBlock
-                key={key}
-                title={block.title}
-                subtitle={block.subtitle}
-                layout={block.layout}
-                columns={block.columns}
-                members={block.members}
-                showSocialLinks={block.showSocialLinks}
-                cardStyle={block.cardStyle}
-                accentColor={block.accentColor}
-                enableAnimation={block.enableAnimation}
-              />
-            )
+            case 'teamBlock':
+              return (
+                <TeamBlock
+                  key={key}
+                  title={block.title}
+                  subtitle={block.subtitle}
+                  layout={block.layout}
+                  columns={block.columns}
+                  members={block.members}
+                  showSocialLinks={block.showSocialLinks}
+                  cardStyle={block.cardStyle}
+                  accentColor={block.accentColor}
+                  enableAnimation={block.enableAnimation}
+                />
+              )
 
-          case 'faqBlock':
-            return (
-              <FAQBlock
-                key={key}
-                title={block.title}
-                questions={block.questions}
-                allowMultiple={block.allowMultiple}
-                enableAnimation={block.enableAnimation}
-              />
-            )
+            case 'faqBlock':
+              return (
+                <FAQBlock
+                  key={key}
+                  title={block.title}
+                  questions={block.questions}
+                  allowMultiple={block.allowMultiple}
+                  enableAnimation={block.enableAnimation}
+                />
+              )
 
-          case 'logoCloudBlock':
-            return (
-              <LogoCloudBlock
-                key={key}
-                title={block.title}
-                subtitle={block.subtitle}
-                layout={block.layout}
-                logos={block.logos}
-                grayscale={block.grayscale}
-                columns={block.columns}
-                speed={block.speed}
-                enableAnimation={block.enableAnimation}
-              />
-            )
+            case 'logoCloudBlock':
+              return (
+                <LogoCloudBlock
+                  key={key}
+                  title={block.title}
+                  subtitle={block.subtitle}
+                  layout={block.layout}
+                  logos={block.logos}
+                  grayscale={block.grayscale}
+                  columns={block.columns}
+                  speed={block.speed}
+                  enableAnimation={block.enableAnimation}
+                />
+              )
 
-          case 'videoBlock':
-            return (
-              <VideoBlock
-                key={key}
-                source={block.source}
-                url={block.url}
-                file={block.file}
-                title={block.title}
-                description={block.description}
-                thumbnail={block.thumbnail}
-                autoplay={block.autoplay}
-                loop={block.loop}
-                controls={block.controls}
-                aspectRatio={block.aspectRatio}
-                enableAnimation={block.enableAnimation}
-              />
-            )
+            case 'videoBlock':
+              return (
+                <VideoBlock
+                  key={key}
+                  source={block.source}
+                  url={block.url}
+                  file={block.file}
+                  title={block.title}
+                  description={block.description}
+                  thumbnail={block.thumbnail}
+                  autoplay={block.autoplay}
+                  loop={block.loop}
+                  controls={block.controls}
+                  aspectRatio={block.aspectRatio}
+                  enableAnimation={block.enableAnimation}
+                />
+              )
 
-          case 'caseStudyBlock':
-            return (
-              <CaseStudyBlock
-                key={key}
-                title={block.title}
-                subtitle={block.subtitle}
-                displayMode={block.displayMode}
-                cases={block.cases}
-                accentColor={block.accentColor}
-                enableAnimation={block.enableAnimation}
-              />
-            )
+            case 'caseStudyBlock':
+              return (
+                <CaseStudyBlock
+                  key={key}
+                  title={block.title}
+                  subtitle={block.subtitle}
+                  displayMode={block.displayMode}
+                  cases={block.cases}
+                  accentColor={block.accentColor}
+                  enableAnimation={block.enableAnimation}
+                />
+              )
 
-          case 'comparisonBlock':
-            return (
-              <ComparisonBlock
-                key={key}
-                title={block.title}
-                subtitle={block.subtitle}
-                type={block.type}
-                beforeImage={block.beforeImage}
-                afterImage={block.afterImage}
-                beforeLabel={block.beforeLabel}
-                afterLabel={block.afterLabel}
-                sliderDefault={block.sliderDefault}
-                headers={block.headers}
-                rows={block.rows}
-                highlightColumn={block.highlightColumn}
-                items={block.items}
-                accentColor={block.accentColor}
-                enableAnimation={block.enableAnimation}
-              />
-            )
+            case 'comparisonBlock':
+              return (
+                <ComparisonBlock
+                  key={key}
+                  title={block.title}
+                  subtitle={block.subtitle}
+                  type={block.type}
+                  beforeImage={block.beforeImage}
+                  afterImage={block.afterImage}
+                  beforeLabel={block.beforeLabel}
+                  afterLabel={block.afterLabel}
+                  sliderDefault={block.sliderDefault}
+                  headers={block.headers}
+                  rows={block.rows}
+                  highlightColumn={block.highlightColumn}
+                  items={block.items}
+                  accentColor={block.accentColor}
+                  enableAnimation={block.enableAnimation}
+                />
+              )
 
-          case 'sectionHeader':
-            return (
-              <SectionHeaderBlock
-                key={key}
-                layout={block.layout}
-                title={block.title}
-                subtitle={block.subtitle}
-                description={block.description}
-                primaryCTA={block.primaryCTA}
-                secondaryCTA={block.secondaryCTA}
-                enableAnimation={block.enableAnimation}
-              />
-            )
+            case 'sectionHeader':
+              return (
+                <SectionHeaderBlock
+                  key={key}
+                  layout={block.layout}
+                  title={block.title}
+                  subtitle={block.subtitle}
+                  description={block.description}
+                  primaryCTA={block.primaryCTA}
+                  secondaryCTA={block.secondaryCTA}
+                  enableAnimation={block.enableAnimation}
+                />
+              )
 
-          case 'markdownText':
-            return (
-              <MarkdownRichTextBlock
-                key={key}
-                markdown={block.markdown}
-                accentColor={block.accentColor}
-              />
-            )
+            case 'markdownText':
+              return (
+                <MarkdownRichTextBlock
+                  key={key}
+                  markdown={block.markdown}
+                  accentColor={block.accentColor}
+                />
+              )
 
-          case 'imageBlock':
-            return (
-              <div key={key} className="my-8">
-                {/* Image block implementation */}
-                <div className="relative aspect-video overflow-hidden rounded-lg bg-muted">
-                  {/* Add image rendering here */}
+            case 'imageBlock':
+              return (
+                <div key={key} className="my-8">
+                  {/* Image block implementation */}
+                  <div className="relative aspect-video overflow-hidden rounded-lg bg-muted">
+                    {/* Add image rendering here */}
+                  </div>
+                  {block.caption && (
+                    <p className="mt-2 text-center text-sm text-muted-foreground">
+                      {block.caption}
+                    </p>
+                  )}
                 </div>
-                {block.caption && (
-                  <p className="mt-2 text-center text-sm text-muted-foreground">{block.caption}</p>
-                )}
-              </div>
-            )
+              )
 
-          case 'callToAction':
-            return (
-              <CallToActionBlock
-                key={key}
-                heading={block.heading}
-                description={block.description}
-                icon={block.icon}
-                link={block.link}
-                secondaryButton={block.secondaryButton}
-                alignment={block.alignment}
-                size={block.size}
-                backgroundStyle={block.backgroundStyle}
-                backgroundGradient={block.backgroundGradient as GradientPreset | undefined}
-                backgroundColor={block.backgroundColor}
-                backgroundImage={block.backgroundImage}
-                backgroundOverlay={block.backgroundOverlay}
-                backgroundOverlayOpacity={block.backgroundOverlayOpacity}
-                enableAnimation={block.enableAnimation}
-              />
-            )
+            case 'callToAction':
+              return (
+                <CallToActionBlock
+                  key={key}
+                  heading={block.heading}
+                  description={block.description}
+                  icon={block.icon}
+                  link={block.link}
+                  secondaryButton={block.secondaryButton}
+                  alignment={block.alignment}
+                  size={block.size}
+                  backgroundStyle={block.backgroundStyle}
+                  backgroundGradient={block.backgroundGradient as GradientPreset | undefined}
+                  backgroundColor={block.backgroundColor}
+                  backgroundImage={block.backgroundImage}
+                  backgroundOverlay={block.backgroundOverlay}
+                  backgroundOverlayOpacity={block.backgroundOverlayOpacity}
+                  enableAnimation={block.enableAnimation}
+                />
+              )
 
-          case 'personPlaceBlock':
-            return (
-              <PersonPlaceBlock
-                key={key}
-                displayMode={block.displayMode}
-                itemsPerRow={block.itemsPerRow}
-                items={block.items}
-              />
-            )
+            case 'personPlaceBlock':
+              return (
+                <PersonPlaceBlock
+                  key={key}
+                  displayMode={block.displayMode}
+                  itemsPerRow={block.itemsPerRow}
+                  items={block.items}
+                />
+              )
 
-          case 'accordionBlock':
-            return (
-              <AccordionBlock
-                key={key}
-                title={block.title}
-                description={block.description}
-                allowMultiple={block.allowMultiple}
-                accordionItems={block.accordionItems}
-              />
-            )
+            case 'accordionBlock':
+              return (
+                <AccordionBlock
+                  key={key}
+                  title={block.title}
+                  description={block.description}
+                  allowMultiple={block.allowMultiple}
+                  accordionItems={block.accordionItems}
+                />
+              )
 
-          case 'tabBlock':
-            return <TabBlockServer key={key} tabs={block.tabs} locale={locale} draft={draft} />
+            case 'tabBlock':
+              return <TabBlockServer key={key} tabs={block.tabs} locale={locale} draft={draft} />
 
-          case 'serviceCardsBlock':
-            return (
-              <ServiceCardsBlock
-                key={key}
-                title={block.title}
-                cards={block.cards}
-                tags={block.tags}
-                enableAnimation={block.enableAnimation}
-              />
-            )
+            case 'serviceCardsBlock':
+              return (
+                <ServiceCardsBlock
+                  key={key}
+                  title={block.title}
+                  cards={block.cards}
+                  tags={block.tags}
+                  enableAnimation={block.enableAnimation}
+                  locale={locale}
+                />
+              )
 
-          case 'aboutBlock':
-            return (
-              <AboutBlock
-                key={key}
-                title={block.title}
-                image={block.image}
-                badges={block.badges}
-                description={block.description}
-                ctaLabel={block.ctaLabel}
-                ctaUrl={block.ctaUrl}
-                ctaOpenInNewTab={block.ctaOpenInNewTab}
-                enableAnimation={block.enableAnimation}
-              />
-            )
+            case 'aboutBlock':
+              return (
+                <AboutBlock
+                  key={key}
+                  title={block.title}
+                  image={block.image}
+                  badges={block.badges}
+                  description={block.description}
+                  ctaLabel={block.ctaLabel}
+                  ctaUrl={block.ctaUrl}
+                  ctaOpenInNewTab={block.ctaOpenInNewTab}
+                  enableAnimation={block.enableAnimation}
+                />
+              )
 
-          case 'valueCardsBlock':
-            return (
-              <ValueCardsBlock
-                key={key}
-                title={block.title}
-                description={block.description}
-                tags={block.tags}
-                cards={block.cards}
-                enableAnimation={block.enableAnimation}
-              />
-            )
+            case 'valueCardsBlock':
+              return (
+                <ValueCardsBlock
+                  key={key}
+                  title={block.title}
+                  description={block.description}
+                  tags={block.tags}
+                  cards={block.cards}
+                  enableAnimation={block.enableAnimation}
+                />
+              )
 
-          case 'caseCardsBlock':
-            return (
-              <CaseCardsBlock
-                key={key}
-                title={block.title}
-                displayMode={block.displayMode}
-                cases={block.cases}
-                reviews={block.reviews}
-                enableAnimation={block.enableAnimation}
-              />
-            )
+            case 'caseCardsBlock':
+              return (
+                <CaseCardsBlock
+                  key={key}
+                  title={block.title}
+                  displayMode={block.displayMode}
+                  cases={block.cases}
+                  reviews={block.reviews}
+                  enableAnimation={block.enableAnimation}
+                />
+              )
 
-          case 'mediaBlock':
-            return (
-              <MediaBlock
-                key={key}
-                title={block.title}
-                displayMode={block.displayMode}
-                columns={block.columns}
-                media={block.media}
-                enableLightbox={block.enableLightbox}
-              />
-            )
+            case 'mediaBlock':
+              return (
+                <MediaBlock
+                  key={key}
+                  title={block.title}
+                  displayMode={block.displayMode}
+                  columns={block.columns}
+                  media={block.media}
+                  enableLightbox={block.enableLightbox}
+                />
+              )
 
-          default:
-            console.warn(`Unknown block type: ${(block as BlockData).blockType}`)
-            return null
-        }
+            default:
+              console.warn(`Unknown block type: ${(block as BlockData).blockType}`)
+              return null
+          }
+        })()
+
+        return anchorId ? (
+          <div key={key} id={anchorId} className="scroll-mt-20">
+            {rendered}
+          </div>
+        ) : (
+          rendered
+        )
       })}
     </div>
   )

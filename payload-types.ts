@@ -164,6 +164,7 @@ export type PageBlock =
 export interface HeroBlock {
   id?: string | null
   blockType: 'heroBlock'
+  anchorId?: string | null
   layout: 'centered' | 'split-left' | 'split-right'
   background?: {
     type?: 'color' | 'gradient' | 'image' | null
@@ -209,6 +210,7 @@ export interface HeroBlock {
 export interface FeaturesBlock {
   id?: string | null
   blockType: 'featuresBlock'
+  anchorId?: string | null
   title?: string | null
   subtitle?: string | null
   layout: 'grid-2' | 'grid-3' | 'grid-4' | 'list'
@@ -231,6 +233,7 @@ export interface FeaturesBlock {
 export interface TestimonialsBlock {
   id?: string | null
   blockType: 'testimonialsBlock'
+  anchorId?: string | null
   title?: string | null
   subtitle?: string | null
   displayMode: 'carousel' | 'grid' | 'single-featured'
@@ -254,6 +257,7 @@ export interface TestimonialsBlock {
 export interface StatsBlock {
   id?: string | null
   blockType: 'statsBlock'
+  anchorId?: string | null
   title?: string | null
   layout: 'row' | 'grid-2' | 'grid-4'
   stats: {
@@ -272,6 +276,7 @@ export interface StatsBlock {
 export interface TimelineBlock {
   id?: string | null
   blockType: 'timelineBlock'
+  anchorId?: string | null
   title?: string | null
   subtitle?: string | null
   layout: 'vertical' | 'horizontal' | 'alternating'
@@ -291,6 +296,7 @@ export interface TimelineBlock {
 export interface PricingBlock {
   id?: string | null
   blockType: 'pricingBlock'
+  anchorId?: string | null
   title?: string | null
   subtitle?: string | null
   layout: 'cards' | 'table' | 'comparison'
@@ -324,6 +330,7 @@ export interface PricingBlock {
 export interface TeamBlock {
   id?: string | null
   blockType: 'teamBlock'
+  anchorId?: string | null
   title?: string | null
   subtitle?: string | null
   layout: 'grid' | 'carousel' | 'list'
@@ -349,6 +356,7 @@ export interface TeamBlock {
 export interface FAQBlock {
   id?: string | null
   blockType: 'faqBlock'
+  anchorId?: string | null
   title?: string | null
   questions: {
     id?: string | null
@@ -362,6 +370,7 @@ export interface FAQBlock {
 export interface LogoCloudBlock {
   id?: string | null
   blockType: 'logoCloudBlock'
+  anchorId?: string | null
   title?: string | null
   subtitle?: string | null
   layout: 'grid' | 'carousel' | 'marquee'
@@ -380,6 +389,7 @@ export interface LogoCloudBlock {
 export interface VideoBlock {
   id?: string | null
   blockType: 'videoBlock'
+  anchorId?: string | null
   source: 'youtube' | 'vimeo' | 'custom' | 'upload'
   url?: string | null
   file?: string | Media | null
@@ -396,6 +406,7 @@ export interface VideoBlock {
 export interface CaseStudyBlock {
   id?: string | null
   blockType: 'caseStudyBlock'
+  anchorId?: string | null
   title?: string | null
   subtitle?: string | null
   displayMode: 'cards' | 'detailed' | 'carousel'
@@ -431,6 +442,7 @@ export interface CaseStudyBlock {
 export interface ComparisonBlock {
   id?: string | null
   blockType: 'comparisonBlock'
+  anchorId?: string | null
   title?: string | null
   subtitle?: string | null
   type: 'before-after' | 'table' | 'cards'
@@ -481,6 +493,7 @@ export interface ComparisonBlock {
 export interface SectionHeaderBlock {
   id?: string | null
   blockType: 'sectionHeader'
+  anchorId?: string | null
   type: 'small' | 'big'
   layout?: 'centered' | 'left' | 'right' | null
   title: string
@@ -529,6 +542,7 @@ export interface RichTextBlock {
 export interface MarkdownTextBlock {
   id?: string | null
   blockType: 'markdownText'
+  anchorId?: string | null
   markdown: string
   accentColor?: 'amber' | 'indigo' | 'purple' | 'green' | 'blue' | null
 }
@@ -536,6 +550,7 @@ export interface MarkdownTextBlock {
 export interface ImageBlock {
   id?: string | null
   blockType: 'imageBlock'
+  anchorId?: string | null
   image: string | Media
   caption?: string | null
 }
@@ -543,6 +558,7 @@ export interface ImageBlock {
 export interface CallToActionBlock {
   id?: string | null
   blockType: 'callToAction'
+  anchorId?: string | null
   heading: string
   description?: string | null
   icon?: string | null
@@ -571,6 +587,7 @@ export interface CallToActionBlock {
 export interface NewsBlock {
   id?: string | null
   blockType: 'newsBlock'
+  anchorId?: string | null
   displayMode: 'list' | 'carousel' | 'grid'
   contentSource: 'all' | 'byTag' | 'manual'
   selectedTag?: string | NewsTag | null
@@ -585,6 +602,7 @@ export interface NewsBlock {
 export interface PersonPlaceBlock {
   id?: string | null
   blockType: 'personPlaceBlock'
+  anchorId?: string | null
   displayMode: 'grid' | 'fullRow'
   itemsPerRow?: '3' | '4' | null
   items: {
@@ -609,6 +627,7 @@ export interface PersonPlaceBlock {
 export interface TabBlock {
   id?: string | null
   blockType: 'tabBlock'
+  anchorId?: string | null
   tabs: {
     id?: string | null
     tabName: string
@@ -640,6 +659,7 @@ export interface TabBlock {
 export interface MediaBlock {
   id?: string | null
   blockType: 'mediaBlock'
+  anchorId?: string | null
   title?: string | null
   displayMode: 'grid' | 'masonry' | 'carousel'
   columns?: '2' | '3' | '4' | null
@@ -654,6 +674,7 @@ export interface MediaBlock {
 export interface AccordionBlock {
   id?: string | null
   blockType: 'accordionBlock'
+  anchorId?: string | null
   title?: string | null
   description?: string | null
   variant?: 'faq' | 'steps' | 'features' | null
@@ -683,6 +704,7 @@ export interface AccordionBlock {
 export interface ServiceCardsBlock {
   id?: string | null
   blockType: 'serviceCardsBlock'
+  anchorId?: string | null
   title?: string | null
   cards: {
     id?: string | null
@@ -692,7 +714,10 @@ export interface ServiceCardsBlock {
       text: string
     }[] | null
     ctaLabel?: string | null
+    ctaLinkType?: ('page' | 'external' | 'anchor') | null
+    ctaPage?: (string | Page) | null
     ctaUrl?: string | null
+    ctaAnchor?: string | null
     ctaOpenInNewTab?: boolean | null
   }[]
   tags?: {
@@ -705,6 +730,7 @@ export interface ServiceCardsBlock {
 export interface AboutBlock {
   id?: string | null
   blockType: 'aboutBlock'
+  anchorId?: string | null
   title?: string | null
   image?: string | Media | null
   badges?: {
@@ -722,6 +748,7 @@ export interface AboutBlock {
 export interface ValueCardsBlock {
   id?: string | null
   blockType: 'valueCardsBlock'
+  anchorId?: string | null
   title?: string | null
   description?: string | null
   tags?:
@@ -742,6 +769,7 @@ export interface ValueCardsBlock {
 export interface CaseCardsBlock {
   id?: string | null
   blockType: 'caseCardsBlock'
+  anchorId?: string | null
   title?: string | null
   displayMode?: ('cases' | 'reviews') | null
   cases: {

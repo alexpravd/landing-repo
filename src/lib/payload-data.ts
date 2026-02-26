@@ -6,7 +6,7 @@ import type {
   NewsTag as PayloadNewsTag,
 } from '@/payload-types'
 
-export type SupportedLocale = 'uk' | 'en'
+export type SupportedLocale = 'uk'
 
 // Re-export types for external usage
 export type Page = PayloadPage

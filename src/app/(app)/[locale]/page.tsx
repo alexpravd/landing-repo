@@ -130,353 +130,366 @@ export default async function HomePage(props: PageProps) {
     if (isPreview) {
       return (
         <div className="min-h-screen bg-background">
-          <LivePreviewPage initialData={homePage} />
+          <LivePreviewPage initialData={homePage} locale={localeString} />
         </div>
       )
     }
 
     // Render blocks (async for server components like TabBlockServer)
     const renderBlock = async (block: PageBlock, index: number): Promise<React.ReactNode> => {
-      switch (block.blockType) {
-        case 'heroBlock':
-          return (
-            <HeroBlock
-              key={index}
-              headline={block.headline || ''}
-              subheadline={block.subheadline ?? undefined}
-              primaryCTA={block.primaryCTA ?? undefined}
-              secondaryCTA={block.secondaryCTA ?? undefined}
-              enableAnimation={block.enableAnimation !== false}
-              isFirstBlock={index === 0}
-            />
-          )
-        case 'featuresBlock':
-          return (
-            <FeaturesBlock
-              key={index}
-              title={block.title ?? undefined}
-              subtitle={block.subtitle ?? undefined}
-              layout={block.layout || 'grid-3'}
-              cardStyle={block.cardStyle || 'elevated'}
-              items={block.items as FeaturesBlockType['items']}
-              showCTAs={block.showCTAs ?? true}
-              enableAnimation={block.enableAnimation !== false}
-            />
-          )
-        case 'testimonialsBlock':
-          return (
-            <TestimonialsBlock
-              key={index}
-              title={block.title ?? undefined}
-              subtitle={block.subtitle ?? undefined}
-              displayMode={block.displayMode || 'carousel'}
-              testimonials={block.testimonials as TestimonialsBlockType['testimonials']}
-              showRatings={block.showRatings ?? true}
-              autoplay={block.autoplay ?? true}
-              autoplayInterval={block.autoplayInterval ?? undefined}
-              accentColor={block.accentColor ?? undefined}
-              enableAnimation={block.enableAnimation !== false}
-            />
-          )
-        case 'statsBlock':
-          return (
-            <StatsBlock
-              key={index}
-              title={block.title ?? undefined}
-              layout={block.layout || 'grid-4'}
-              stats={block.stats as StatsBlockType['stats']}
-              animateOnScroll={block.animateOnScroll ?? true}
-              accentColor={block.accentColor ?? undefined}
-              enableAnimation={block.enableAnimation !== false}
-            />
-          )
-        case 'timelineBlock':
-          return (
-            <TimelineBlock
-              key={index}
-              title={block.title ?? undefined}
-              subtitle={block.subtitle ?? undefined}
-              layout={block.layout || 'vertical'}
-              items={block.items as TimelineBlockType['items']}
-              showConnectors={block.showConnectors ?? true}
-              accentColor={block.accentColor ?? undefined}
-              enableAnimation={block.enableAnimation !== false}
-            />
-          )
-        case 'pricingBlock':
-          return (
-            <PricingBlock
-              key={index}
-              title={block.title ?? undefined}
-              subtitle={block.subtitle ?? undefined}
-              layout={block.layout || 'cards'}
-              billingToggle={block.billingToggle ?? false}
-              plans={block.plans as PricingBlockType['plans']}
-              accentColor={block.accentColor ?? undefined}
-              enableAnimation={block.enableAnimation !== false}
-            />
-          )
-        case 'teamBlock':
-          return (
-            <TeamBlock
-              key={index}
-              title={block.title ?? undefined}
-              subtitle={block.subtitle ?? undefined}
-              layout={block.layout || 'grid'}
-              columns={block.columns ?? undefined}
-              members={block.members as TeamBlockType['members']}
-              showSocialLinks={block.showSocialLinks ?? true}
-              cardStyle={block.cardStyle || 'card'}
-              accentColor={block.accentColor ?? undefined}
-              enableAnimation={block.enableAnimation !== false}
-            />
-          )
-        case 'faqBlock':
-          return (
-            <FAQBlock
-              key={index}
-              title={block.title ?? undefined}
-              questions={block.questions as FAQBlockType['questions']}
-              allowMultiple={block.allowMultiple ?? false}
-              enableAnimation={block.enableAnimation !== false}
-            />
-          )
-        case 'logoCloudBlock':
-          return (
-            <LogoCloudBlock
-              key={index}
-              title={block.title ?? undefined}
-              subtitle={block.subtitle ?? undefined}
-              layout={block.layout || 'grid'}
-              logos={block.logos as LogoCloudBlockType['logos']}
-              grayscale={block.grayscale ?? true}
-              columns={block.columns ?? undefined}
-              speed={block.speed ?? undefined}
-              enableAnimation={block.enableAnimation !== false}
-            />
-          )
-        case 'videoBlock':
-          return (
-            <VideoBlock
-              key={index}
-              source={block.source || 'youtube'}
-              url={block.url ?? undefined}
-              file={block.file as VideoBlockType['file']}
-              title={block.title ?? undefined}
-              description={block.description ?? undefined}
-              thumbnail={block.thumbnail as VideoBlockType['thumbnail']}
-              autoplay={block.autoplay ?? false}
-              loop={block.loop ?? false}
-              controls={block.controls ?? true}
-              aspectRatio={block.aspectRatio ?? '16:9'}
-              enableAnimation={block.enableAnimation !== false}
-            />
-          )
-        case 'caseStudyBlock':
-          return (
-            <CaseStudyBlock
-              key={index}
-              title={block.title ?? undefined}
-              subtitle={block.subtitle ?? undefined}
-              displayMode={block.displayMode || 'cards'}
-              cases={block.cases as CaseStudyBlockType['cases']}
-              accentColor={block.accentColor ?? undefined}
-              enableAnimation={block.enableAnimation !== false}
-            />
-          )
-        case 'comparisonBlock':
-          return (
-            <ComparisonBlock
-              key={index}
-              title={block.title ?? undefined}
-              subtitle={block.subtitle ?? undefined}
-              type={block.type || 'before-after'}
-              beforeImage={block.beforeImage as ComparisonBlockType['beforeImage']}
-              afterImage={block.afterImage as ComparisonBlockType['afterImage']}
-              beforeLabel={block.beforeLabel ?? undefined}
-              afterLabel={block.afterLabel ?? undefined}
-              sliderDefault={block.sliderDefault ?? undefined}
-              headers={block.headers as ComparisonBlockType['headers']}
-              rows={block.rows as ComparisonBlockType['rows']}
-              highlightColumn={block.highlightColumn ?? undefined}
-              items={block.items as ComparisonBlockType['items']}
-              accentColor={block.accentColor ?? undefined}
-              enableAnimation={block.enableAnimation !== false}
-            />
-          )
-        case 'sectionHeader':
-          return (
-            <SectionHeaderBlock
-              key={index}
-              layout={block.layout ?? undefined}
-              title={block.title ?? undefined}
-              subtitle={block.subtitle ?? undefined}
-              description={block.description ?? undefined}
-              primaryCTA={block.primaryCTA ?? undefined}
-              secondaryCTA={block.secondaryCTA ?? undefined}
-              enableAnimation={block.enableAnimation !== false}
-            />
-          )
-        case 'imageBlock': {
-          const image = block.image
-          const imageData = typeof image === 'object' ? (image as Media) : null
-          return (
-            <div key={index} className="my-8">
-              {imageData?.url && (
-                <figure>
-                  <Image
-                    src={imageData.url}
-                    alt={imageData.alt || block.caption || 'Image'}
-                    width={800}
-                    height={600}
-                    className="w-full rounded-lg"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 800px"
-                  />
-                  {block.caption && (
-                    <figcaption className="mt-2 text-center text-sm text-muted-foreground">
-                      {block.caption}
-                    </figcaption>
-                  )}
-                </figure>
-              )}
-            </div>
-          )
+      const anchorId =
+        'anchorId' in block ? (block as { anchorId?: string | null }).anchorId : undefined
+      const content = (() => {
+        switch (block.blockType) {
+          case 'heroBlock':
+            return (
+              <HeroBlock
+                key={index}
+                headline={block.headline || ''}
+                subheadline={block.subheadline ?? undefined}
+                primaryCTA={block.primaryCTA ?? undefined}
+                secondaryCTA={block.secondaryCTA ?? undefined}
+                enableAnimation={block.enableAnimation !== false}
+                isFirstBlock={index === 0}
+              />
+            )
+          case 'featuresBlock':
+            return (
+              <FeaturesBlock
+                key={index}
+                title={block.title ?? undefined}
+                subtitle={block.subtitle ?? undefined}
+                layout={block.layout || 'grid-3'}
+                cardStyle={block.cardStyle || 'elevated'}
+                items={block.items as FeaturesBlockType['items']}
+                showCTAs={block.showCTAs ?? true}
+                enableAnimation={block.enableAnimation !== false}
+              />
+            )
+          case 'testimonialsBlock':
+            return (
+              <TestimonialsBlock
+                key={index}
+                title={block.title ?? undefined}
+                subtitle={block.subtitle ?? undefined}
+                displayMode={block.displayMode || 'carousel'}
+                testimonials={block.testimonials as TestimonialsBlockType['testimonials']}
+                showRatings={block.showRatings ?? true}
+                autoplay={block.autoplay ?? true}
+                autoplayInterval={block.autoplayInterval ?? undefined}
+                accentColor={block.accentColor ?? undefined}
+                enableAnimation={block.enableAnimation !== false}
+              />
+            )
+          case 'statsBlock':
+            return (
+              <StatsBlock
+                key={index}
+                title={block.title ?? undefined}
+                layout={block.layout || 'grid-4'}
+                stats={block.stats as StatsBlockType['stats']}
+                animateOnScroll={block.animateOnScroll ?? true}
+                accentColor={block.accentColor ?? undefined}
+                enableAnimation={block.enableAnimation !== false}
+              />
+            )
+          case 'timelineBlock':
+            return (
+              <TimelineBlock
+                key={index}
+                title={block.title ?? undefined}
+                subtitle={block.subtitle ?? undefined}
+                layout={block.layout || 'vertical'}
+                items={block.items as TimelineBlockType['items']}
+                showConnectors={block.showConnectors ?? true}
+                accentColor={block.accentColor ?? undefined}
+                enableAnimation={block.enableAnimation !== false}
+              />
+            )
+          case 'pricingBlock':
+            return (
+              <PricingBlock
+                key={index}
+                title={block.title ?? undefined}
+                subtitle={block.subtitle ?? undefined}
+                layout={block.layout || 'cards'}
+                billingToggle={block.billingToggle ?? false}
+                plans={block.plans as PricingBlockType['plans']}
+                accentColor={block.accentColor ?? undefined}
+                enableAnimation={block.enableAnimation !== false}
+              />
+            )
+          case 'teamBlock':
+            return (
+              <TeamBlock
+                key={index}
+                title={block.title ?? undefined}
+                subtitle={block.subtitle ?? undefined}
+                layout={block.layout || 'grid'}
+                columns={block.columns ?? undefined}
+                members={block.members as TeamBlockType['members']}
+                showSocialLinks={block.showSocialLinks ?? true}
+                cardStyle={block.cardStyle || 'card'}
+                accentColor={block.accentColor ?? undefined}
+                enableAnimation={block.enableAnimation !== false}
+              />
+            )
+          case 'faqBlock':
+            return (
+              <FAQBlock
+                key={index}
+                title={block.title ?? undefined}
+                questions={block.questions as FAQBlockType['questions']}
+                allowMultiple={block.allowMultiple ?? false}
+                enableAnimation={block.enableAnimation !== false}
+              />
+            )
+          case 'logoCloudBlock':
+            return (
+              <LogoCloudBlock
+                key={index}
+                title={block.title ?? undefined}
+                subtitle={block.subtitle ?? undefined}
+                layout={block.layout || 'grid'}
+                logos={block.logos as LogoCloudBlockType['logos']}
+                grayscale={block.grayscale ?? true}
+                columns={block.columns ?? undefined}
+                speed={block.speed ?? undefined}
+                enableAnimation={block.enableAnimation !== false}
+              />
+            )
+          case 'videoBlock':
+            return (
+              <VideoBlock
+                key={index}
+                source={block.source || 'youtube'}
+                url={block.url ?? undefined}
+                file={block.file as VideoBlockType['file']}
+                title={block.title ?? undefined}
+                description={block.description ?? undefined}
+                thumbnail={block.thumbnail as VideoBlockType['thumbnail']}
+                autoplay={block.autoplay ?? false}
+                loop={block.loop ?? false}
+                controls={block.controls ?? true}
+                aspectRatio={block.aspectRatio ?? '16:9'}
+                enableAnimation={block.enableAnimation !== false}
+              />
+            )
+          case 'caseStudyBlock':
+            return (
+              <CaseStudyBlock
+                key={index}
+                title={block.title ?? undefined}
+                subtitle={block.subtitle ?? undefined}
+                displayMode={block.displayMode || 'cards'}
+                cases={block.cases as CaseStudyBlockType['cases']}
+                accentColor={block.accentColor ?? undefined}
+                enableAnimation={block.enableAnimation !== false}
+              />
+            )
+          case 'comparisonBlock':
+            return (
+              <ComparisonBlock
+                key={index}
+                title={block.title ?? undefined}
+                subtitle={block.subtitle ?? undefined}
+                type={block.type || 'before-after'}
+                beforeImage={block.beforeImage as ComparisonBlockType['beforeImage']}
+                afterImage={block.afterImage as ComparisonBlockType['afterImage']}
+                beforeLabel={block.beforeLabel ?? undefined}
+                afterLabel={block.afterLabel ?? undefined}
+                sliderDefault={block.sliderDefault ?? undefined}
+                headers={block.headers as ComparisonBlockType['headers']}
+                rows={block.rows as ComparisonBlockType['rows']}
+                highlightColumn={block.highlightColumn ?? undefined}
+                items={block.items as ComparisonBlockType['items']}
+                accentColor={block.accentColor ?? undefined}
+                enableAnimation={block.enableAnimation !== false}
+              />
+            )
+          case 'sectionHeader':
+            return (
+              <SectionHeaderBlock
+                key={index}
+                layout={block.layout ?? undefined}
+                title={block.title ?? undefined}
+                subtitle={block.subtitle ?? undefined}
+                description={block.description ?? undefined}
+                primaryCTA={block.primaryCTA ?? undefined}
+                secondaryCTA={block.secondaryCTA ?? undefined}
+                enableAnimation={block.enableAnimation !== false}
+              />
+            )
+          case 'imageBlock': {
+            const image = block.image
+            const imageData = typeof image === 'object' ? (image as Media) : null
+            return (
+              <div key={index} className="my-8">
+                {imageData?.url && (
+                  <figure>
+                    <Image
+                      src={imageData.url}
+                      alt={imageData.alt || block.caption || 'Image'}
+                      width={800}
+                      height={600}
+                      className="w-full rounded-lg"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 800px"
+                    />
+                    {block.caption && (
+                      <figcaption className="mt-2 text-center text-sm text-muted-foreground">
+                        {block.caption}
+                      </figcaption>
+                    )}
+                  </figure>
+                )}
+              </div>
+            )
+          }
+          case 'callToAction':
+            return (
+              <CallToActionBlock
+                key={index}
+                heading={block.heading || ''}
+                description={block.description ?? undefined}
+                icon={block.icon ?? undefined}
+                link={block.link ?? undefined}
+                secondaryButton={block.secondaryButton ?? undefined}
+                alignment={block.alignment ?? undefined}
+                size={block.size ?? undefined}
+                backgroundStyle={block.backgroundStyle ?? undefined}
+                backgroundGradient={block.backgroundGradient as GradientPreset | undefined}
+                backgroundColor={block.backgroundColor ?? undefined}
+                backgroundImage={block.backgroundImage as Media | undefined}
+                backgroundOverlay={block.backgroundOverlay ?? undefined}
+                backgroundOverlayOpacity={block.backgroundOverlayOpacity ?? undefined}
+                enableAnimation={block.enableAnimation !== false}
+              />
+            )
+          case 'markdownText':
+            return (
+              <MarkdownRichTextBlock
+                key={index}
+                markdown={block.markdown || ''}
+                accentColor={block.accentColor ?? undefined}
+              />
+            )
+          case 'newsBlock':
+            return (
+              <NewsBlockServer
+                key={index}
+                block={{
+                  displayMode: block.displayMode,
+                  contentSource: block.contentSource,
+                  selectedTag: block.selectedTag ?? undefined,
+                  selectedNews: block.selectedNews ?? undefined,
+                  limit: block.limit ?? undefined,
+                  enableSearch: block.enableSearch ?? undefined,
+                  enableFilters: block.enableFilters ?? undefined,
+                  enablePagination: block.enablePagination ?? undefined,
+                  itemsPerPage: block.itemsPerPage ?? undefined,
+                }}
+                locale={localeString as SupportedLocale}
+                draft={isPreview}
+              />
+            )
+          case 'personPlaceBlock':
+            return (
+              <PersonPlaceBlock
+                key={index}
+                displayMode={block.displayMode || 'grid'}
+                itemsPerRow={block.itemsPerRow ?? undefined}
+                items={block.items as PersonPlaceBlockType['items']}
+              />
+            )
+          case 'tabBlock':
+            return (
+              <TabBlockServer
+                key={index}
+                tabs={block.tabs as TabBlockType['tabs']}
+                locale={localeString as SupportedLocale}
+                draft={isPreview}
+              />
+            )
+          case 'mediaBlock':
+            return (
+              <MediaBlock
+                key={index}
+                title={block.title ?? undefined}
+                displayMode={block.displayMode || 'grid'}
+                columns={block.columns ?? undefined}
+                media={block.media as MediaBlockType['media']}
+                enableLightbox={block.enableLightbox ?? undefined}
+              />
+            )
+          case 'accordionBlock':
+            return (
+              <AccordionBlock
+                key={index}
+                title={block.title ?? undefined}
+                description={block.description ?? undefined}
+                allowMultiple={block.allowMultiple ?? undefined}
+                accordionItems={block.accordionItems as AccordionBlockType['accordionItems']}
+              />
+            )
+          case 'serviceCardsBlock':
+            return (
+              <ServiceCardsBlock
+                key={index}
+                title={block.title ?? undefined}
+                cards={block.cards}
+                tags={block.tags ?? undefined}
+                enableAnimation={block.enableAnimation !== false}
+                locale={localeString}
+              />
+            )
+          case 'aboutBlock':
+            return (
+              <AboutBlock
+                key={index}
+                title={block.title ?? undefined}
+                image={block.image}
+                badges={block.badges}
+                description={block.description ?? undefined}
+                ctaLabel={block.ctaLabel ?? undefined}
+                ctaUrl={block.ctaUrl ?? undefined}
+                ctaOpenInNewTab={block.ctaOpenInNewTab ?? undefined}
+                enableAnimation={block.enableAnimation !== false}
+              />
+            )
+          case 'valueCardsBlock':
+            return (
+              <ValueCardsBlock
+                key={index}
+                title={block.title ?? undefined}
+                description={block.description ?? undefined}
+                tags={block.tags ?? undefined}
+                cards={block.cards}
+                enableAnimation={block.enableAnimation !== false}
+              />
+            )
+          case 'caseCardsBlock':
+            return (
+              <CaseCardsBlock
+                key={index}
+                title={block.title ?? undefined}
+                displayMode={block.displayMode}
+                cases={block.cases}
+                reviews={block.reviews}
+                enableAnimation={block.enableAnimation !== false}
+              />
+            )
+          default:
+            return null
         }
-        case 'callToAction':
-          return (
-            <CallToActionBlock
-              key={index}
-              heading={block.heading || ''}
-              description={block.description ?? undefined}
-              icon={block.icon ?? undefined}
-              link={block.link ?? undefined}
-              secondaryButton={block.secondaryButton ?? undefined}
-              alignment={block.alignment ?? undefined}
-              size={block.size ?? undefined}
-              backgroundStyle={block.backgroundStyle ?? undefined}
-              backgroundGradient={block.backgroundGradient as GradientPreset | undefined}
-              backgroundColor={block.backgroundColor ?? undefined}
-              backgroundImage={block.backgroundImage as Media | undefined}
-              backgroundOverlay={block.backgroundOverlay ?? undefined}
-              backgroundOverlayOpacity={block.backgroundOverlayOpacity ?? undefined}
-              enableAnimation={block.enableAnimation !== false}
-            />
-          )
-        case 'markdownText':
-          return (
-            <MarkdownRichTextBlock
-              key={index}
-              markdown={block.markdown || ''}
-              accentColor={block.accentColor ?? undefined}
-            />
-          )
-        case 'newsBlock':
-          return (
-            <NewsBlockServer
-              key={index}
-              block={{
-                displayMode: block.displayMode,
-                contentSource: block.contentSource,
-                selectedTag: block.selectedTag ?? undefined,
-                selectedNews: block.selectedNews ?? undefined,
-                limit: block.limit ?? undefined,
-                enableSearch: block.enableSearch ?? undefined,
-                enableFilters: block.enableFilters ?? undefined,
-                enablePagination: block.enablePagination ?? undefined,
-                itemsPerPage: block.itemsPerPage ?? undefined,
-              }}
-              locale={localeString as SupportedLocale}
-              draft={isPreview}
-            />
-          )
-        case 'personPlaceBlock':
-          return (
-            <PersonPlaceBlock
-              key={index}
-              displayMode={block.displayMode || 'grid'}
-              itemsPerRow={block.itemsPerRow ?? undefined}
-              items={block.items as PersonPlaceBlockType['items']}
-            />
-          )
-        case 'tabBlock':
-          return (
-            <TabBlockServer
-              key={index}
-              tabs={block.tabs as TabBlockType['tabs']}
-              locale={localeString as SupportedLocale}
-              draft={isPreview}
-            />
-          )
-        case 'mediaBlock':
-          return (
-            <MediaBlock
-              key={index}
-              title={block.title ?? undefined}
-              displayMode={block.displayMode || 'grid'}
-              columns={block.columns ?? undefined}
-              media={block.media as MediaBlockType['media']}
-              enableLightbox={block.enableLightbox ?? undefined}
-            />
-          )
-        case 'accordionBlock':
-          return (
-            <AccordionBlock
-              key={index}
-              title={block.title ?? undefined}
-              description={block.description ?? undefined}
-              allowMultiple={block.allowMultiple ?? undefined}
-              accordionItems={block.accordionItems as AccordionBlockType['accordionItems']}
-            />
-          )
-        case 'serviceCardsBlock':
-          return (
-            <ServiceCardsBlock
-              key={index}
-              title={block.title ?? undefined}
-              cards={block.cards}
-              tags={block.tags ?? undefined}
-              enableAnimation={block.enableAnimation !== false}
-            />
-          )
-        case 'aboutBlock':
-          return (
-            <AboutBlock
-              key={index}
-              title={block.title ?? undefined}
-              image={block.image}
-              badges={block.badges}
-              description={block.description ?? undefined}
-              ctaLabel={block.ctaLabel ?? undefined}
-              ctaUrl={block.ctaUrl ?? undefined}
-              ctaOpenInNewTab={block.ctaOpenInNewTab ?? undefined}
-              enableAnimation={block.enableAnimation !== false}
-            />
-          )
-        case 'valueCardsBlock':
-          return (
-            <ValueCardsBlock
-              key={index}
-              title={block.title ?? undefined}
-              description={block.description ?? undefined}
-              tags={block.tags ?? undefined}
-              cards={block.cards}
-              enableAnimation={block.enableAnimation !== false}
-            />
-          )
-        case 'caseCardsBlock':
-          return (
-            <CaseCardsBlock
-              key={index}
-              title={block.title ?? undefined}
-              displayMode={block.displayMode}
-              cases={block.cases}
-              reviews={block.reviews}
-              enableAnimation={block.enableAnimation !== false}
-            />
-          )
-        default:
-          return null
-      }
+      })()
+
+      return anchorId ? (
+        <div key={index} id={anchorId} className="scroll-mt-20">
+          {content}
+        </div>
+      ) : (
+        content
+      )
     }
 
     // Pre-render blocks with Promise.all for async server components

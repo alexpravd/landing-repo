@@ -5,6 +5,6 @@ import { redirect } from 'next/navigation'
  * Following i18n best practices for Next.js 15 App Router
  */
 export default function RootPage() {
-  // Redirect to default locale (English)
-  redirect('/en')
+  // Redirect to default locale (Ukrainian)
+  redirect('/uk')
 }

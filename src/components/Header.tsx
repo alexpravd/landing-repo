@@ -3,9 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import {
-  ChevronDown,
   ChevronRight,
-  Globe,
   Eye,
   Facebook,
   Twitter,
@@ -31,12 +29,6 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from './ui/navigation-menu'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from './ui/dropdown-menu'
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from './ui/sheet'
 import { useAccessibility } from './providers/AccessibilityProvider'
 import { SearchDialog } from './SearchDialog'
@@ -88,7 +80,6 @@ interface HeaderProps {
   siteSettings?: SiteSettings
   navigationItems?: NavigationItem[]
   currentLocale?: string
-  availableLocales?: Array<{ code: string; label: string }>
   /** Whether to show the search button in the header. Defaults to false (disabled). */
   showSearch?: boolean
   /** Whether to hide Social/Locale/A11y controls. Defaults to false. */
@@ -119,11 +110,6 @@ const defaultNavigationData = {
   },
 }
 
-const defaultLocales = [
-  { code: 'en', label: 'English' },
-  { code: 'uk', label: 'Ukrainian' },
-]
-
 // Helper function to get icon component based on platform
 const getSocialIcon = (platform: string) => {
   const icons: Record<string, typeof Facebook | null> = {
@@ -143,7 +129,6 @@ export function Header({
   siteSettings,
   navigationItems,
   currentLocale = 'uk',
-  availableLocales = defaultLocales,
   showSearch = false,
   hideHeaderControls,
 }: HeaderProps = {}) {
@@ -257,27 +242,6 @@ export function Header({
                       })}
                     </div>
                   )}
-
-                  {/* Locale Switcher */}
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground">
-                        <Globe className="h-4 w-4" />
-                        <span className="hidden sm:inline">{localeString.toUpperCase()}</span>
-                        <ChevronDown className="h-3 w-3" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="start">
-                      {availableLocales.map((locale) => (
-                        <DropdownMenuItem key={locale.code} asChild>
-                          <Link href={`/${locale.code}`}>
-                            {locale.label}
-                            {locale.code === localeString && ' ✓'}
-                          </Link>
-                        </DropdownMenuItem>
-                      ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
 
                   {/* Accessibility Button */}
                   <div className="relative">
@@ -578,34 +542,6 @@ export function Header({
                           )
                         })}
                   </nav>
-                </div>
-
-                {/* Footer section with language switcher */}
-                <div className="relative mt-auto border-t border-slate-800/60 px-6 py-5">
-                  <p className="mb-3 text-xs font-medium uppercase tracking-wider text-slate-500">
-                    Language
-                  </p>
-                  <div className="flex gap-2">
-                    {availableLocales.map((locale) => {
-                      const flagEmoji = locale.code === 'uk' ? '🇺🇦' : '🇬🇧'
-                      const isActive = locale.code === localeString
-
-                      return (
-                        <Link
-                          key={locale.code}
-                          href={`/${locale.code}`}
-                          className={`flex min-h-[48px] min-w-[48px] flex-1 items-center justify-center gap-2 rounded-xl text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 ${
-                            isActive
-                              ? 'bg-indigo-500/20 text-indigo-300 ring-1 ring-indigo-500/40'
-                              : 'bg-slate-800/50 text-slate-300 ring-1 ring-slate-700/50 hover:bg-slate-800 hover:text-white'
-                          }`}
-                        >
-                          <span className="text-lg">{flagEmoji}</span>
-                          <span className="hidden sm:inline">{locale.code.toUpperCase()}</span>
-                        </Link>
-                      )
-                    })}
-                  </div>
                 </div>
               </SheetContent>
             </Sheet>
