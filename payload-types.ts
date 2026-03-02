@@ -7,958 +7,463 @@
  */
 
 export interface Config {
-  collections: {
-    users: User
-    media: Media
-    'media-folders': MediaFolder
-    navigation: Navigation
-    pages: Page
-    news: News
-    'news-tags': NewsTag
-    'contact-submissions': ContactSubmission
-  }
-  globals: {
-    'site-settings': SiteSettings
-    footer: Footer
-  }
+collections: {
+  users: User
+  media: Media
+  'media-folders': MediaFolder
+  navigation: Navigation
+  pages: Page
+  'contact-submissions': ContactSubmission
+}
+globals: {
+  'site-settings': SiteSettings
+  footer: Footer
+}
 }
 
 /**
  * User
  */
 export interface User {
-  id: string
-  name: string
-  email: string
-  role: 'admin' | 'user'
-  avatar?: string | Media | null
-  createdAt: string
-  updatedAt: string
+id: string
+name: string
+email: string
+role: 'admin' | 'user'
+avatar?: string | Media | null
+createdAt: string
+updatedAt: string
 }
 
 /**
  * Media
  */
 export interface Media {
-  id: string
-  folder?: string | MediaFolder | null
-  alt: string
-  caption?: string | null
-  uploadedBy?: string | User | null
-  url?: string | null
-  filename?: string | null
-  mimeType?: string | null
-  filesize?: number | null
-  width?: number | null
-  height?: number | null
-  focalX?: number | null
-  focalY?: number | null
-  sizes?: {
-    thumbnail?: {
-      url?: string | null
-      width?: number | null
-      height?: number | null
-    }
-    card?: {
-      url?: string | null
-      width?: number | null
-      height?: number | null
-    }
-    tablet?: {
-      url?: string | null
-      width?: number | null
-      height?: number | null
-    }
+id: string
+folder?: string | MediaFolder | null
+alt: string
+caption?: string | null
+uploadedBy?: string | User | null
+url?: string | null
+filename?: string | null
+mimeType?: string | null
+filesize?: number | null
+width?: number | null
+height?: number | null
+focalX?: number | null
+focalY?: number | null
+sizes?: {
+  thumbnail?: {
+    url?: string | null
+    width?: number | null
+    height?: number | null
   }
-  createdAt: string
-  updatedAt: string
+  card?: {
+    url?: string | null
+    width?: number | null
+    height?: number | null
+  }
+  tablet?: {
+    url?: string | null
+    width?: number | null
+    height?: number | null
+  }
+}
+createdAt: string
+updatedAt: string
 }
 
 /**
  * MediaFolder
  */
 export interface MediaFolder {
-  id: string
-  name: string
-  slug: string
-  parent?: string | MediaFolder | null
-  createdAt: string
-  updatedAt: string
+id: string
+name: string
+slug: string
+parent?: string | MediaFolder | null
+createdAt: string
+updatedAt: string
 }
 
 /**
  * Navigation
  */
 export interface Navigation {
-  id: string
-  label: string
-  linkType?: 'none' | 'page' | 'custom' | null
-  page?: string | Page | null
-  href?: string | null
-  order: number
-  openInNewTab?: boolean | null
-  children?: NavigationChild[] | null
-  createdAt: string
-  updatedAt: string
+id: string
+label: string
+linkType?: 'none' | 'page' | 'custom' | null
+page?: string | Page | null
+href?: string | null
+order: number
+openInNewTab?: boolean | null
+children?: NavigationChild[] | null
+createdAt: string
+updatedAt: string
 }
 
 export interface NavigationChild {
-  label: string
-  items?: NavigationChildItem[] | null
+label: string
+items?: NavigationChildItem[] | null
 }
 
 export interface NavigationChildItem {
-  label: string
-  linkType: 'page' | 'custom'
-  page?: string | Page | null
-  href?: string | null
-  openInNewTab?: boolean | null
+label: string
+linkType: 'page' | 'custom'
+page?: string | Page | null
+href?: string | null
+openInNewTab?: boolean | null
 }
 
 /**
  * Page
  */
 export interface Page {
-  id: string
-  title: string
-  pageType: 'home' | 'news' | 'leadership' | 'departments' | 'documents' | 'text'
-  status: 'draft' | 'published' | 'archived'
-  slug?: string | null
-  content?: Record<string, unknown> | null
-  blocks?: PageBlock[] | null
-  seo?: SEOFields | null
-  publishedDate?: string | null
-  author?: string | User | null
-  createdAt: string
-  updatedAt: string
+id: string
+title: string
+pageType: 'home' | 'news' | 'leadership' | 'departments' | 'documents' | 'text'
+status: 'draft' | 'published' | 'archived'
+slug?: string | null
+content?: Record<string, unknown> | null
+blocks?: PageBlock[] | null
+seo?: SEOFields | null
+publishedDate?: string | null
+author?: string | User | null
+createdAt: string
+updatedAt: string
 }
 
-export type PageBlock =
-  | HeroBlock
-  | FeaturesBlock
-  | TestimonialsBlock
-  | StatsBlock
-  | TimelineBlock
-  | PricingBlock
-  | TeamBlock
-  | FAQBlock
-  | LogoCloudBlock
-  | VideoBlock
-  | CaseStudyBlock
-  | ComparisonBlock
-  | SectionHeaderBlock
-  | RichTextBlock
-  | MarkdownTextBlock
-  | ImageBlock
-  | CallToActionBlock
-  | NewsBlock
-  | PersonPlaceBlock
-  | TabBlock
-  | MediaBlock
-  | AccordionBlock
-  | ServiceCardsBlock
-  | AboutBlock
-  | ValueCardsBlock
-  | CaseCardsBlock
+export type PageBlock = HeroBlock | FAQBlock | SectionHeaderBlock | RichTextBlock | ServiceCardsBlock | AboutBlock | ValueCardsBlock | CaseCardsBlock
 
 export interface HeroBlock {
+id?: string | null
+blockType: 'heroBlock'
+anchorId?: string | null
+layout: 'centered' | 'split-left' | 'split-right'
+background?: {
+  type?: 'color' | 'gradient' | 'image' | null
+  color?: string | null
+  gradient?: string | null
+  image?: string | Media | null
+  overlay?: boolean | null
+  overlayOpacity?: number | null
+} | null
+badge?: {
+  text?: string | null
+  icon?: string | null
+  gradient?: string | null
+} | null
+headline: string
+subheadline?: string | null
+bulletPoints?: {
   id?: string | null
-  blockType: 'heroBlock'
-  anchorId?: string | null
-  layout: 'centered' | 'split-left' | 'split-right'
-  background?: {
-    type?: 'color' | 'gradient' | 'image' | null
-    color?: string | null
-    gradient?: string | null
-    image?: string | Media | null
-    overlay?: boolean | null
-    overlayOpacity?: number | null
-  } | null
-  badge?: {
-    text?: string | null
-    icon?: string | null
-    gradient?: string | null
-  } | null
-  headline: string
-  subheadline?: string | null
-  bulletPoints?: {
-    id?: string | null
-    icon?: string | null
-    text: string
-  }[] | null
-  primaryCTA?: {
-    label?: string | null
-    linkType?: ('page' | 'external' | 'anchor') | null
-    page?: (string | null) | Page
-    url?: string | null
-    anchor?: string | null
-    style?: 'solid' | 'outline' | null
-    openInNewTab?: boolean | null
-  } | null
-  secondaryCTA?: {
-    label?: string | null
-    linkType?: ('page' | 'external' | 'anchor') | null
-    page?: (string | null) | Page
-    url?: string | null
-    anchor?: string | null
-    style?: 'solid' | 'outline' | null
-    openInNewTab?: boolean | null
-  } | null
-  trustBadges?: {
-    id?: string | null
-    image: string | Media
-    alt?: string | null
-  }[] | null
-  heroImage?: string | Media | null
-  enableAnimation?: boolean | null
-}
-
-export interface FeaturesBlock {
+  icon?: string | null
+  text: string
+}[] | null
+primaryCTA?: {
+  label?: string | null
+  linkType?: ('page' | 'external' | 'anchor') | null
+  page?: (string | null) | Page
+  url?: string | null
+  anchor?: string | null
+  style?: 'solid' | 'outline' | null
+  openInNewTab?: boolean | null
+} | null
+secondaryCTA?: {
+  label?: string | null
+  linkType?: ('page' | 'external' | 'anchor') | null
+  page?: (string | null) | Page
+  url?: string | null
+  anchor?: string | null
+  style?: 'solid' | 'outline' | null
+  openInNewTab?: boolean | null
+} | null
+trustBadges?: {
   id?: string | null
-  blockType: 'featuresBlock'
-  anchorId?: string | null
-  title?: string | null
-  subtitle?: string | null
-  layout: 'grid-2' | 'grid-3' | 'grid-4' | 'list'
-  cardStyle: 'minimal' | 'bordered' | 'elevated' | 'gradient'
-  items: {
-    id?: string | null
-    icon?: string | null
-    title: string
-    description?: string | null
-    link?: {
-      label?: string | null
-      url?: string | null
-      openInNewTab?: boolean | null
-    } | null
-  }[]
-  showCTAs?: boolean | null
-  enableAnimation?: boolean | null
-}
-
-export interface TestimonialsBlock {
-  id?: string | null
-  blockType: 'testimonialsBlock'
-  anchorId?: string | null
-  title?: string | null
-  subtitle?: string | null
-  displayMode: 'carousel' | 'grid' | 'single-featured'
-  testimonials: {
-    id?: string | null
-    quote: string
-    authorName: string
-    authorRole?: string | null
-    authorCompany?: string | null
-    authorPhoto?: string | Media | null
-    rating?: number | null
-    logo?: string | Media | null
-  }[]
-  showRatings?: boolean | null
-  autoplay?: boolean | null
-  autoplayInterval?: number | null
-  accentColor?: 'amber' | 'indigo' | 'purple' | 'green' | 'blue' | null
-  enableAnimation?: boolean | null
-}
-
-export interface StatsBlock {
-  id?: string | null
-  blockType: 'statsBlock'
-  anchorId?: string | null
-  title?: string | null
-  layout: 'row' | 'grid-2' | 'grid-4'
-  stats: {
-    id?: string | null
-    value: number
-    prefix?: string | null
-    suffix?: string | null
-    label: string
-    icon?: string | null
-  }[]
-  animateOnScroll?: boolean | null
-  accentColor?: 'amber' | 'indigo' | 'purple' | 'green' | 'blue' | null
-  enableAnimation?: boolean | null
-}
-
-export interface TimelineBlock {
-  id?: string | null
-  blockType: 'timelineBlock'
-  anchorId?: string | null
-  title?: string | null
-  subtitle?: string | null
-  layout: 'vertical' | 'horizontal' | 'alternating'
-  items: {
-    id?: string | null
-    label: string
-    title: string
-    description?: string | null
-    icon?: string | null
-    status?: 'completed' | 'current' | 'upcoming' | null
-  }[]
-  showConnectors?: boolean | null
-  accentColor?: 'amber' | 'indigo' | 'purple' | 'green' | 'blue' | null
-  enableAnimation?: boolean | null
-}
-
-export interface PricingBlock {
-  id?: string | null
-  blockType: 'pricingBlock'
-  anchorId?: string | null
-  title?: string | null
-  subtitle?: string | null
-  layout: 'cards' | 'table' | 'comparison'
-  billingToggle?: boolean | null
-  plans: {
-    id?: string | null
-    name: string
-    description?: string | null
-    monthlyPrice?: number | null
-    yearlyPrice?: number | null
-    currency?: string | null
-    billingPeriod?: string | null
-    features?: {
-      id?: string | null
-      text: string
-      included?: boolean | null
-    }[] | null
-    cta?: {
-      label?: string | null
-      url?: string | null
-      style?: 'solid' | 'outline' | null
-      openInNewTab?: boolean | null
-    } | null
-    highlighted?: boolean | null
-    badge?: string | null
-  }[]
-  accentColor?: 'amber' | 'indigo' | 'purple' | 'green' | 'blue' | null
-  enableAnimation?: boolean | null
-}
-
-export interface TeamBlock {
-  id?: string | null
-  blockType: 'teamBlock'
-  anchorId?: string | null
-  title?: string | null
-  subtitle?: string | null
-  layout: 'grid' | 'carousel' | 'list'
-  columns?: '2' | '3' | '4' | null
-  cardStyle: 'minimal' | 'card' | 'overlay'
-  showSocialLinks?: boolean | null
-  members: {
-    id?: string | null
-    photo: string | Media
-    name: string
-    role?: string | null
-    bio?: string | null
-    socialLinks?: {
-      id?: string | null
-      platform: 'linkedin' | 'twitter' | 'github' | 'email' | 'website'
-      url: string
-    }[] | null
-  }[]
-  accentColor?: 'amber' | 'indigo' | 'purple' | 'green' | 'blue' | null
-  enableAnimation?: boolean | null
+  image: string | Media
+  alt?: string | null
+}[] | null
+heroImage?: string | Media | null
+enableAnimation?: boolean | null
 }
 
 export interface FAQBlock {
+id?: string | null
+blockType: 'faqBlock'
+anchorId?: string | null
+title?: string | null
+questions: {
   id?: string | null
-  blockType: 'faqBlock'
-  anchorId?: string | null
-  title?: string | null
-  questions: {
-    id?: string | null
-    question: string
-    answer: string
-  }[]
-  allowMultiple?: boolean | null
-  enableAnimation?: boolean | null
-}
-
-export interface LogoCloudBlock {
-  id?: string | null
-  blockType: 'logoCloudBlock'
-  anchorId?: string | null
-  title?: string | null
-  subtitle?: string | null
-  layout: 'grid' | 'carousel' | 'marquee'
-  logos: {
-    id?: string | null
-    image: string | Media
-    name?: string | null
-    url?: string | null
-  }[]
-  grayscale?: boolean | null
-  columns?: '4' | '5' | '6' | null
-  speed?: 'slow' | 'normal' | 'fast' | null
-  enableAnimation?: boolean | null
-}
-
-export interface VideoBlock {
-  id?: string | null
-  blockType: 'videoBlock'
-  anchorId?: string | null
-  source: 'youtube' | 'vimeo' | 'custom' | 'upload'
-  url?: string | null
-  file?: string | Media | null
-  title?: string | null
-  description?: string | null
-  thumbnail?: string | Media | null
-  autoplay?: boolean | null
-  loop?: boolean | null
-  controls?: boolean | null
-  aspectRatio?: '16:9' | '4:3' | '1:1' | '9:16' | null
-  enableAnimation?: boolean | null
-}
-
-export interface CaseStudyBlock {
-  id?: string | null
-  blockType: 'caseStudyBlock'
-  anchorId?: string | null
-  title?: string | null
-  subtitle?: string | null
-  displayMode: 'cards' | 'detailed' | 'carousel'
-  cases: {
-    id?: string | null
-    title: string
-    clientName?: string | null
-    industry?: string | null
-    challenge?: string | null
-    solution?: string | null
-    results?: {
-      id?: string | null
-      metric?: string | null
-      value?: string | null
-      description?: string | null
-    }[] | null
-    testimonial?: {
-      quote?: string | null
-      author?: string | null
-    } | null
-    image?: string | Media | null
-    logo?: string | Media | null
-    link?: {
-      label?: string | null
-      url?: string | null
-      openInNewTab?: boolean | null
-    } | null
-  }[]
-  accentColor?: 'amber' | 'indigo' | 'purple' | 'green' | 'blue' | null
-  enableAnimation?: boolean | null
-}
-
-export interface ComparisonBlock {
-  id?: string | null
-  blockType: 'comparisonBlock'
-  anchorId?: string | null
-  title?: string | null
-  subtitle?: string | null
-  type: 'before-after' | 'table' | 'cards'
-  // Before-after fields
-  beforeImage?: string | Media | null
-  afterImage?: string | Media | null
-  beforeLabel?: string | null
-  afterLabel?: string | null
-  sliderDefault?: number | null
-  // Table fields
-  headers?: {
-    id?: string | null
-    text: string
-    highlighted?: boolean | null
-  }[] | null
-  rows?: {
-    id?: string | null
-    label: string
-    values?: {
-      id?: string | null
-      text?: string | null
-      isCheckmark?: boolean | null
-    }[] | null
-  }[] | null
-  highlightColumn?: number | null
-  // Cards fields
-  items?: {
-    id?: string | null
-    title: string
-    description?: string | null
-    price?: string | null
-    features?: {
-      id?: string | null
-      text: string
-      included?: boolean | null
-    }[] | null
-    highlighted?: boolean | null
-    cta?: {
-      label?: string | null
-      url?: string | null
-      openInNewTab?: boolean | null
-    } | null
-  }[] | null
-  accentColor?: 'amber' | 'indigo' | 'purple' | 'green' | 'blue' | null
-  enableAnimation?: boolean | null
+  question: string
+  answer: string
+}[]
+allowMultiple?: boolean | null
+enableAnimation?: boolean | null
 }
 
 export interface SectionHeaderBlock {
+id?: string | null
+blockType: 'sectionHeader'
+anchorId?: string | null
+type: 'small' | 'big'
+layout?: 'centered' | 'left' | 'right' | null
+title: string
+subtitle?: string | null
+description?: string | null
+headingLevel?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | null
+badge?: {
+  text?: string | null
+  icon?: string | null
+  gradient?: string | null
+} | null
+background?: {
+  type?: 'none' | 'color' | 'gradient' | 'image' | null
+  color?: string | null
+  gradient?: string | null
+  image?: string | Media | null
+  overlay?: boolean | null
+  overlayOpacity?: number | null
+} | null
+bulletPoints?: {
   id?: string | null
-  blockType: 'sectionHeader'
-  anchorId?: string | null
-  type: 'small' | 'big'
-  layout?: 'centered' | 'left' | 'right' | null
-  title: string
-  subtitle?: string | null
-  description?: string | null
-  headingLevel?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | null
-  badge?: {
-    text?: string | null
-    icon?: string | null
-    gradient?: string | null
-  } | null
-  background?: {
-    type?: 'none' | 'color' | 'gradient' | 'image' | null
-    color?: string | null
-    gradient?: string | null
-    image?: string | Media | null
-    overlay?: boolean | null
-    overlayOpacity?: number | null
-  } | null
-  bulletPoints?: {
-    id?: string | null
-    icon?: string | null
-    text: string
-  }[] | null
-  primaryCTA?: {
-    label?: string | null
-    linkType?: ('page' | 'external' | 'anchor') | null
-    page?: (string | null) | Page
-    url?: string | null
-    anchor?: string | null
-    style?: 'solid' | 'outline' | null
-    openInNewTab?: boolean | null
-  } | null
-  secondaryCTA?: {
-    label?: string | null
-    linkType?: ('page' | 'external' | 'anchor') | null
-    page?: (string | null) | Page
-    url?: string | null
-    anchor?: string | null
-    style?: 'solid' | 'outline' | null
-    openInNewTab?: boolean | null
-  } | null
-  enableAnimation?: boolean | null
+  icon?: string | null
+  text: string
+}[] | null
+primaryCTA?: {
+  label?: string | null
+  linkType?: ('page' | 'external' | 'anchor') | null
+  page?: (string | null) | Page
+  url?: string | null
+  anchor?: string | null
+  style?: 'solid' | 'outline' | null
+  openInNewTab?: boolean | null
+} | null
+secondaryCTA?: {
+  label?: string | null
+  linkType?: ('page' | 'external' | 'anchor') | null
+  page?: (string | null) | Page
+  url?: string | null
+  anchor?: string | null
+  style?: 'solid' | 'outline' | null
+  openInNewTab?: boolean | null
+} | null
+enableAnimation?: boolean | null
 }
 
 export interface RichTextBlock {
-  id?: string | null
-  blockType: 'richText'
-  content: Record<string, unknown> | null
-}
-
-export interface MarkdownTextBlock {
-  id?: string | null
-  blockType: 'markdownText'
-  anchorId?: string | null
-  markdown: string
-  accentColor?: 'amber' | 'indigo' | 'purple' | 'green' | 'blue' | null
-}
-
-export interface ImageBlock {
-  id?: string | null
-  blockType: 'imageBlock'
-  anchorId?: string | null
-  image: string | Media
-  caption?: string | null
-}
-
-export interface CallToActionBlock {
-  id?: string | null
-  blockType: 'callToAction'
-  anchorId?: string | null
-  heading: string
-  description?: string | null
-  icon?: string | null
-  link?: {
-    label: string
-    url: string
-    openInNewTab?: boolean | null
-  } | null
-  secondaryButton?: {
-    label?: string | null
-    url?: string | null
-    style?: 'solid' | 'outline' | null
-    openInNewTab?: boolean | null
-  } | null
-  alignment?: 'centered' | 'left' | null
-  size?: 'compact' | 'standard' | 'large' | null
-  backgroundStyle?: 'gradient' | 'solid' | 'transparent' | 'image' | null
-  backgroundGradient?: string | null
-  backgroundColor?: string | null
-  backgroundImage?: string | Media | null
-  backgroundOverlay?: boolean | null
-  backgroundOverlayOpacity?: number | null
-  enableAnimation?: boolean | null
-}
-
-export interface NewsBlock {
-  id?: string | null
-  blockType: 'newsBlock'
-  anchorId?: string | null
-  displayMode: 'list' | 'carousel' | 'grid'
-  contentSource: 'all' | 'byTag' | 'manual'
-  selectedTag?: string | NewsTag | null
-  selectedNews?: (string | News)[] | null
-  limit?: number | null
-  enableSearch?: boolean | null
-  enableFilters?: boolean | null
-  enablePagination?: boolean | null
-  itemsPerPage?: number | null
-}
-
-export interface PersonPlaceBlock {
-  id?: string | null
-  blockType: 'personPlaceBlock'
-  anchorId?: string | null
-  displayMode: 'grid' | 'fullRow'
-  itemsPerRow?: '3' | '4' | null
-  items: {
-    id?: string | null
-    photo: string | Media
-    name: string
-    subtitle?: string | null
-    description?: string | null
-    customFields?: {
-      id?: string | null
-      label: string
-      value: string
-    }[] | null
-    readMoreLink?: {
-      enabled?: boolean | null
-      url?: string | null
-      openInNewTab?: boolean | null
-    } | null
-  }[]
-}
-
-export interface TabBlock {
-  id?: string | null
-  blockType: 'tabBlock'
-  anchorId?: string | null
-  tabs: {
-    id?: string | null
-    tabName: string
-    contentType: 'richText' | 'news' | 'images' | 'records'
-    richTextContent?: Record<string, unknown> | null
-    newsSource?: 'latest' | 'byTag' | 'manual' | null
-    newsTag?: string | NewsTag | null
-    selectedNews?: (string | News)[] | null
-    newsLimit?: number | null
-    images?: {
-      id?: string | null
-      image: string | Media
-      caption?: string | null
-    }[] | null
-    records?: {
-      id?: string | null
-      recordType: 'richText' | 'image' | 'video' | 'imageCard'
-      recordRichText?: Record<string, unknown> | null
-      recordImage?: string | Media | null
-      videoUrl?: string | null
-      cardImage?: string | Media | null
-      cardTitle?: string | null
-      cardDescription?: string | null
-      cardLink?: string | null
-    }[] | null
-  }[]
-}
-
-export interface MediaBlock {
-  id?: string | null
-  blockType: 'mediaBlock'
-  anchorId?: string | null
-  title?: string | null
-  displayMode: 'grid' | 'masonry' | 'carousel'
-  columns?: '2' | '3' | '4' | null
-  media: {
-    id?: string | null
-    image: string | Media
-    caption?: string | null
-  }[]
-  enableLightbox?: boolean | null
-}
-
-export interface AccordionBlock {
-  id?: string | null
-  blockType: 'accordionBlock'
-  anchorId?: string | null
-  title?: string | null
-  description?: string | null
-  variant?: 'faq' | 'steps' | 'features' | null
-  showNumbers?: boolean | null
-  iconStyle?: 'chevron' | 'plus' | 'arrow' | null
-  allowMultiple?: boolean | null
-  accordionItems: {
-    id?: string | null
-    itemTitle: string
-    contentItems: {
-      id?: string | null
-      contentType: 'text' | 'richText' | 'image' | 'linkList'
-      text?: string | null
-      richText?: Record<string, unknown> | null
-      image?: string | Media | null
-      imageCaption?: string | null
-      links?: {
-        id?: string | null
-        linkText: string
-        linkUrl: string
-        openInNewTab?: boolean | null
-      }[] | null
-    }[]
-  }[]
+id?: string | null
+blockType: 'richText'
+content: Record<string, unknown> | null
 }
 
 export interface ServiceCardsBlock {
+id?: string | null
+blockType: 'serviceCardsBlock'
+anchorId?: string | null
+title?: string | null
+cards: {
   id?: string | null
-  blockType: 'serviceCardsBlock'
-  anchorId?: string | null
-  title?: string | null
-  cards: {
-    id?: string | null
-    title: string
-    bulletPoints?: {
-      id?: string | null
-      text: string
-    }[] | null
-    ctaLabel?: string | null
-    ctaLinkType?: ('page' | 'external' | 'anchor') | null
-    ctaPage?: (string | Page) | null
-    ctaUrl?: string | null
-    ctaAnchor?: string | null
-    ctaOpenInNewTab?: boolean | null
-  }[]
-  tags?: {
+  title: string
+  bulletPoints?: {
     id?: string | null
     text: string
   }[] | null
-  enableAnimation?: boolean | null
-}
-
-export interface AboutBlock {
-  id?: string | null
-  blockType: 'aboutBlock'
-  anchorId?: string | null
-  title?: string | null
-  image?: string | Media | null
-  badges?: {
-    id?: string | null
-    emoji?: string | null
-    text: string
-  }[] | null
-  description?: string | null
   ctaLabel?: string | null
   ctaLinkType?: ('page' | 'external' | 'anchor') | null
-  ctaPage?: (string | null) | Page
+  ctaPage?: (string | Page) | null
   ctaUrl?: string | null
   ctaAnchor?: string | null
   ctaOpenInNewTab?: boolean | null
-  enableAnimation?: boolean | null
+}[]
+tags?: {
+  id?: string | null
+  text: string
+}[] | null
+enableAnimation?: boolean | null
+}
+
+export interface AboutBlock {
+id?: string | null
+blockType: 'aboutBlock'
+anchorId?: string | null
+title?: string | null
+image?: string | Media | null
+badges?: {
+  id?: string | null
+  emoji?: string | null
+  text: string
+}[] | null
+description?: string | null
+ctaLabel?: string | null
+ctaLinkType?: ('page' | 'external' | 'anchor') | null
+ctaPage?: (string | null) | Page
+ctaUrl?: string | null
+ctaAnchor?: string | null
+ctaOpenInNewTab?: boolean | null
+enableAnimation?: boolean | null
 }
 
 export interface ValueCardsBlock {
-  id?: string | null
-  blockType: 'valueCardsBlock'
-  anchorId?: string | null
-  title?: string | null
-  description?: string | null
-  tags?:
-    | {
-        id?: string | null
-        text: string
-      }[]
-    | null
-  cards?:
-    | {
-        id?: string | null
-        text: string
-      }[]
-    | null
-  enableAnimation?: boolean | null
+id?: string | null
+blockType: 'valueCardsBlock'
+anchorId?: string | null
+title?: string | null
+description?: string | null
+tags?:
+  | {
+      id?: string | null
+      text: string
+    }[]
+  | null
+cards?:
+  | {
+      id?: string | null
+      text: string
+    }[]
+  | null
+enableAnimation?: boolean | null
 }
 
 export interface CaseCardsBlock {
+id?: string | null
+blockType: 'caseCardsBlock'
+anchorId?: string | null
+title?: string | null
+displayMode?: ('cases' | 'reviews') | null
+cases: {
   id?: string | null
-  blockType: 'caseCardsBlock'
-  anchorId?: string | null
-  title?: string | null
-  displayMode?: ('cases' | 'reviews') | null
-  cases: {
+  title: string
+  sections: {
     id?: string | null
-    title: string
-    sections: {
-      id?: string | null
-      emoji?: string | null
-      label: string
-      content: string
-    }[]
+    emoji?: string | null
+    label: string
+    content: string
   }[]
-  reviews?:
-    | {
-        id?: string | null
-        quote: string
-        authorName: string
-        authorSubtitle?: string | null
-      }[]
-    | null
-  enableAnimation?: boolean | null
+}[]
+reviews?:
+  | {
+      id?: string | null
+      quote: string
+      authorName: string
+      authorSubtitle?: string | null
+    }[]
+  | null
+enableAnimation?: boolean | null
 }
 
 /**
  * SEO Fields
  */
 export interface SEOFields {
-  metaTitle?: string | null
-  focusKeyword?: string | null
-  metaDescription?: string | null
-  keywords?: string | null
-  canonicalUrl?: string | null
-  noIndex?: boolean | null
-  noFollow?: boolean | null
-  ogTitle?: string | null
-  ogDescription?: string | null
-  ogImage?: string | Media | null
-  ogType?: 'website' | 'article' | 'blog' | null
-  twitterCard?: 'summary_large_image' | 'summary' | null
-  twitterTitle?: string | null
-  twitterDescription?: string | null
-  twitterImage?: string | Media | null
-  metaImage?: string | Media | null
-  // Allow additional fields for compatibility
-  [key: string]: unknown
+metaTitle?: string | null
+focusKeyword?: string | null
+metaDescription?: string | null
+keywords?: string | null
+canonicalUrl?: string | null
+noIndex?: boolean | null
+noFollow?: boolean | null
+ogTitle?: string | null
+ogDescription?: string | null
+ogImage?: string | Media | null
+ogType?: 'website' | 'article' | 'blog' | null
+twitterCard?: 'summary_large_image' | 'summary' | null
+twitterTitle?: string | null
+twitterDescription?: string | null
+twitterImage?: string | Media | null
+metaImage?: string | Media | null
+// Allow additional fields for compatibility
+[key: string]: unknown
 }
 
 /**
- * News
- */
-export interface News {
-  id: string
-  title: string
-  slug: string
-  status: 'draft' | 'published'
-  publishedDate: string
-  featuredImage?: string | Media | null
-  tags?: (string | NewsTag)[] | null
-  excerpt: string
-  blocks?: NewsContentBlock[] | null
-  seo?: SEOFields | null
-  author: string | User
-  authorNote?: string | null
-  createdAt: string
-  updatedAt: string
-}
-
-export type NewsContentBlock =
-  | SectionHeaderBlock
-  | RichTextBlock
-  | MarkdownTextBlock
-  | ImageBlock
-  | CallToActionBlock
 
 /**
- * NewsTag
  */
-export interface NewsTag {
-  id: string
-  name: string
-  slug: string
-  color?: 'indigo' | 'blue' | 'purple' | 'green' | 'amber' | 'red' | 'pink' | 'teal' | null
-  description?: string | null
-  createdAt: string
-  updatedAt: string
-}
-
 /**
  * SiteSettings Global
  */
 export interface SiteSettings {
-  id: string
-  siteTitle: string
-  siteLogo?: string | Media | null
-  logoAltText?: string | null
-  tagline?: string | null
-  socialLinks?: SocialLink[] | null
-  createdAt: string
-  updatedAt: string
+id: string
+siteTitle: string
+siteLogo?: string | Media | null
+logoAltText?: string | null
+tagline?: string | null
+socialLinks?: SocialLink[] | null
+createdAt: string
+updatedAt: string
 }
 
 export interface SocialLink {
-  platform:
-    | 'facebook'
-    | 'twitter'
-    | 'instagram'
-    | 'linkedin'
-    | 'youtube'
-    | 'tiktok'
-    | 'github'
-    | 'discord'
-  url: string
-  openInNewTab?: boolean | null
+platform:
+  | 'facebook'
+  | 'twitter'
+  | 'instagram'
+  | 'linkedin'
+  | 'youtube'
+  | 'tiktok'
+  | 'github'
+  | 'discord'
+url: string
+openInNewTab?: boolean | null
 }
 
 /**
  * Footer Global
  */
 export interface Footer {
-  id: string
-  title?: string | null
-  // Contact Info tab
-  sectionTitle?: string | null
-  sectionSubtitle?: string | null
-  messengerLinks?: FooterMessengerLink[] | null
-  phoneLabel?: string | null
-  phoneNumber?: string | null
-  phoneHref?: string | null
-  emailLabel?: string | null
-  emailAddress?: string | null
-  emailHref?: string | null
-  disclaimer?: string | null
-  // Contact Form tab
-  formHeading?: string | null
-  formNamePlaceholder?: string | null
-  formPhonePlaceholder?: string | null
-  formEmailPlaceholder?: string | null
-  formOrganizationPlaceholder?: string | null
-  formMessagePlaceholder?: string | null
-  consentText?: string | null
-  submitButtonText?: string | null
-  successMessage?: string | null
-  errorMessage?: string | null
-  sendAnotherButtonText?: string | null
-  loadingText?: string | null
-  nameRequiredError?: string | null
-  emailRequiredError?: string | null
-  consentRequiredError?: string | null
-  // Bottom Bar tab
-  copyrightText?: string | null
-  createdAt: string
-  updatedAt: string
+id: string
+title?: string | null
+// Contact Info tab
+sectionTitle?: string | null
+sectionSubtitle?: string | null
+messengerLinks?: FooterMessengerLink[] | null
+phoneLabel?: string | null
+phoneNumber?: string | null
+phoneHref?: string | null
+emailLabel?: string | null
+emailAddress?: string | null
+emailHref?: string | null
+disclaimer?: string | null
+// Contact Form tab
+formHeading?: string | null
+formNamePlaceholder?: string | null
+formPhonePlaceholder?: string | null
+formEmailPlaceholder?: string | null
+formOrganizationPlaceholder?: string | null
+formMessagePlaceholder?: string | null
+consentText?: string | null
+submitButtonText?: string | null
+successMessage?: string | null
+errorMessage?: string | null
+sendAnotherButtonText?: string | null
+loadingText?: string | null
+nameRequiredError?: string | null
+emailRequiredError?: string | null
+consentRequiredError?: string | null
+// Bottom Bar tab
+copyrightText?: string | null
+createdAt: string
+updatedAt: string
 }
 
 export interface FooterMessengerLink {
-  id?: string | null
-  platform: 'telegram' | 'viber' | 'whatsapp' | 'signal'
-  label: string
-  url: string
+id?: string | null
+platform: 'telegram' | 'viber' | 'whatsapp' | 'signal'
+label: string
+url: string
 }
 
 /**
  * ContactSubmission
  */
 export interface ContactSubmission {
-  id: string
-  name: string
-  phone?: string | null
-  email: string
-  organization?: string | null
-  message?: string | null
-  consentGiven: boolean
-  locale?: string | null
-  status?: 'new' | 'in-progress' | 'resolved' | null
-  createdAt: string
-  updatedAt: string
+id: string
+name: string
+phone?: string | null
+email: string
+organization?: string | null
+message?: string | null
+consentGiven: boolean
+locale?: string | null
+status?: 'new' | 'in-progress' | 'resolved' | null
+createdAt: string
+updatedAt: string
 }

@@ -1,6 +1,15 @@
 'use client'
 
-import { forwardRef, useImperativeHandle, useEffect, useRef, useMemo, FC, ReactNode } from 'react'
+import {
+  forwardRef,
+  useImperativeHandle,
+  useEffect,
+  useRef,
+  useMemo,
+  useState,
+  FC,
+  ReactNode,
+} from 'react'
 import * as THREE from 'three'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { PerspectiveCamera } from '@react-three/drei'
@@ -197,6 +206,10 @@ const Beams: FC<BeamsProps> = ({
   scale = 0.2,
   rotation = 0,
 }) => {
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => {
+    setMounted(true)
+  }, [])
   const meshRef = useRef<THREE.Mesh<THREE.BufferGeometry, THREE.ShaderMaterial>>(null!)
 
   const beamMaterial = useMemo(
@@ -255,6 +268,10 @@ const Beams: FC<BeamsProps> = ({
       }),
     [speed, noiseIntensity, scale]
   )
+
+  if (!mounted) {
+    return <div style={{ width: '100%', height: '100%', position: 'absolute', inset: 0 }} />
+  }
 
   return (
     <div style={{ width: '100%', height: '100%', position: 'absolute', inset: 0 }}>

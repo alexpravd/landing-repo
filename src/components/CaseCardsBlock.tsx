@@ -41,8 +41,11 @@ function renderSectionContent(content: string) {
     return (
       <ul className="mt-1.5 space-y-1">
         {lines.map((line, i) => (
-          <li key={i} className="flex items-start gap-2 text-sm text-gray-400">
-            <span className="mt-1.5 h-1 w-1 flex-shrink-0 rounded-full bg-gray-500" />
+          <li
+            key={i}
+            className="flex items-start gap-2 text-base font-light leading-[120%] -tracking-[0.04em] text-white"
+          >
+            <span className="mt-[7px] h-1 w-1 flex-shrink-0 rounded-full bg-white" />
             <span>{line.replace(bulletPattern, '')}</span>
           </li>
         ))}
@@ -50,7 +53,11 @@ function renderSectionContent(content: string) {
     )
   }
 
-  return <p className="mt-1.5 text-sm leading-relaxed text-gray-400">{content}</p>
+  return (
+    <p className="mt-1.5 text-base font-light leading-[120%] -tracking-[0.04em] text-white">
+      {content}
+    </p>
+  )
 }
 
 export function CaseCardsBlock({
@@ -106,11 +113,11 @@ export function CaseCardsBlock({
   }
 
   return (
-    <section className="py-16 md:py-24">
-      <div className="mx-auto max-w-6xl px-4">
+    <section className="relative overflow-hidden">
+      <div className="relative mx-auto mb-8 sm:mb-10 md:mb-14">
         {/* Header row */}
-        <div className="mb-10 flex items-center justify-between">
-          <h2 className="text-2xl font-bold uppercase tracking-wide text-white md:text-3xl">
+        <div className="mb-8 flex items-center justify-between sm:mb-10 md:mb-14">
+          <h2 className="text-[40px] font-bold uppercase leading-[90%] -tracking-[0.04em] text-white">
             {title || ''}
           </h2>
 
@@ -160,7 +167,7 @@ export function CaseCardsBlock({
               animate="center"
               exit={animate ? 'exit' : undefined}
               transition={{ duration: 0.35, ease: 'easeInOut' }}
-              className="grid gap-6 md:grid-cols-2"
+              className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 lg:gap-6"
             >
               {visible.map((card, idx) => {
                 if (isReviews) {
@@ -168,13 +175,15 @@ export function CaseCardsBlock({
                   return (
                     <div
                       key={review.id || idx}
-                      className="flex flex-col justify-between rounded-xl border border-white/[0.08] bg-[#0f1f1a] p-6 md:p-8"
+                      className="flex flex-col justify-between rounded-[10px] border border-[#1C3023] p-6 md:p-8"
+                      style={{
+                        background:
+                          'linear-gradient(180deg, #0D1A12 0%, #08110C 22%, #030B06 60%, #030B06 81%)',
+                      }}
                     >
-                      <div>
-                        <span className="font-serif text-5xl leading-none text-teal-400">
-                          {'\u201C'}
-                        </span>
-                        <p className="mt-3 text-sm leading-relaxed text-white/80">{review.quote}</p>
+                      <div className="mb-[48px] flex items-start gap-6">
+                        <span className="text-5xl leading-none text-[#025A4A]">{'\u201C'}</span>
+                        <p className="text-sm leading-relaxed text-white/80">{review.quote}</p>
                       </div>
                       <div className="mt-6 flex items-center gap-3">
                         <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-white/10 text-sm font-bold text-white">
@@ -196,17 +205,21 @@ export function CaseCardsBlock({
                 return (
                   <div
                     key={caseCard.id || idx}
-                    className="rounded-xl border border-white/[0.08] bg-[#0f1613] p-6 md:p-8"
+                    className="rounded-[10px] border border-[#1C3023] p-6 md:p-8"
+                    style={{
+                      background:
+                        'linear-gradient(180deg, #0D1A12 0%, #08110C 22%, #030B06 60%, #030B06 81%)',
+                    }}
                   >
-                    {/* Card header */}
-                    <div className="mb-6 flex items-start gap-4">
-                      <span className="font-mono text-3xl font-bold text-teal-400">
-                        {cardNumber}
-                      </span>
-                      <h3 className="pt-1 text-lg font-bold uppercase tracking-wide text-white">
-                        {caseCard.title}
-                      </h3>
-                    </div>
+                    {/* Card number */}
+                    <span className="inline-block text-xl font-medium leading-[120%] -tracking-[0.04em] text-[#025A4A]">
+                      {cardNumber}
+                    </span>
+
+                    {/* Card title */}
+                    <h3 className="mb-6 mt-8 text-[18px] font-medium uppercase leading-[110%] -tracking-[0.04em] text-white">
+                      {caseCard.title}
+                    </h3>
 
                     {/* Sections */}
                     <div className="space-y-4">
@@ -214,7 +227,7 @@ export function CaseCardsBlock({
                         <div key={section.id || sIdx}>
                           <div className="flex items-center gap-2">
                             {section.emoji && <span className="text-base">{section.emoji}</span>}
-                            <span className="text-sm font-semibold text-white">
+                            <span className="text-base font-light leading-[120%] -tracking-[0.04em] text-white">
                               {section.label}
                             </span>
                           </div>

@@ -104,7 +104,7 @@ export function FAQBlock({
               : {})}
             className="mb-8 sm:mb-10 md:mb-14"
           >
-            <h2 className="text-2xl font-bold uppercase tracking-[0.1em] text-white sm:text-3xl sm:tracking-[0.2em] md:text-4xl">
+            <h2 className="text-[40px] font-bold uppercase leading-[90%] -tracking-[0.04em] text-white">
               {title}
             </h2>
           </Header>

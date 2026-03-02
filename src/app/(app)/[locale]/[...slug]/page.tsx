@@ -1,5 +1,4 @@
 import { notFound } from 'next/navigation'
-import Image from 'next/image'
 import { draftMode } from 'next/headers'
 import {
   getPageBySlug,
@@ -7,52 +6,15 @@ import {
   getAllPublishedPageSlugs,
   type SupportedLocale,
 } from '@/lib/payload-data'
-import type {
-  Media,
-  Page,
-  PageBlock,
-  FeaturesBlock as FeaturesBlockType,
-  TestimonialsBlock as TestimonialsBlockType,
-  StatsBlock as StatsBlockType,
-  TimelineBlock as TimelineBlockType,
-  PricingBlock as PricingBlockType,
-  TeamBlock as TeamBlockType,
-  FAQBlock as FAQBlockType,
-  LogoCloudBlock as LogoCloudBlockType,
-  VideoBlock as VideoBlockType,
-  CaseStudyBlock as CaseStudyBlockType,
-  ComparisonBlock as ComparisonBlockType,
-  PersonPlaceBlock as PersonPlaceBlockType,
-  TabBlock as TabBlockType,
-  MediaBlock as MediaBlockType,
-  AccordionBlock as AccordionBlockType,
-} from '@/payload-types'
+import type { Page, PageBlock, FAQBlock as FAQBlockType } from '@/payload-types'
 import { SectionHeaderBlock } from '@/components/SectionHeaderBlock'
 import { HeroBlock } from '@/components/HeroBlock'
-import { CallToActionBlock } from '@/components/CallToActionBlock'
-import { FeaturesBlock } from '@/components/FeaturesBlock'
-import { TestimonialsBlock } from '@/components/TestimonialsBlock'
-import { StatsBlock } from '@/components/StatsBlock'
-import { TimelineBlock } from '@/components/TimelineBlock'
-import { PricingBlock } from '@/components/PricingBlock'
-import { TeamBlock } from '@/components/TeamBlock'
 import { FAQBlock } from '@/components/FAQBlock'
-import { LogoCloudBlock } from '@/components/LogoCloudBlock'
-import { VideoBlock } from '@/components/VideoBlock'
-import { CaseStudyBlock } from '@/components/CaseStudyBlock'
-import { ComparisonBlock } from '@/components/ComparisonBlock'
-import { MarkdownRichTextBlock } from '@/components/MarkdownRichTextBlock'
 import { LivePreviewPage } from '@/components/LivePreviewPage'
-import { NewsBlockServer } from '@/components/NewsBlockServer'
-import { PersonPlaceBlock } from '@/components/PersonPlaceBlock'
-import { TabBlockServer } from '@/components/TabBlockServer'
-import { MediaBlock } from '@/components/MediaBlock'
-import { AccordionBlock } from '@/components/AccordionBlock'
 import { ServiceCardsBlock } from '@/components/ServiceCardsBlock'
 import { AboutBlock } from '@/components/AboutBlock'
 import { ValueCardsBlock } from '@/components/ValueCardsBlock'
 import { CaseCardsBlock } from '@/components/CaseCardsBlock'
-import type { GradientPreset } from '@/lib/gradients'
 import { generateSEOMetadata, type SEOData } from '@/lib/seo'
 import { sanitizeHtml } from '@/lib/sanitize'
 
@@ -85,7 +47,6 @@ interface PageProps {
 /**
  * Dynamic Page Renderer
  * Renders pages based on slug from the Pages collection
- * Supports multiple page types: home, news, leadership, departments, documents, text
  * Uses Next.js draftMode() API for preview functionality
  */
 export default async function DynamicPage(props: PageProps) {
@@ -123,7 +84,7 @@ export default async function DynamicPage(props: PageProps) {
   // Render based on page type
   return (
     <div className="min-h-screen bg-background">
-      <PageRenderer page={page} locale={localeString} draft={isPreview} />
+      <PageRenderer page={page} locale={localeString} />
     </div>
   )
 }
@@ -132,58 +93,8 @@ export default async function DynamicPage(props: PageProps) {
  * Page Renderer Component
  * Renders different layouts based on page type
  */
-async function PageRenderer({
-  page,
-  locale,
-  draft,
-}: {
-  page: Page
-  locale: string
-  draft: boolean
-}) {
-  const { content, blocks, pageType } = page
-
-  // Special handling for 'news' page type
-  if (pageType === 'news') {
-    // If blocks exist, render them (allows custom configuration)
-    if (blocks && blocks.length > 0) {
-      return (
-        <div className="min-h-screen">
-          <div className="space-y-8">
-            {await Promise.all(
-              blocks.map(async (block, index) => (
-                <BlockRenderer
-                  key={index}
-                  block={block}
-                  locale={locale}
-                  draft={draft}
-                  index={index}
-                />
-              ))
-            )}
-          </div>
-        </div>
-      )
-    }
-
-    // Default: show all news in list mode with search, filters, and pagination
-    return (
-      <div className="min-h-screen">
-        <NewsBlockServer
-          block={{
-            displayMode: 'list',
-            contentSource: 'all',
-            enableSearch: true,
-            enableFilters: true,
-            enablePagination: true,
-            itemsPerPage: 9,
-          }}
-          locale={locale as SupportedLocale}
-          draft={draft}
-        />
-      </div>
-    )
-  }
+async function PageRenderer({ page, locale }: { page: Page; locale: string }) {
+  const { content, blocks } = page
 
   return (
     <div className="container mx-auto px-4 py-12">
@@ -201,13 +112,7 @@ async function PageRenderer({
           <div className="space-y-8">
             {await Promise.all(
               blocks.map(async (block, index) => (
-                <BlockRenderer
-                  key={index}
-                  block={block}
-                  locale={locale}
-                  draft={draft}
-                  index={index}
-                />
+                <BlockRenderer key={index} block={block} locale={locale} index={index} />
               ))
             )}
           </div>
@@ -296,12 +201,10 @@ function renderNode(node: RichTextNode): string {
 async function BlockRenderer({
   block,
   locale,
-  draft,
   index = 0,
 }: {
   block: PageBlock
   locale: string
-  draft: boolean
   index?: number
 }) {
   const anchorId =
@@ -321,156 +224,12 @@ async function BlockRenderer({
           />
         )
 
-      case 'featuresBlock':
-        return (
-          <FeaturesBlock
-            title={block.title ?? undefined}
-            subtitle={block.subtitle ?? undefined}
-            layout={block.layout || 'grid-3'}
-            cardStyle={block.cardStyle || 'elevated'}
-            items={block.items as FeaturesBlockType['items']}
-            showCTAs={block.showCTAs ?? true}
-            enableAnimation={block.enableAnimation !== false}
-          />
-        )
-
-      case 'testimonialsBlock':
-        return (
-          <TestimonialsBlock
-            title={block.title ?? undefined}
-            subtitle={block.subtitle ?? undefined}
-            displayMode={block.displayMode || 'carousel'}
-            testimonials={block.testimonials as TestimonialsBlockType['testimonials']}
-            showRatings={block.showRatings ?? true}
-            autoplay={block.autoplay ?? true}
-            autoplayInterval={block.autoplayInterval ?? undefined}
-            accentColor={block.accentColor ?? undefined}
-            enableAnimation={block.enableAnimation !== false}
-          />
-        )
-
-      case 'statsBlock':
-        return (
-          <StatsBlock
-            title={block.title ?? undefined}
-            layout={block.layout || 'grid-4'}
-            stats={block.stats as StatsBlockType['stats']}
-            animateOnScroll={block.animateOnScroll ?? true}
-            accentColor={block.accentColor ?? undefined}
-            enableAnimation={block.enableAnimation !== false}
-          />
-        )
-
-      case 'timelineBlock':
-        return (
-          <TimelineBlock
-            title={block.title ?? undefined}
-            subtitle={block.subtitle ?? undefined}
-            layout={block.layout || 'vertical'}
-            items={block.items as TimelineBlockType['items']}
-            showConnectors={block.showConnectors ?? true}
-            accentColor={block.accentColor ?? undefined}
-            enableAnimation={block.enableAnimation !== false}
-          />
-        )
-
-      case 'pricingBlock':
-        return (
-          <PricingBlock
-            title={block.title ?? undefined}
-            subtitle={block.subtitle ?? undefined}
-            layout={block.layout || 'cards'}
-            billingToggle={block.billingToggle ?? false}
-            plans={block.plans as PricingBlockType['plans']}
-            accentColor={block.accentColor ?? undefined}
-            enableAnimation={block.enableAnimation !== false}
-          />
-        )
-
-      case 'teamBlock':
-        return (
-          <TeamBlock
-            title={block.title ?? undefined}
-            subtitle={block.subtitle ?? undefined}
-            layout={block.layout || 'grid'}
-            columns={block.columns ?? undefined}
-            members={block.members as TeamBlockType['members']}
-            showSocialLinks={block.showSocialLinks ?? true}
-            cardStyle={block.cardStyle || 'card'}
-            accentColor={block.accentColor ?? undefined}
-            enableAnimation={block.enableAnimation !== false}
-          />
-        )
-
       case 'faqBlock':
         return (
           <FAQBlock
             title={block.title ?? undefined}
             questions={block.questions as FAQBlockType['questions']}
             allowMultiple={block.allowMultiple ?? false}
-            enableAnimation={block.enableAnimation !== false}
-          />
-        )
-
-      case 'logoCloudBlock':
-        return (
-          <LogoCloudBlock
-            title={block.title ?? undefined}
-            subtitle={block.subtitle ?? undefined}
-            layout={block.layout || 'grid'}
-            logos={block.logos as LogoCloudBlockType['logos']}
-            grayscale={block.grayscale ?? true}
-            columns={block.columns ?? undefined}
-            speed={block.speed ?? undefined}
-            enableAnimation={block.enableAnimation !== false}
-          />
-        )
-
-      case 'videoBlock':
-        return (
-          <VideoBlock
-            source={block.source || 'youtube'}
-            url={block.url ?? undefined}
-            file={block.file as VideoBlockType['file']}
-            title={block.title ?? undefined}
-            description={block.description ?? undefined}
-            thumbnail={block.thumbnail as VideoBlockType['thumbnail']}
-            autoplay={block.autoplay ?? false}
-            loop={block.loop ?? false}
-            controls={block.controls ?? true}
-            aspectRatio={block.aspectRatio ?? '16:9'}
-            enableAnimation={block.enableAnimation !== false}
-          />
-        )
-
-      case 'caseStudyBlock':
-        return (
-          <CaseStudyBlock
-            title={block.title ?? undefined}
-            subtitle={block.subtitle ?? undefined}
-            displayMode={block.displayMode || 'cards'}
-            cases={block.cases as CaseStudyBlockType['cases']}
-            accentColor={block.accentColor ?? undefined}
-            enableAnimation={block.enableAnimation !== false}
-          />
-        )
-
-      case 'comparisonBlock':
-        return (
-          <ComparisonBlock
-            title={block.title ?? undefined}
-            subtitle={block.subtitle ?? undefined}
-            type={block.type || 'before-after'}
-            beforeImage={block.beforeImage as ComparisonBlockType['beforeImage']}
-            afterImage={block.afterImage as ComparisonBlockType['afterImage']}
-            beforeLabel={block.beforeLabel ?? undefined}
-            afterLabel={block.afterLabel ?? undefined}
-            sliderDefault={block.sliderDefault ?? undefined}
-            headers={block.headers as ComparisonBlockType['headers']}
-            rows={block.rows as ComparisonBlockType['rows']}
-            highlightColumn={block.highlightColumn ?? undefined}
-            items={block.items as ComparisonBlockType['items']}
-            accentColor={block.accentColor ?? undefined}
             enableAnimation={block.enableAnimation !== false}
           />
         )
@@ -486,125 +245,6 @@ async function BlockRenderer({
             secondaryCTA={block.secondaryCTA ?? undefined}
             enableAnimation={block.enableAnimation !== false}
             locale={locale}
-          />
-        )
-
-      case 'richText':
-        return (
-          <div className="prose prose-lg max-w-none">
-            <RichTextRenderer content={block.content as unknown as RichTextNode[]} />
-          </div>
-        )
-
-      case 'markdownText':
-        return (
-          <MarkdownRichTextBlock
-            markdown={block.markdown || ''}
-            accentColor={block.accentColor ?? undefined}
-          />
-        )
-
-      case 'imageBlock': {
-        const image = block.image
-        const imageData = typeof image === 'object' ? (image as Media) : null
-        return (
-          <div className="my-8">
-            {imageData?.url && (
-              <figure>
-                <Image
-                  src={imageData.url}
-                  alt={imageData.alt || block.caption || 'Image'}
-                  width={800}
-                  height={600}
-                  className="w-full rounded-lg"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 800px"
-                />
-                {block.caption && (
-                  <figcaption className="mt-2 text-center text-sm text-muted-foreground">
-                    {block.caption}
-                  </figcaption>
-                )}
-              </figure>
-            )}
-          </div>
-        )
-      }
-
-      case 'callToAction':
-        return (
-          <CallToActionBlock
-            heading={block.heading || ''}
-            description={block.description ?? undefined}
-            icon={block.icon ?? undefined}
-            link={block.link ?? undefined}
-            secondaryButton={block.secondaryButton ?? undefined}
-            alignment={block.alignment ?? undefined}
-            size={block.size ?? undefined}
-            backgroundStyle={block.backgroundStyle ?? undefined}
-            backgroundGradient={block.backgroundGradient as GradientPreset | undefined}
-            backgroundColor={block.backgroundColor ?? undefined}
-            backgroundImage={block.backgroundImage as Media | undefined}
-            backgroundOverlay={block.backgroundOverlay ?? undefined}
-            backgroundOverlayOpacity={block.backgroundOverlayOpacity ?? undefined}
-            enableAnimation={block.enableAnimation !== false}
-          />
-        )
-
-      case 'newsBlock':
-        return (
-          <NewsBlockServer
-            block={{
-              displayMode: block.displayMode,
-              contentSource: block.contentSource,
-              selectedTag: block.selectedTag ?? undefined,
-              selectedNews: block.selectedNews ?? undefined,
-              limit: block.limit ?? undefined,
-              enableSearch: block.enableSearch ?? undefined,
-              enableFilters: block.enableFilters ?? undefined,
-              enablePagination: block.enablePagination ?? undefined,
-              itemsPerPage: block.itemsPerPage ?? undefined,
-            }}
-            locale={locale as SupportedLocale}
-            draft={draft}
-          />
-        )
-
-      case 'personPlaceBlock':
-        return (
-          <PersonPlaceBlock
-            displayMode={block.displayMode || 'grid'}
-            itemsPerRow={block.itemsPerRow ?? undefined}
-            items={block.items as PersonPlaceBlockType['items']}
-          />
-        )
-
-      case 'tabBlock':
-        return (
-          <TabBlockServer
-            tabs={block.tabs as TabBlockType['tabs']}
-            locale={locale as SupportedLocale}
-            draft={draft}
-          />
-        )
-
-      case 'mediaBlock':
-        return (
-          <MediaBlock
-            title={block.title ?? undefined}
-            displayMode={block.displayMode || 'grid'}
-            columns={block.columns ?? undefined}
-            media={block.media as MediaBlockType['media']}
-            enableLightbox={block.enableLightbox ?? undefined}
-          />
-        )
-
-      case 'accordionBlock':
-        return (
-          <AccordionBlock
-            title={block.title ?? undefined}
-            description={block.description ?? undefined}
-            allowMultiple={block.allowMultiple ?? undefined}
-            accordionItems={block.accordionItems as AccordionBlockType['accordionItems']}
           />
         )
 

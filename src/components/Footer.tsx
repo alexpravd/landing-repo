@@ -174,7 +174,7 @@ export function Footer({ footerData, locale = 'uk' }: FooterProps) {
           </div>
 
           {/* Right Column — Contact Form */}
-          <div>
+          <div id="contact-form">
             <ContactForm
               locale={locale}
               formHeading={footerData?.formHeading}

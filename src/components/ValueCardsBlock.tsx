@@ -78,12 +78,12 @@ export function ValueCardsBlock({
             className="mb-8 sm:mb-10 md:mb-14"
           >
             {title && (
-              <h2 className="text-2xl font-bold uppercase tracking-[0.1em] text-white sm:text-3xl sm:tracking-[0.2em] md:text-4xl">
+              <h2 className="text-[40px] font-bold uppercase leading-[90%] -tracking-[0.04em] text-white">
                 {title}
               </h2>
             )}
             {description && (
-              <p className="mt-3 text-base text-gray-400 sm:text-lg">
+              <p className="mt-3 text-base font-light leading-[120%] -tracking-[0.04em] text-white">
                 {description.split('\n').map((line, i, arr) => (
                   <React.Fragment key={i}>
                     {line}
@@ -97,7 +97,7 @@ export function ValueCardsBlock({
                 {tags.map((tag, i) => (
                   <GlassTag
                     key={tag.id ?? i}
-                    className="px-3 py-1 text-xs text-gray-300 sm:text-sm"
+                    className="px-3.5 py-1.5 text-sm text-white sm:px-4 sm:py-2"
                   >
                     {tag.text}
                   </GlassTag>
@@ -123,15 +123,19 @@ export function ValueCardsBlock({
               <Card
                 key={card.id ?? index}
                 {...(enableAnimation ? { variants: cardVariants } : {})}
-                className="group relative flex items-center justify-center rounded-xl border border-white/[0.08] bg-[#0f1f1a] p-5 text-center transition-colors duration-300 hover:border-teal-500/25 sm:p-6 md:p-8"
+                className="group relative flex items-start rounded-[10px] border border-[#1C3023] p-5 transition-colors duration-300 hover:border-teal-500/25 sm:p-6 md:p-8"
+                style={{
+                  background:
+                    'linear-gradient(180deg, #0D1A12 0%, #08110C 22%, #030B06 60%, #030B06 81%)',
+                }}
               >
                 {/* Subtle radial glow */}
                 <div
                   aria-hidden
-                  className="pointer-events-none absolute inset-0 rounded-xl bg-[radial-gradient(ellipse_at_center,_rgba(20,184,166,0.06)_0%,_transparent_70%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                  className="pointer-events-none absolute inset-0 rounded-[10px] bg-[radial-gradient(ellipse_at_center,_rgba(20,184,166,0.06)_0%,_transparent_70%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                 />
 
-                <p className="relative text-sm font-bold leading-snug text-white sm:text-base">
+                <p className="relative text-xl font-medium leading-[32px] tracking-normal text-white">
                   {card.text}
                 </p>
               </Card>

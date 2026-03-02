@@ -10,8 +10,6 @@ import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Navigation } from './collections/Navigation'
 import { Pages } from './collections/Pages'
-import { News } from './collections/News'
-import { NewsTags } from './collections/NewsTags'
 import { ContactSubmissions } from './collections/ContactSubmissions'
 import { SiteSettings } from './globals/SiteSettings'
 import { Footer } from './globals/Footer'
@@ -43,7 +41,7 @@ export default buildConfig({
   ],
 
   // Collections (data models)
-  collections: [Users, Media, Navigation, Pages, News, NewsTags, ContactSubmissions],
+  collections: [Users, Media, Navigation, Pages, ContactSubmissions],
 
   // Globals
   globals: [SiteSettings, Footer, MediaFoldersGlobal],
@@ -89,7 +87,7 @@ export default buildConfig({
       },
     ],
     defaultLocale: 'uk',
-    fallback: true,
+    fallback: false,
   },
 
   // Upload configuration

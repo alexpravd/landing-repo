@@ -408,24 +408,24 @@ export function Header({
               </SheetTrigger>
               <SheetContent
                 side="right"
-                className="w-full border-l-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-0 sm:max-w-md [&>button]:text-slate-400 [&>button]:hover:text-white [&>button]:focus:ring-slate-700"
+                className="w-full border-l-0 bg-[#030B06] p-0 sm:max-w-md [&>button]:text-white/60 [&>button]:hover:text-white [&>button]:focus:ring-[#1C3023]"
               >
                 {/* Decorative ambient orbs */}
                 <div className="pointer-events-none absolute inset-0 overflow-hidden">
-                  <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-indigo-600/20 blur-3xl" />
-                  <div className="absolute -bottom-32 -left-20 h-80 w-80 rounded-full bg-purple-600/15 blur-3xl" />
-                  <div className="absolute right-10 top-1/2 h-40 w-40 rounded-full bg-cyan-500/10 blur-2xl" />
+                  <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[#025A4A]/20 blur-3xl" />
+                  <div className="absolute -bottom-32 -left-20 h-80 w-80 rounded-full bg-[#025A4A]/10 blur-3xl" />
+                  <div className="absolute right-10 top-1/2 h-40 w-40 rounded-full bg-[#05B08F]/10 blur-2xl" />
                 </div>
 
                 {/* Header section */}
-                <div className="relative border-b border-slate-800/60 px-6 pb-6 pt-8">
+                <div className="relative border-b border-[#1C3023]/60 px-6 pb-6 pt-8">
                   <SheetTitle className="flex items-center gap-3 text-xl font-semibold tracking-tight text-white">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg shadow-indigo-500/30">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#025A4A] to-[#05B08F] shadow-lg shadow-[#025A4A]/30">
                       <Sparkles className="h-5 w-5 text-white" />
                     </div>
                     {siteTitle}
                   </SheetTitle>
-                  <SheetDescription className="mt-2 text-sm text-slate-400">
+                  <SheetDescription className="mt-2 text-sm text-white/60">
                     {siteTagline}
                   </SheetDescription>
                 </div>
@@ -450,21 +450,21 @@ export function Header({
                               }}
                             >
                               {/* Main nav item - 48px touch target */}
-                              <div className="group flex min-h-[48px] items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 hover:bg-slate-800/50">
-                                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-800/80 text-slate-400 ring-1 ring-slate-700/50 transition-all duration-200 group-hover:bg-indigo-500/20 group-hover:text-indigo-400 group-hover:ring-indigo-500/30">
+                              <div className="group flex min-h-[48px] items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 hover:bg-white/[0.03]">
+                                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/[0.05] text-white/60 ring-1 ring-white/10 transition-all duration-200 group-hover:bg-[#025A4A]/20 group-hover:text-[#05B08F] group-hover:ring-[#025A4A]/30">
                                   <NavIcon className="h-4 w-4" />
                                 </div>
-                                <span className="text-base font-medium text-white transition-colors group-hover:text-indigo-300">
+                                <span className="text-base font-medium text-white transition-colors group-hover:text-[#05B08F]">
                                   {item.label}
                                 </span>
                               </div>
 
                               {/* Sub-navigation */}
                               {item.children && item.children.length > 0 && (
-                                <div className="ml-4 mt-1 space-y-1 border-l border-slate-800 pl-4">
+                                <div className="ml-4 mt-1 space-y-1 border-l border-[#1C3023] pl-4">
                                   {item.children.map((group) => (
                                     <div key={group.id} className="py-1">
-                                      <p className="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                                      <p className="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-white/40">
                                         {group.label}
                                       </p>
                                       {group.items && group.items.length > 0 && (
@@ -473,7 +473,7 @@ export function Header({
                                             <Link
                                               key={link.id}
                                               href={link.href}
-                                              className="flex min-h-[44px] items-center rounded-lg px-3 py-2 text-sm text-slate-300 transition-all duration-150 hover:bg-slate-800/40 hover:text-white focus:bg-slate-800/40 focus:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+                                              className="flex min-h-[44px] items-center rounded-lg px-3 py-2 text-sm text-white/70 transition-all duration-150 hover:bg-white/[0.05] hover:text-white focus:bg-white/[0.05] focus:text-white focus:outline-none focus:ring-2 focus:ring-[#025A4A]/40"
                                               {...(link.openInNewTab
                                                 ? { target: '_blank', rel: 'noopener noreferrer' }
                                                 : {})}
@@ -506,21 +506,21 @@ export function Header({
                               }}
                             >
                               {/* Main nav item - 48px touch target */}
-                              <div className="group flex min-h-[48px] items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 hover:bg-slate-800/50">
-                                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-800/80 text-slate-400 ring-1 ring-slate-700/50 transition-all duration-200 group-hover:bg-indigo-500/20 group-hover:text-indigo-400 group-hover:ring-indigo-500/30">
+                              <div className="group flex min-h-[48px] items-center gap-3 rounded-xl px-4 py-3 transition-all duration-200 hover:bg-white/[0.03]">
+                                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/[0.05] text-white/60 ring-1 ring-white/10 transition-all duration-200 group-hover:bg-[#025A4A]/20 group-hover:text-[#05B08F] group-hover:ring-[#025A4A]/30">
                                   <NavIcon className="h-4 w-4" />
                                 </div>
-                                <span className="text-base font-medium text-white transition-colors group-hover:text-indigo-300">
+                                <span className="text-base font-medium text-white transition-colors group-hover:text-[#05B08F]">
                                   {mainItem}
                                 </span>
                               </div>
 
                               {/* Sub-navigation */}
-                              <div className="ml-4 mt-1 space-y-1 border-l border-slate-800 pl-4">
+                              <div className="ml-4 mt-1 space-y-1 border-l border-[#1C3023] pl-4">
                                 {Object.entries(subItems as Record<string, string[]>).map(
                                   ([category, items]) => (
                                     <div key={category} className="py-1">
-                                      <p className="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                                      <p className="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-white/40">
                                         {category}
                                       </p>
                                       <div className="space-y-0.5">
@@ -528,7 +528,7 @@ export function Header({
                                           <a
                                             key={item}
                                             href="#"
-                                            className="flex min-h-[44px] items-center rounded-lg px-3 py-2 text-sm text-slate-300 transition-all duration-150 hover:bg-slate-800/40 hover:text-white focus:bg-slate-800/40 focus:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+                                            className="flex min-h-[44px] items-center rounded-lg px-3 py-2 text-sm text-white/70 transition-all duration-150 hover:bg-white/[0.05] hover:text-white focus:bg-white/[0.05] focus:text-white focus:outline-none focus:ring-2 focus:ring-[#025A4A]/40"
                                           >
                                             {item}
                                           </a>
