@@ -102,8 +102,8 @@ export function getCorsOrigins(): string[] {
     return ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:4173']
   }
 
-  // Production requires explicit CORS_ORIGINS
-  return []
+  // Production: allow the server URL itself
+  return [env.NEXT_PUBLIC_SERVER_URL]
 }
 
 /**

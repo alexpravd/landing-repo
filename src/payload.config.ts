@@ -2,6 +2,8 @@ import { buildConfig } from 'payload'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { slateEditor } from '@payloadcms/richtext-slate'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
+import { resendAdapter } from '@payloadcms/email-resend'
+import sharp from 'sharp'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
@@ -32,7 +34,7 @@ export default buildConfig({
   // Plugins
   plugins: [
     vercelBlobStorage({
-      enabled: true,
+      enabled: !!process.env.BLOB_READ_WRITE_TOKEN,
       collections: {
         media: true,
       },
@@ -103,24 +105,17 @@ export default buildConfig({
     disable: false,
   },
 
-  // Email configuration (optional)
-  // email: {
-  //   transportOptions: {
-  //     host: process.env.SMTP_HOST,
-  //     port: 587,
-  //     auth: {
-  //       user: process.env.SMTP_USER,
-  //       pass: process.env.SMTP_PASS,
-  //     },
-  //   },
-  //   fromName: 'Payload Platform',
-  //   fromAddress: 'noreply@payloadplatform.com',
-  // },
+  // Email configuration via Resend (enables password reset, email verification, etc.)
+  ...(process.env.RESEND_API_KEY
+    ? {
+        email: resendAdapter({
+          defaultFromAddress: process.env.RESEND_FROM_ADDRESS || 'noreply@yourdomain.com',
+          defaultFromName: 'Payload Platform',
+          apiKey: process.env.RESEND_API_KEY,
+        }),
+      }
+    : {}),
 
-  // Localization (if needed)
-  // localization: {
-  //   locales: ['en', 'es', 'fr'],
-  //   defaultLocale: 'en',
-  //   fallback: true,
-  // },
+  // Sharp for image processing (required for Vercel deployments)
+  sharp,
 })
