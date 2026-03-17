@@ -28,6 +28,15 @@ export const SiteSettings: GlobalConfig = {
   },
   fields: [
     {
+      name: 'favicon',
+      type: 'upload',
+      relationTo: 'media',
+      required: false,
+      admin: {
+        description: 'Favicon for the browser tab (recommended: 32x32 or 48x48 PNG/ICO)',
+      },
+    },
+    {
       name: 'siteTitle',
       type: 'text',
       required: false,

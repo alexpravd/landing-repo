@@ -71,6 +71,9 @@ interface SocialLink {
 
 interface SiteSettings {
   siteTitle: string
+  favicon?: {
+    url: string
+  }
   siteLogo?: {
     url: string
     alt?: string
@@ -221,6 +224,10 @@ export const getSiteData = cache(async (locale: SupportedLocale = 'uk', draft: b
   const siteSettings: SiteSettings | undefined = settings
     ? {
         siteTitle: settings.siteTitle || '',
+        favicon:
+          settings.favicon && typeof settings.favicon === 'object' && 'url' in settings.favicon
+            ? { url: settings.favicon.url as string }
+            : undefined,
         siteLogo:
           settings.siteLogo && typeof settings.siteLogo === 'object' && 'url' in settings.siteLogo
             ? {

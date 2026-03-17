@@ -382,6 +382,7 @@ metaImage?: string | Media | null
  */
 export interface SiteSettings {
 id: string
+favicon?: string | Media | null
 siteTitle: string
 siteLogo?: string | Media | null
 logoAltText?: string | null
