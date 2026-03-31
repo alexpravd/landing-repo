@@ -46,6 +46,19 @@ export const SiteSettings: GlobalConfig = {
       },
     },
     {
+      name: 'logoHeight',
+      type: 'number',
+      required: false,
+      defaultValue: 40,
+      min: 16,
+      max: 120,
+      admin: {
+        description:
+          'Logo height in pixels (16–120). Width adjusts automatically to maintain aspect ratio.',
+        condition: (data) => Boolean(data?.siteLogo),
+      },
+    },
+    {
       name: 'logoAltText',
       type: 'text',
       required: false,

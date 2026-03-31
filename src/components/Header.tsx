@@ -71,6 +71,7 @@ interface SiteSettings {
     url: string
     alt?: string
   }
+  logoHeight?: number
   tagline?: string
   socialLinks?: SocialLink[]
   hideHeaderControls?: boolean
@@ -155,6 +156,7 @@ export function Header({
   const siteTitle = siteSettings?.siteTitle || ''
   const siteTagline = siteSettings?.tagline || ''
   const siteLogo = siteSettings?.siteLogo
+  const logoHeight = siteSettings?.logoHeight || 40
   const socialLinks = siteSettings?.socialLinks || []
   const showTitleSection = siteTitle || siteTagline
 
@@ -173,7 +175,12 @@ export function Header({
               <div className="relative">
                 {siteLogo?.url ? (
                   /* eslint-disable-next-line @next/next/no-img-element */
-                  <img src={siteLogo.url} alt={siteLogo.alt || siteTitle} className="h-10 w-auto" />
+                  <img
+                    src={siteLogo.url}
+                    alt={siteLogo.alt || siteTitle}
+                    className="w-auto"
+                    style={{ height: `${logoHeight}px` }}
+                  />
                 ) : (
                   <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg shadow-indigo-500/30">
                     <Sparkles className="h-5 w-5 text-white" />
